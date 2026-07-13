@@ -1,0 +1,143 @@
+/**
+ * Brand + site configuration.
+ *
+ * Everything here is a build-time default. At runtime the values are overlaid
+ * by the SiteSettings document (editable from the admin panel), so the client
+ * can swap the brand name, phone, WhatsApp, email and address without a deploy.
+ * See `src/lib/settings.ts`.
+ */
+
+export const BRAND = {
+  /** Placeholder — replace from Admin → Site Settings. */
+  name: "[TRAVEL BRAND NAME]",
+  /** Short mark used in the logo lockup while no logo asset is uploaded. */
+  shortName: "Voyara",
+  tagline: "Journeys designed around you.",
+  description:
+    "Thoughtfully designed holidays, flights, stays and experiences — planned with you, not sold to you.",
+  phone: "[PHONE NUMBER]",
+  whatsapp: "[WHATSAPP NUMBER]",
+  email: "[EMAIL ADDRESS]",
+  address: "[OFFICE ADDRESS]",
+  primaryMarket: "India",
+  social: {
+    instagram: "#",
+    facebook: "#",
+    youtube: "#",
+    linkedin: "#",
+    x: "#",
+  },
+} as const;
+
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+
+/* -------------------------------------------------------------------------- */
+/*                                  Currency                                   */
+/* -------------------------------------------------------------------------- */
+
+export const CURRENCIES = ["INR", "USD", "AED", "EUR", "GBP"] as const;
+export type CurrencyCode = (typeof CURRENCIES)[number];
+
+export const DEFAULT_CURRENCY: CurrencyCode = "INR";
+
+export interface CurrencyMeta {
+  code: CurrencyCode;
+  symbol: string;
+  label: string;
+  locale: string;
+  /** Units of this currency per 1 INR. Editable in Admin → Site Settings. */
+  rateFromINR: number;
+}
+
+export const CURRENCY_META: Record<CurrencyCode, CurrencyMeta> = {
+  INR: { code: "INR", symbol: "₹", label: "Indian Rupee", locale: "en-IN", rateFromINR: 1 },
+  USD: { code: "USD", symbol: "$", label: "US Dollar", locale: "en-US", rateFromINR: 0.012 },
+  AED: { code: "AED", symbol: "AED ", label: "UAE Dirham", locale: "en-AE", rateFromINR: 0.044 },
+  EUR: { code: "EUR", symbol: "€", label: "Euro", locale: "de-DE", rateFromINR: 0.011 },
+  GBP: { code: "GBP", symbol: "£", label: "Pound Sterling", locale: "en-GB", rateFromINR: 0.0094 },
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                 Taxonomies                                  */
+/* -------------------------------------------------------------------------- */
+
+export const TRIP_TYPES = [
+  { slug: "honeymoon", label: "Honeymoon" },
+  { slug: "family", label: "Family" },
+  { slug: "group", label: "Group" },
+  { slug: "luxury", label: "Luxury" },
+  { slug: "adventure", label: "Adventure" },
+  { slug: "beach", label: "Beach" },
+  { slug: "wildlife", label: "Wildlife" },
+  { slug: "pilgrimage", label: "Pilgrimage" },
+  { slug: "weekend", label: "Weekend Break" },
+  { slug: "solo", label: "Solo" },
+  { slug: "cruise", label: "Cruise" },
+  { slug: "workation", label: "Workation" },
+] as const;
+
+export const ACTIVITY_CATEGORIES = [
+  { slug: "adventure", label: "Adventure", icon: "mountain" },
+  { slug: "water-sports", label: "Water Sports", icon: "waves" },
+  { slug: "theme-parks", label: "Theme Parks", icon: "ferris-wheel" },
+  { slug: "wildlife", label: "Wildlife", icon: "bird" },
+  { slug: "cultural-tours", label: "Cultural Tours", icon: "landmark" },
+  { slug: "cruises", label: "Cruises", icon: "ship" },
+  { slug: "nightlife", label: "Nightlife", icon: "martini" },
+  { slug: "wellness", label: "Wellness", icon: "flower-2" },
+  { slug: "food-experiences", label: "Food Experiences", icon: "utensils" },
+  { slug: "sightseeing", label: "Sightseeing", icon: "camera" },
+] as const;
+
+export const HOTEL_CATEGORIES = [
+  { value: 3, label: "3★ Comfort" },
+  { value: 4, label: "4★ Premium" },
+  { value: 5, label: "5★ Luxury" },
+] as const;
+
+export const TRAVEL_CLASSES = [
+  { value: "economy", label: "Economy" },
+  { value: "premium_economy", label: "Premium Economy" },
+  { value: "business", label: "Business" },
+  { value: "first", label: "First" },
+] as const;
+
+export const VISA_TYPES = [
+  { value: "tourist", label: "Tourist" },
+  { value: "business", label: "Business" },
+  { value: "transit", label: "Transit" },
+  { value: "e-visa", label: "e-Visa" },
+  { value: "visa-on-arrival", label: "Visa on Arrival" },
+] as const;
+
+export const PACKAGE_COLLECTIONS = [
+  { slug: "trending-international", label: "Trending International Trips" },
+  { slug: "best-of-india", label: "Best of India" },
+  { slug: "honeymoon-escapes", label: "Honeymoon Escapes" },
+  { slug: "family-holidays", label: "Family Holidays" },
+  { slug: "luxury-getaways", label: "Luxury Getaways" },
+  { slug: "adventure-tours", label: "Adventure Tours" },
+  { slug: "weekend-breaks", label: "Weekend Breaks" },
+  { slug: "group-departures", label: "Group Departures" },
+  { slug: "flight-inclusive", label: "Flight-Inclusive Deals" },
+] as const;
+
+export type PackageCollectionSlug = (typeof PACKAGE_COLLECTIONS)[number]["slug"];
+
+/* -------------------------------------------------------------------------- */
+/*                                Data provenance                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Every price surfaced to a traveller carries one of these labels so we never
+ * imply that demo inventory is live supplier inventory.
+ */
+export const DATA_SOURCES = {
+  live: { label: "Live fare", tone: "success" },
+  cached: { label: "Cached fare", tone: "info" },
+  estimated: { label: "Estimated fare", tone: "warning" },
+  demo: { label: "Demo data", tone: "neutral" },
+} as const;
+
+export type DataSource = keyof typeof DATA_SOURCES;

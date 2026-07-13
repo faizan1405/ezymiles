@@ -1,26 +1,388 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   VOYARA DESIGN SYSTEM
+   An original luxury-travel identity: midnight depth, ivory calm,
+   lagoon vitality, gilded restraint.
+   ========================================================================== */
+
+@theme {
+  /* --- Brand: Midnight (deep navy — premium sections, footer, overlays) --- */
+  --color-midnight-50: #eef2f8;
+  --color-midnight-100: #d6dfee;
+  --color-midnight-200: #adbedd;
+  --color-midnight-300: #7d97c5;
+  --color-midnight-400: #4d6ea6;
+  --color-midnight-500: #2f4f83;
+  --color-midnight-600: #223c66;
+  --color-midnight-700: #182d4d;
+  --color-midnight-800: #101f37;
+  --color-midnight-900: #0a1628;
+  --color-midnight-950: #050d18;
+
+  /* --- Brand: Lagoon (primary action — ocean teal) --- */
+  --color-lagoon-50: #eefbfa;
+  --color-lagoon-100: #d2f5f2;
+  --color-lagoon-200: #a8ebe7;
+  --color-lagoon-300: #6fdbd6;
+  --color-lagoon-400: #38c2be;
+  --color-lagoon-500: #17a5a3;
+  --color-lagoon-600: #0f8484;
+  --color-lagoon-700: #106a6b;
+  --color-lagoon-800: #125456;
+  --color-lagoon-900: #134648;
+  --color-lagoon-950: #04292b;
+
+  /* --- Brand: Sunset (accent — used sparingly for offers/urgency) --- */
+  --color-sunset-50: #fff5f1;
+  --color-sunset-100: #ffe8de;
+  --color-sunset-200: #ffcdb8;
+  --color-sunset-300: #ffa987;
+  --color-sunset-400: #fc7a4f;
+  --color-sunset-500: #f2552a;
+  --color-sunset-600: #e03a18;
+  --color-sunset-700: #ba2b14;
+  --color-sunset-800: #942618;
+  --color-sunset-900: #782317;
+  --color-sunset-950: #410e07;
+
+  /* --- Brand: Gild (gold — premium badges, luxury collections) --- */
+  --color-gild-50: #fbf8ef;
+  --color-gild-100: #f4edd5;
+  --color-gild-200: #e9d9ab;
+  --color-gild-300: #dbbf78;
+  --color-gild-400: #cfa551;
+  --color-gild-500: #c48f3c;
+  --color-gild-600: #a97131;
+  --color-gild-700: #88562b;
+  --color-gild-800: #714629;
+  --color-gild-900: #613c26;
+  --color-gild-950: #371f12;
+
+  /* --- Neutrals: warm ivory / sand --- */
+  --color-ivory: #fcfaf7;
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4efe6;
+  --color-sand-200: #e9e0d1;
+  --color-sand-300: #d9cbb4;
+  --color-sand-400: #c3ae90;
+  --color-sand-500: #b09675;
+  --color-sand-600: #9a7f5f;
+  --color-sand-700: #7f664e;
+  --color-sand-800: #6a5645;
+  --color-sand-900: #5a493c;
+
+  /* --- Semantic --- */
+  --color-canvas: #fcfaf7;
+  --color-surface: #ffffff;
+  --color-ink: #10192b;
+  --color-muted: #5b6577;
+  --color-hairline: #e8e3da;
+
+  /* --- Typography --- */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* --- Radii --- */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.75rem;
+
+  /* --- Elevation (soft, elegant, never muddy) --- */
+  --shadow-tile: 0 1px 2px rgb(16 25 43 / 0.04), 0 8px 24px -12px rgb(16 25 43 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(16 25 43 / 0.04), 0 18px 40px -16px rgb(16 25 43 / 0.22);
+  --shadow-float: 0 4px 8px rgb(16 25 43 / 0.05), 0 32px 64px -24px rgb(16 25 43 / 0.3);
+  --shadow-panel: 0 24px 70px -28px rgb(10 22 40 / 0.35);
+
+  /* --- Motion --- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- Breakpoints (mobile-first, includes 430px phablet stop) --- */
+  --breakpoint-xs: 26.875rem; /* 430px */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ==========================================================================
+   Base
+   ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+    --header-height: 4.5rem;
+  }
+
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Guarantee no horizontal overflow at any breakpoint. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, brand-consistent focus for keyboard users (WCAG 2.2 AA). */
+  :focus-visible {
+    outline: 2px solid var(--color-lagoon-600);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-lagoon-200);
+    color: var(--color-midnight-900);
+  }
+
+  /* Native date/time inputs: make the picker indicator usable + on-brand. */
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.55;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   Components / utilities
+   ========================================================================== */
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  max-width: 90rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Section rhythm — spacious editorial layout */
+@utility section-y {
+  padding-block: 4rem;
+  @media (width >= 48rem) {
+    padding-block: 6rem;
+  }
+  @media (width >= 80rem) {
+    padding-block: 7.5rem;
+  }
+}
+
+/* Restrained frosted glass — only for floating chrome over imagery */
+@utility glass {
+  background-color: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.6);
+}
+
+@utility glass-dark {
+  background-color: rgb(5 13 24 / 0.42);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  border: 1px solid rgb(255 255 255 / 0.14);
+}
+
+/* Guarantees hero text legibility on any frame of any photo/video */
+@utility hero-scrim {
+  background:
+    linear-gradient(180deg, rgb(5 13 24 / 0.55) 0%, rgb(5 13 24 / 0.18) 35%, rgb(5 13 24 / 0.72) 100%),
+    linear-gradient(90deg, rgb(5 13 24 / 0.5) 0%, rgb(5 13 24 / 0) 65%);
+}
+
+@utility text-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Horizontal scroll rails on small screens */
+@utility scroll-rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+  scroll-padding-inline: 1.25rem;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility rail-item {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+.scroll-rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Editorial gradient washes inspired by ocean / sunset / tropics */
+@utility wash-ocean {
+  background-image: linear-gradient(135deg, #0a1628 0%, #123f52 48%, #17a5a3 100%);
+}
+@utility wash-sunset {
+  background-image: linear-gradient(135deg, #782317 0%, #e03a18 45%, #cfa551 100%);
+}
+@utility wash-ivory {
+  background-image: linear-gradient(180deg, #fcfaf7 0%, #f4efe6 100%);
+}
+
+/* ==========================================================================
+   Keyframes — used sparingly, all disabled under reduced motion
+   ========================================================================== */
+
+@keyframes voyara-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes voyara-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes voyara-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes voyara-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-float {
+  animation: voyara-float 5s var(--ease-in-out-soft) infinite;
+}
+
+@utility animate-pulse-ring {
+  animation: voyara-pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+
+@utility animate-marquee {
+  animation: voyara-marquee 40s linear infinite;
+}
+
+/* Skeleton shimmer */
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-sand-100);
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0) 0%,
+      rgb(255 255 255 / 0.65) 50%,
+      rgb(255 255 255 / 0) 100%
+    );
+    animation: voyara-shimmer 1.6s infinite;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion — a first-class mode, not an afterthought
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after {
+    display: none;
+  }
+}
+
+/* Print: clean invoices & vouchers */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
 }
