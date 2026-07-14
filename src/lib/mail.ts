@@ -53,7 +53,7 @@ export async function sendMail(message: MailMessage): Promise<DeliveryResult> {
 
   try {
     await getTransporter().sendMail({
-      from: process.env.MAIL_FROM ?? "EzyMiles <no-reply@ezymiles.example>",
+      from: process.env.MAIL_FROM ?? "eZyMiles <no-reply@ezymiles.example>",
       to: message.to,
       subject: message.subject,
       html: message.html,

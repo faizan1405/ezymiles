@@ -18,10 +18,10 @@ import {
   type IBooking,
 } from "@/models";
 import { getSettings } from "@/lib/settings";
-import { generateReference, serialise } from "@/lib/utils";
+import { generateReference, serialise, formatPrice, formatDate } from "@/lib/utils";
 import { quote, PricingError, type Quote } from "@/server/pricing";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import type { BookingIntentInput, TravellerInput } from "@/lib/validation";
 
 /**
@@ -268,6 +268,14 @@ export async function confirmBookingAfterPayment(bookingId: string, paymentId: s
     href: `/admin/bookings/${booking._id.toString()}`,
   });
 
+  await Notification.create({
+    audience: "admin",
+    kind: "payment",
+    title: `Payment received — ${booking.reference}`,
+    body: `${formatPrice(payment.amountINR)} from ${booking.guestName ?? "guest"}`,
+    href: `/admin/payments`,
+  });
+
   if (booking.user) {
     await Notification.create({
       audience: "customer",
@@ -282,7 +290,7 @@ export async function confirmBookingAfterPayment(bookingId: string, paymentId: s
   const settings = await getSettings();
 
   if (booking.guestEmail) {
-    const tpl = emailTemplates.bookingConfirmation({
+    const tpl = await renderTemplate("bookingConfirmation", {
       brandName: settings.brand.name,
       name: booking.guestName ?? "there",
       reference: booking.reference,
@@ -309,14 +317,36 @@ async function decrementInventory(booking: IBooking) {
       { $inc: { "departures.$.seatsBooked": heads } },
     );
 
-    const pkg = await Package.findById(booking.item.refId).select("departures");
+    const pkg = await Package.findById(booking.item.refId).select("title departures");
     const dep = pkg?.departures.find((d) => String(d._id) === String(meta.departureId));
+
+    // `dep.status` here still reflects the state *before* this booking's
+    // increment above — comparing against it tells us whether availability
+    // just crossed a threshold, so the notification fires once, not per booking.
     if (dep && dep.seatsBooked >= dep.seatsTotal) {
+      if (dep.status !== "sold_out") {
+        await Notification.create({
+          audience: "admin",
+          kind: "system",
+          title: `Package sold out — ${pkg?.title ?? "Package"}`,
+          body: `All seats are booked for the ${formatDate(dep.date)} departure.`,
+          href: `/admin/packages/${booking.item.refId}`,
+        });
+      }
       await Package.updateOne(
         { _id: booking.item.refId, "departures._id": meta.departureId },
         { $set: { "departures.$.status": "sold_out" } },
       );
     } else if (dep && dep.seatsTotal - dep.seatsBooked <= 4) {
+      if (dep.status !== "filling_fast" && dep.status !== "sold_out") {
+        await Notification.create({
+          audience: "admin",
+          kind: "system",
+          title: `Low availability — ${pkg?.title ?? "Package"}`,
+          body: `Only ${dep.seatsTotal - dep.seatsBooked} seat(s) left for the ${formatDate(dep.date)} departure.`,
+          href: `/admin/packages/${booking.item.refId}`,
+        });
+      }
       await Package.updateOne(
         { _id: booking.item.refId, "departures._id": meta.departureId },
         { $set: { "departures.$.status": "filling_fast" } },

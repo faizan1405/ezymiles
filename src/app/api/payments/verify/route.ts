@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { connectDB } from "@/lib/db";
-import { Booking, Payment } from "@/models";
+import { Booking, Payment, Notification } from "@/models";
 import { getGateway } from "@/server/payments/gateway";
 import { confirmBookingAfterPayment } from "@/server/bookings";
 import { getSettings } from "@/lib/settings";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import { guard } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -68,6 +68,8 @@ export async function POST(request: Request) {
     });
 
     if (!result.verified) {
+      const alreadyFailed = payment.status === "failed";
+
       payment.status = "failed";
       payment.failureReason = "Signature or capture verification failed";
       await payment.save();
@@ -76,9 +78,19 @@ export async function POST(request: Request) {
       booking.status = "failed";
       await booking.save();
 
+      if (!alreadyFailed) {
+        await Notification.create({
+          audience: "admin",
+          kind: "payment",
+          title: `Payment failed — ${booking.reference}`,
+          body: `${booking.guestName ?? "Guest"} · signature/capture verification failed`,
+          href: "/admin/payments",
+        });
+      }
+
       const settings = await getSettings();
       if (booking.guestEmail) {
-        const tpl = emailTemplates.paymentFailed({
+        const tpl = await renderTemplate("paymentFailed", {
           brandName: settings.brand.name,
           name: booking.guestName ?? "there",
           reference: booking.reference,
@@ -104,7 +116,7 @@ export async function POST(request: Request) {
 
     const settings = await getSettings();
     if (confirmed.guestEmail) {
-      const tpl = emailTemplates.paymentConfirmation({
+      const tpl = await renderTemplate("paymentConfirmation", {
         brandName: settings.brand.name,
         name: confirmed.guestName ?? "there",
         reference: confirmed.reference,

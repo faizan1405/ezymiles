@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Eye } from "lucide-react";
+import Link from "next/link";
+import { Eye, Plus } from "lucide-react";
 
 import { requireAdmin } from "@/lib/session";
 import { tryConnectDB } from "@/lib/db";
@@ -16,6 +17,7 @@ import {
 import { FilterBar } from "@/components/admin/filter-bar";
 import { EntityActions } from "@/components/admin/entity-actions";
 import { SmartImage } from "@/components/ui/smart-image";
+import { Button } from "@/components/ui/button";
 import { ACTIVITY_CATEGORIES } from "@/config/site";
 import { formatMinutes, formatPrice, serialise } from "@/lib/utils";
 import type { QueryFilter } from "mongoose";
@@ -64,6 +66,14 @@ export default async function AdminActivitiesPage({
       <AdminPageHeader
         title="Activities"
         description="Slots, capacity and add-ons. Capacity is decremented only once a payment clears."
+        action={
+          <Button asChild variant="accent">
+            <Link href="/admin/activities/new">
+              <Plus aria-hidden />
+              Add activity
+            </Link>
+          </Button>
+        }
       />
 
       <FilterBar
@@ -167,7 +177,7 @@ export default async function AdminActivitiesPage({
                       id={String(a._id)}
                       label={a.title}
                       status={a.status}
-                      editHref={`/activities/${a.slug}`}
+                      editHref={`/admin/activities/${String(a._id)}`}
                     />
                   </div>
                 </Td>

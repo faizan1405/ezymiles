@@ -5,6 +5,7 @@ import { Bell, Target, CalendarCheck, CreditCard, Stamp, LifeBuoy, Info } from "
 import { requireAdmin } from "@/lib/session";
 import { tryConnectDB } from "@/lib/db";
 import { Notification } from "@/models";
+import { syncFollowUpNotifications } from "@/server/leads";
 import { AdminPageHeader } from "@/components/admin/ui";
 import { AdminMarkAllRead } from "@/components/admin/mark-all-read";
 import { EmptyState } from "@/components/ui/primitives";
@@ -35,6 +36,8 @@ export default async function AdminNotificationsPage() {
       </div>
     );
   }
+
+  await syncFollowUpNotifications().catch((error) => console.error("[syncFollowUpNotifications]", error));
 
   const rows = await Notification.find({ audience: "admin" })
     .sort({ createdAt: -1 })

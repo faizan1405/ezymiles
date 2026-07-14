@@ -7,7 +7,7 @@ import { AdminUser, User } from "@/models";
 import { guard } from "@/lib/rate-limit";
 import { getSettings } from "@/lib/settings";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import { SITE_URL } from "@/config/site";
 import {
   forgotPasswordSchema,
@@ -88,14 +88,14 @@ export async function registerUser(raw: unknown): Promise<AuthResult> {
 
     const settings = await getSettings();
 
-    const verifyTpl = emailTemplates.verifyEmail({
+    const verifyTpl = await renderTemplate("verifyEmail", {
       brandName: settings.brand.name,
       name: user.name,
       url: `${SITE_URL}/verify-email?token=${token}&email=${encodeURIComponent(email)}`,
     });
     await sendMail({ to: email, subject: verifyTpl.subject, html: verifyTpl.html });
 
-    const welcomeTpl = emailTemplates.welcome({ brandName: settings.brand.name, name: user.name });
+    const welcomeTpl = await renderTemplate("welcome", { brandName: settings.brand.name, name: user.name });
     await sendMail({ to: email, subject: welcomeTpl.subject, html: welcomeTpl.html });
 
     return {
@@ -187,7 +187,7 @@ export async function requestPasswordReset(raw: unknown): Promise<AuthResult> {
     await user.save();
 
     const settings = await getSettings();
-    const tpl = emailTemplates.resetPassword({
+    const tpl = await renderTemplate("resetPassword", {
       brandName: settings.brand.name,
       name: user.name,
       url: `${SITE_URL}/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`,

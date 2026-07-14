@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/session";
 import { tryConnectDB } from "@/lib/db";
 import { AdminUser } from "@/models";
-import { ROLE_LABELS, ROLE_PERMISSIONS, ADMIN_ROLES } from "@/models/types";
+import { ROLE_LABELS, ADMIN_ROLES } from "@/models/types";
+import { getAllRoleBasePermissions } from "@/lib/permissions";
 import { AdminPageHeader, Panel } from "@/components/admin/ui";
 import { StaffManager } from "@/components/admin/staff-manager";
+import { RolePermissionsEditor } from "@/components/admin/role-permissions-editor";
 import { serialise } from "@/lib/utils";
 import type { IAdminUser } from "@/models";
 
@@ -26,6 +28,7 @@ export default async function AdminStaffPage() {
 
   const rows = await AdminUser.find({ deletedAt: null }).sort({ role: 1, name: 1 }).lean();
   const staff = serialise(rows) as unknown as IAdminUser[];
+  const rolePermissions = await getAllRoleBasePermissions();
 
   return (
     <div>
@@ -36,6 +39,7 @@ export default async function AdminStaffPage() {
 
       <StaffManager
         currentUserId={me.id}
+        rolePermissions={rolePermissions}
         staff={staff.map((s) => ({
           id: String(s._id),
           name: s.name,
@@ -49,7 +53,11 @@ export default async function AdminStaffPage() {
       />
 
       {/* ---------------------------- Permission matrix --------------------------- */}
-      <div className="mt-8">
+      <div className="mt-8 space-y-6">
+        {me.adminRole === "super_admin" ? (
+          <RolePermissionsEditor rolePermissions={rolePermissions} />
+        ) : null}
+
         <Panel title="What each role can do">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[40rem] text-sm">
@@ -74,10 +82,10 @@ export default async function AdminStaffPage() {
                     </th>
                     <td className="py-3">
                       <div className="flex flex-wrap gap-1">
-                        {ROLE_PERMISSIONS[role].length === 0 ? (
+                        {rolePermissions[role].length === 0 ? (
                           <span className="text-xs text-muted">None</span>
                         ) : (
-                          ROLE_PERMISSIONS[role].map((p) => (
+                          rolePermissions[role].map((p) => (
                             <span
                               key={p}
                               className="rounded bg-sand-100 px-1.5 py-0.5 font-mono text-[0.625rem] text-midnight-700"

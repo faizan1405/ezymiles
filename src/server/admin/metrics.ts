@@ -10,6 +10,7 @@ import {
   Destination,
 } from "@/models";
 import { serialise } from "@/lib/utils";
+import { syncFollowUpNotifications } from "@/server/leads";
 
 /**
  * Dashboard metrics.
@@ -54,6 +55,10 @@ const EMPTY: DashboardMetrics = {
 
 export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   if (!(await tryConnectDB())) return EMPTY;
+
+  // Best-effort: there's no background job runner, so "follow-up due" admin
+  // notifications are synced on every dashboard view instead.
+  syncFollowUpNotifications().catch((error) => console.error("[syncFollowUpNotifications]", error));
 
   const now = new Date();
   const d30 = new Date(now.getTime() - 30 * 86_400_000);

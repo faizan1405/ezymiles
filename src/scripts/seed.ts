@@ -51,7 +51,7 @@ async function connect() {
 
 async function seedAdmin() {
   const email = (process.env.SEED_ADMIN_EMAIL || "admin@ezymiles.example").toLowerCase();
-  const password = process.env.SEED_ADMIN_PASSWORD || "EzyMiles@2026";
+  const password = process.env.SEED_ADMIN_PASSWORD || "eZyMiles@2026";
 
   const existing = await AdminUser.findOne({ email });
   if (existing) {
@@ -77,7 +77,7 @@ async function seedDemoTraveller() {
   const existing = await User.findOne({ email });
   if (existing) return;
 
-  const passwordHash = await bcrypt.hash("EzyMiles@2026", 12);
+  const passwordHash = await bcrypt.hash("eZyMiles@2026", 12);
 
   await User.create({
     name: "Demo Traveller",
@@ -115,7 +115,7 @@ async function seedSiteSettings() {
     homepage: {
       heroHeadline: "Travel With Confidence",
       heroSubheadline:
-        "From your first enquiry to your journey back home, EzyMiles provides honest guidance, transparent recommendations and dependable travel support.",
+        "From your first enquiry to your journey back home, eZyMiles provides honest guidance, transparent recommendations and dependable travel support.",
       heroMediaKind: "slideshow",
       heroSlides: [],
       sections: {},
@@ -154,13 +154,13 @@ async function seedSiteSettings() {
       liveActivityEnabled: true,
     },
     about: {
-      aboutTitle: "About EzyMiles",
-      aboutText: "EzyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
+      aboutTitle: "About eZyMiles",
+      aboutText: "eZyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
       aboutHighlight: "Listen first. Recommend honestly. Serve responsibly.",
       philosophyTitle: "Trust Before Transactions",
-      philosophyText: "Customers invest their money, time, emotions and dreams when planning a journey. EzyMiles values honest guidance and customer trust more than higher commissions.",
+      philosophyText: "Customers invest their money, time, emotions and dreams when planning a journey. eZyMiles values honest guidance and customer trust more than higher commissions.",
       founderName: "Charanjit Singh",
-      founderRole: "Founder, EzyMiles",
+      founderRole: "Founder, eZyMiles",
       founderStory: `Travel has never been just a hobby for me. It has been one of the most meaningful experiences of my life.
 
 Over the years, I have travelled extensively across India and several countries around the world. Every journey taught me something new—not just about places, but about people, cultures and the importance of good planning.
@@ -169,11 +169,11 @@ Like many travellers, I have experienced situations where promises made during b
 
 After completing nearly four decades of public service, I decided to dedicate this phase of my life to something I genuinely enjoy—helping people travel with confidence.
 
-EzyMiles is built on a simple promise: If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.
+eZyMiles is built on a simple promise: If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.
 
 My goal is not to build the biggest travel company. My goal is to build a company that people remember because it stood by them when it mattered.
 
-If, after your journey, you feel that EzyMiles made your travel easier, safer and more enjoyable, then I will consider our work successful.`,
+If, after your journey, you feel that eZyMiles made your travel easier, safer and more enjoyable, then I will consider our work successful.`,
       founderQuote: "If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.",
       founderImageUrl: "",
     },
@@ -1831,7 +1831,7 @@ async function seedBlogPosts() {
 }
 
 async function main() {
-  console.log("Seeding EzyMiles demo data...\n");
+  console.log("Seeding eZyMiles demo data...\n");
 
   await connect();
 

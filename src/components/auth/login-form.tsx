@@ -42,8 +42,12 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
     });
 
     if (result?.error) {
-      // Deliberately generic: never reveal whether the email exists.
-      setFormError("That email and password combination isn't right.");
+      setFormError(
+        result.code === "rate-limited"
+          ? "Too many sign-in attempts. Please wait 15 minutes and try again."
+          // Deliberately generic: never reveal whether the email exists.
+          : "That email and password combination isn't right.",
+      );
       return;
     }
 

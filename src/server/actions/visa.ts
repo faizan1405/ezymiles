@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/lib/session";
 import { guard } from "@/lib/rate-limit";
 import { getSettings } from "@/lib/settings";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import { createEnquiryWithLead } from "@/server/leads";
 import { visaApplicationSchema } from "@/lib/validation";
 import { generateReference, serialise } from "@/lib/utils";
@@ -108,7 +108,7 @@ export async function submitVisaApplication(raw: unknown): Promise<ActionResult>
     });
 
     const settings = await getSettings();
-    const tpl = emailTemplates.visaUpdate({
+    const tpl = await renderTemplate("visaUpdate", {
       brandName: settings.brand.name,
       name: d.applicantName,
       reference,

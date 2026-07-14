@@ -6,7 +6,7 @@ import { NewsletterSubscriber } from "@/models";
 import { guard } from "@/lib/rate-limit";
 import { getSettings } from "@/lib/settings";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import { createEnquiryWithLead } from "@/server/leads";
 import {
   callbackSchema,
@@ -84,7 +84,7 @@ export async function submitEnquiry(raw: unknown): Promise<ActionResult> {
     });
 
     const settings = await getSettings();
-    const tpl = emailTemplates.enquiryReceived({
+    const tpl = await renderTemplate("enquiryReceived", {
       brandName: settings.brand.name,
       name: data.name,
       reference: lead.reference,
@@ -147,7 +147,7 @@ export async function submitCallback(raw: unknown): Promise<ActionResult> {
 
     if (data.email) {
       const settings = await getSettings();
-      const tpl = emailTemplates.callbackReceived({
+      const tpl = await renderTemplate("callbackReceived", {
         brandName: settings.brand.name,
         name: data.name,
         phone: `${data.countryCode} ${data.phone}`,
@@ -216,7 +216,7 @@ export async function submitCustomTrip(raw: unknown): Promise<ActionResult> {
     });
 
     const settings = await getSettings();
-    const tpl = emailTemplates.enquiryReceived({
+    const tpl = await renderTemplate("enquiryReceived", {
       brandName: settings.brand.name,
       name: d.name,
       reference: lead.reference,
@@ -278,7 +278,7 @@ export async function submitContact(raw: unknown): Promise<ActionResult> {
     });
 
     const settings = await getSettings();
-    const tpl = emailTemplates.enquiryReceived({
+    const tpl = await renderTemplate("enquiryReceived", {
       brandName: settings.brand.name,
       name: d.name,
       reference: lead.reference,

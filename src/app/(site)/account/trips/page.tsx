@@ -4,6 +4,8 @@ import { Compass } from "lucide-react";
 
 import { requireUser } from "@/lib/session";
 import { getUserBookings } from "@/server/bookings";
+import { connectDB } from "@/lib/db";
+import { Review } from "@/models";
 import { TripCard } from "@/components/account/trip-card";
 import { EmptyState } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,10 @@ export default async function TripsPage({
 
   const all = (await getUserBookings(user.id)) as unknown as IBooking[];
   const now = new Date();
+
+  await connectDB();
+  const reviewedRows = await Review.find({ user: user.id }).select("booking").lean();
+  const reviewedBookingIds = new Set(reviewedRows.map((r) => String(r.booking)));
 
   const bookings = all.filter((b) => {
     const travelled = b.travelDate ? new Date(b.travelDate) < now : false;
@@ -99,7 +105,7 @@ export default async function TripsPage({
         <ul className="space-y-4">
           {bookings.map((booking) => (
             <li key={String(booking._id)}>
-              <TripCard booking={booking} />
+              <TripCard booking={booking} hasReview={reviewedBookingIds.has(String(booking._id))} />
             </li>
           ))}
         </ul>

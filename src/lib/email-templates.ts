@@ -1,6 +1,8 @@
 import "server-only";
 import { BRAND, SITE_URL } from "@/config/site";
 import { formatDate, formatPrice } from "@/lib/utils";
+import { connectDB } from "@/lib/db";
+import { EmailTemplate } from "@/models";
 
 /**
  * Transactional email templates.
@@ -268,3 +270,93 @@ function row(label: string, value: string) {
 }
 
 export type EmailTemplateKey = keyof typeof emailTemplates;
+
+/** Reference for the admin editor: every overridable template and the `{{tokens}}` it receives. */
+export const EMAIL_TEMPLATE_CATALOG: { key: EmailTemplateKey; label: string; variables: string[] }[] = [
+  { key: "welcome", label: "Welcome email", variables: ["brandName", "name"] },
+  { key: "verifyEmail", label: "Verify email address", variables: ["brandName", "name", "url"] },
+  { key: "resetPassword", label: "Reset password", variables: ["brandName", "name", "url"] },
+  {
+    key: "enquiryReceived",
+    label: "Enquiry received",
+    variables: ["brandName", "name", "reference", "subject"],
+  },
+  { key: "callbackReceived", label: "Callback scheduled", variables: ["brandName", "name", "phone"] },
+  {
+    key: "bookingConfirmation",
+    label: "Booking confirmed",
+    variables: ["brandName", "name", "reference", "title", "travelDate", "totalINR", "paidINR", "balanceINR"],
+  },
+  {
+    key: "paymentConfirmation",
+    label: "Payment received",
+    variables: ["brandName", "name", "reference", "amountINR", "balanceINR"],
+  },
+  { key: "paymentFailed", label: "Payment failed", variables: ["brandName", "name", "reference"] },
+  {
+    key: "tripReminder",
+    label: "Trip reminder",
+    variables: ["brandName", "name", "reference", "title", "travelDate", "days"],
+  },
+  {
+    key: "visaUpdate",
+    label: "Visa application update",
+    variables: ["brandName", "name", "reference", "country", "status", "note"],
+  },
+  {
+    key: "cancellationUpdate",
+    label: "Cancellation update",
+    variables: ["brandName", "name", "reference", "status", "chargeINR"],
+  },
+  {
+    key: "refundUpdate",
+    label: "Refund update",
+    variables: ["brandName", "name", "reference", "amountINR", "status"],
+  },
+  {
+    key: "ticketUpdate",
+    label: "Support ticket update",
+    variables: ["brandName", "name", "reference", "subject", "status"],
+  },
+];
+
+/**
+ * Renders an email, preferring a Super-Admin-edited override from
+ * Admin → Site Settings → Email templates (matched by `key`) over the
+ * hardcoded template. `{{placeholder}}` tokens in the override's subject/body
+ * are substituted from `ctx` — anything not found is left blank rather than
+ * throwing, since an admin typo shouldn't block a transactional email.
+ */
+export async function renderTemplate<K extends EmailTemplateKey>(
+  key: K,
+  ctx: Parameters<(typeof emailTemplates)[K]>[0],
+): Promise<{ subject: string; html: string }> {
+  const fallback = (emailTemplates[key] as (c: typeof ctx) => { subject: string; html: string })(ctx);
+
+  try {
+    await connectDB();
+    const override = await EmailTemplate.findOne({ key, isActive: true }).lean();
+    if (!override) return fallback;
+
+    const vars = ctx as unknown as Record<string, unknown>;
+    const substitute = (text: string) =>
+      text.replace(/\{\{(\w+)\}\}/g, (_, token: string) =>
+        vars[token] != null ? String(vars[token]) : "",
+      );
+
+    const subject = substitute(override.subject);
+
+    return {
+      subject,
+      html: shell({
+        brandName: (ctx as { brandName: string }).brandName,
+        preheader: subject,
+        heading: subject,
+        body: substitute(override.body),
+      }),
+    };
+  } catch (error) {
+    console.error("[renderTemplate]", error);
+    return fallback;
+  }
+}

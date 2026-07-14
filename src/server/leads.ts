@@ -111,3 +111,54 @@ export async function createEnquiryWithLead(payload: EnquiryPayload) {
 
   return { enquiry, lead };
 }
+
+/**
+ * Creates a "follow-up due" admin notification for every open lead whose
+ * follow-up date has arrived, at most once per lead per calendar day.
+ *
+ * There is no background job runner in this deployment, so this is called
+ * on-view from the admin dashboard and notifications pages — a few seconds of
+ * staleness is an acceptable trade for not standing up a scheduler.
+ */
+export async function syncFollowUpNotifications(): Promise<void> {
+  await connectDB();
+
+  const now = new Date();
+  const startOfDay = new Date(now);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const due = await Lead.find({
+    deletedAt: null,
+    followUpDate: { $lte: now },
+    status: { $nin: ["won", "lost", "junk"] },
+  })
+    .select("_id reference name followUpDate")
+    .lean();
+
+  if (due.length === 0) return;
+
+  const alreadyNotified = await Notification.find({
+    audience: "admin",
+    kind: "lead",
+    href: { $in: due.map((lead) => `/admin/leads/${lead._id.toString()}`) },
+    createdAt: { $gte: startOfDay },
+    title: "Follow-up due",
+  })
+    .select("href")
+    .lean();
+
+  const notifiedHrefs = new Set(alreadyNotified.map((n) => n.href));
+
+  const toCreate = due.filter((lead) => !notifiedHrefs.has(`/admin/leads/${lead._id.toString()}`));
+  if (toCreate.length === 0) return;
+
+  await Notification.insertMany(
+    toCreate.map((lead) => ({
+      audience: "admin",
+      kind: "lead",
+      title: "Follow-up due",
+      body: `${lead.name} (${lead.reference}) is due for follow-up.`,
+      href: `/admin/leads/${lead._id.toString()}`,
+    })),
+  );
+}

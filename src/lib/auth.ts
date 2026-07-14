@@ -1,4 +1,5 @@
 import NextAuth, { type NextAuthConfig } from "next-auth";
+import { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
@@ -7,7 +8,17 @@ import { AdminUser, User } from "@/models";
 import { resolvePermissions } from "@/lib/permissions";
 import { loginSchema } from "@/lib/validation";
 import { integrations } from "@/lib/env";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import type { AdminRole, Permission } from "@/models/types";
+
+/**
+ * Thrown instead of returning `null` when a sign-in attempt is throttled, so
+ * the client can tell "wrong password" apart from "slow down" — `code` is the
+ * only part of an AuthError that reaches the browser, so it must stay generic.
+ */
+class RateLimitedSignin extends CredentialsSignin {
+  code = "rate-limited";
+}
 
 /**
  * Auth.js v5.
@@ -32,6 +43,16 @@ const providers: NextAuthConfig["providers"] = [
       if (!parsed.success) return null;
 
       const { email, password } = parsed.data;
+
+      // Throttle both per-IP (stop distributed brute force) and per-account
+      // (stop credential stuffing against one victim from many IPs).
+      const ip = await getClientIp();
+      const ipLimit = rateLimit(`login-ip:${ip}`, { limit: 15, windowSeconds: 15 * 60 });
+      const emailLimit = rateLimit(`login-email:${email}`, { limit: 6, windowSeconds: 15 * 60 });
+      if (!ipLimit.success || !emailLimit.success) {
+        throw new RateLimitedSignin();
+      }
+
       await connectDB();
 
       // Staff first — an email may only ever belong to one audience.
@@ -53,7 +74,7 @@ const providers: NextAuthConfig["providers"] = [
           isVerified: true,
           isAdmin: true,
           adminRole: admin.role,
-          permissions: resolvePermissions(
+          permissions: await resolvePermissions(
             admin.role,
             admin.extraPermissions,
             admin.revokedPermissions,
@@ -143,7 +164,7 @@ export const authConfig: NextAuthConfig = {
           token.permissions = [];
         } else {
           token.adminRole = admin.role;
-          token.permissions = resolvePermissions(
+          token.permissions = await resolvePermissions(
             admin.role,
             admin.extraPermissions,
             admin.revokedPermissions,

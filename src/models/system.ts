@@ -93,17 +93,25 @@ export interface ISiteSettings {
     cabsEnabled: boolean;
   };
 
+  maintenance: {
+    enabled: boolean;
+    message: string;
+  };
+
   about: {
     aboutTitle: string;
     aboutText: string;
     aboutHighlight: string;
     philosophyTitle: string;
     philosophyText: string;
+    founderHeading: string;
     founderName: string;
     founderRole: string;
     founderStory: string;
     founderQuote: string;
+    founderQuoteSecondary: string;
     founderImageUrl: string;
+    founderSignatureUrl: string;
   };
 
   updatedBy?: Types.ObjectId;
@@ -191,29 +199,38 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       visaEnabled: { type: Boolean, default: true },
       cabsEnabled: { type: Boolean, default: true },
     },
+    maintenance: {
+      enabled: { type: Boolean, default: false },
+      message: {
+        type: String,
+        default: "We're making a few improvements and will be back shortly. Thanks for your patience.",
+      },
+    },
     about: {
-      aboutTitle: { type: String, default: "About EzyMiles" },
+      aboutTitle: { type: String, default: "About eZyMiles" },
       aboutText: {
         type: String,
         default:
-          "EzyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
+          "eZyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
       },
       aboutHighlight: { type: String, default: "Listen first. Recommend honestly. Serve responsibly." },
       philosophyTitle: { type: String, default: "Trust Before Transactions" },
       philosophyText: {
         type: String,
         default:
-          "Customers invest their money, time, emotions and dreams when planning a journey. EzyMiles values honest guidance and customer trust more than higher commissions.",
+          "Customers invest their money, time, emotions and dreams when planning a journey. eZyMiles values honest guidance and customer trust more than higher commissions.",
       },
+      founderHeading: { type: String, default: "A Note from the Founder" },
       founderName: { type: String, default: "Charanjit Singh" },
-      founderRole: { type: String, default: "Founder, EzyMiles" },
+      founderRole: { type: String, default: "Founder, eZyMiles" },
       founderStory: { type: String, default: "" },
       founderQuote: {
         type: String,
-        default:
-          "If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.",
+        default: "Travel should create memories, not complications.",
       },
+      founderQuoteSecondary: { type: String, default: "Miles that make sense." },
       founderImageUrl: { type: String, default: "" },
+      founderSignatureUrl: { type: String, default: "" },
     },
     updatedBy: { type: Schema.Types.ObjectId, ref: "AdminUser" },
   },
@@ -324,6 +341,33 @@ const EmailTemplateSchema = new Schema<IEmailTemplate>(
 
 EmailTemplateSchema.index({ key: 1 }, { unique: true });
 
+/* ------------------------------ RolePermission ----------------------------- */
+/**
+ * Super-Admin-editable override of the built-in permission matrix
+ * (`ROLE_PERMISSIONS` in `src/models/types.ts`). Absence of a document for a
+ * role means "use the built-in default" — this collection only ever holds
+ * roles a Super Admin has deliberately customised.
+ */
+export interface IRolePermission {
+  _id: Types.ObjectId;
+  role: string;
+  permissions: string[];
+  updatedBy?: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const RolePermissionSchema = new Schema<IRolePermission>(
+  {
+    role: { type: String, required: true },
+    permissions: { type: [String], default: [] },
+    updatedBy: { type: Schema.Types.ObjectId, ref: "AdminUser" },
+  },
+  { timestamps: true },
+);
+
+RolePermissionSchema.index({ role: 1 }, { unique: true });
+
 /* --------------------------------- LegalPage ------------------------------- */
 
 export interface ILegalPage {
@@ -353,6 +397,8 @@ LegalPageSchema.index({ slug: 1 }, { unique: true });
 
 export const SiteSettings: Model<ISiteSettings> =
   models.SiteSettings || model<ISiteSettings>("SiteSettings", SiteSettingsSchema);
+export const RolePermission: Model<IRolePermission> =
+  models.RolePermission || model<IRolePermission>("RolePermission", RolePermissionSchema);
 export const AuditLog: Model<IAuditLog> = models.AuditLog || model<IAuditLog>("AuditLog", AuditLogSchema);
 export const MediaItem: Model<IMediaItem> =
   models.MediaItem || model<IMediaItem>("MediaItem", MediaItemSchema);

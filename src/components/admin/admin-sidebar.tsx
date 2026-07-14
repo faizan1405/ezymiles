@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  FileBarChart,
   Target,
   Users,
   CalendarCheck,
@@ -58,6 +59,7 @@ const GROUPS: AdminGroup[] = [
     title: "Overview",
     links: [
       { href: "/admin", label: "Dashboard", icon: LayoutDashboard, permission: "dashboard:view", exact: true },
+      { href: "/admin/reports", label: "Reports & export", icon: FileBarChart, permission: "dashboard:view" },
     ],
   },
   {

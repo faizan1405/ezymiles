@@ -12,7 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
 export const metadata: Metadata = {
   title: "About us",
   description:
-    "EzyMiles makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.",
+    "eZyMiles makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.",
   alternates: { canonical: "/about" },
 };
 
@@ -26,7 +26,7 @@ export default async function AboutPage() {
         <div className="absolute inset-0 -z-10">
           <SmartImage
             src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=2000&q=80"
-            alt="Travellers exploring destinations with EzyMiles guidance"
+            alt="Travellers exploring destinations with eZyMiles guidance"
             fill
             priority
             sizes="100vw"

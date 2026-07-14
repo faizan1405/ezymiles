@@ -8,6 +8,7 @@ import { saveSiteSettings } from "@/server/admin/actions";
 import { Panel } from "./ui";
 import { ImageField } from "./image-field";
 import { StringListField, ToggleField } from "./field-kits";
+import { EmailTemplateManager, type EmailTemplateRow } from "./email-template-manager";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/overlays";
@@ -19,9 +20,11 @@ import { cn } from "@/lib/utils";
 export function SettingsEditor({
   settings,
   integrationStatus,
+  emailTemplates,
 }: {
   settings: Settings;
   integrationStatus: Record<string, boolean>;
+  emailTemplates: EmailTemplateRow[];
 }) {
   const router = useRouter();
   const [values, setValues] = React.useState(() => ({
@@ -35,6 +38,7 @@ export function SettingsEditor({
     },
     payments: { ...settings.payments },
     features: { ...settings.features },
+    maintenance: { ...settings.maintenance },
     seo: { ...settings.seo, keywords: settings.seo.keywords ?? [] },
     rates: { ...settings.currency.rates } as Record<string, number>,
     about: { ...settings.about },
@@ -52,6 +56,7 @@ export function SettingsEditor({
       announcement: values.announcement,
       payments: values.payments,
       features: values.features,
+      maintenance: values.maintenance,
       seo: values.seo,
       currency: { rates: values.rates },
       about: values.about,
@@ -124,6 +129,7 @@ export function SettingsEditor({
             ["seo", "SEO"],
             ["currency", "Currency"],
             ["about", "About & Founder"],
+            ["email", "Email templates"],
           ].map(([value, label]) => (
             <TabsTrigger key={value} value={value}>
               {label}
@@ -519,6 +525,30 @@ export function SettingsEditor({
               ))}
             </div>
           </Panel>
+
+          <Panel title="Maintenance mode" className="mt-5">
+            <div className="space-y-4">
+              <ToggleField
+                label="Site under maintenance"
+                description="Visitors see the message below instead of the site. Staff stay signed in and can still preview the live site and use /admin."
+                checked={values.maintenance.enabled}
+                onChange={(v) =>
+                  setValues({ ...values, maintenance: { ...values.maintenance, enabled: v } })
+                }
+              />
+
+              <Field label="Maintenance message" htmlFor="maintenance-message">
+                <Textarea
+                  id="maintenance-message"
+                  rows={3}
+                  value={values.maintenance.message}
+                  onChange={(e) =>
+                    setValues({ ...values, maintenance: { ...values.maintenance, message: e.target.value } })
+                  }
+                />
+              </Field>
+            </div>
+          </Panel>
         </TabsContent>
 
         {/* ================================== SEO =============================== */}
@@ -639,10 +669,10 @@ export function SettingsEditor({
                 />
               </Field>
 
-              <Field label="About Description" htmlFor="ab-text" required>
+              <Field label="About Description" htmlFor="ab-text" required hint="Use double newlines to separate paragraphs.">
                 <Textarea
                   id="ab-text"
-                  rows={4}
+                  rows={10}
                   value={values.about.aboutText}
                   onChange={(e) =>
                     setValues({
@@ -683,10 +713,10 @@ export function SettingsEditor({
                 />
               </Field>
 
-              <Field label="Philosophy Text" htmlFor="ab-ph-text" required>
+              <Field label="Philosophy Text" htmlFor="ab-ph-text" required hint="Use double newlines to separate paragraphs.">
                 <Textarea
                   id="ab-ph-text"
-                  rows={4}
+                  rows={8}
                   value={values.about.philosophyText}
                   onChange={(e) =>
                     setValues({
@@ -701,6 +731,19 @@ export function SettingsEditor({
 
           <Panel title="Founder's Note Section">
             <div className="space-y-4">
+              <Field label="Section Heading" htmlFor="ab-fd-heading" required hint="Shown above the letter on the About page and the homepage preview.">
+                <Input
+                  id="ab-fd-heading"
+                  value={values.about.founderHeading}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderHeading: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
               <Field label="Founder Name" htmlFor="ab-fd-name" required>
                 <Input
                   id="ab-fd-name"
@@ -727,10 +770,10 @@ export function SettingsEditor({
                 />
               </Field>
 
-              <Field label="Founder's Story" htmlFor="ab-fd-story" required hint="Admin-edited version of founder's narrative. Use double newlines to separate paragraphs.">
+              <Field label="Founder's Story" htmlFor="ab-fd-story" required hint="The full letter. Use double newlines to separate paragraphs, and wrap text in **double asterisks** to bold it.">
                 <Textarea
                   id="ab-fd-story"
-                  rows={8}
+                  rows={12}
                   value={values.about.founderStory}
                   onChange={(e) =>
                     setValues({
@@ -741,7 +784,7 @@ export function SettingsEditor({
                 />
               </Field>
 
-              <Field label="Highlighted Founder Quote" htmlFor="ab-fd-quote" required>
+              <Field label="Primary highlighted quote" htmlFor="ab-fd-quote" required hint="Shown as the main pull-quote on the About page and homepage preview.">
                 <Textarea
                   id="ab-fd-quote"
                   rows={2}
@@ -750,6 +793,19 @@ export function SettingsEditor({
                     setValues({
                       ...values,
                       about: { ...values.about, founderQuote: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Secondary highlighted quote" htmlFor="ab-fd-quote2" hint="A short tagline-style quote — also appears in the site footer.">
+                <Input
+                  id="ab-fd-quote2"
+                  value={values.about.founderQuoteSecondary}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderQuoteSecondary: e.target.value },
                     })
                   }
                 />
@@ -767,8 +823,26 @@ export function SettingsEditor({
                 folder="brand"
                 hint="Admins can upload the real founder photo. If empty, the website renders a premium profile placeholder."
               />
+
+              <ImageField
+                label="Founder Signature"
+                value={{ url: values.about.founderSignatureUrl ?? "", alt: `${values.about.founderName} signature` }}
+                onChange={(v) =>
+                  setValues({
+                    ...values,
+                    about: { ...values.about, founderSignatureUrl: v.url },
+                  })
+                }
+                folder="brand"
+                hint="Optional. Upload a transparent PNG of the signature. If empty, a stylised text signature is shown instead."
+              />
             </div>
           </Panel>
+        </TabsContent>
+
+        {/* ============================== EMAIL TEMPLATES ========================= */}
+        <TabsContent value="email">
+          <EmailTemplateManager templates={emailTemplates} />
         </TabsContent>
       </Tabs>
     </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Eye, Star } from "lucide-react";
+import Link from "next/link";
+import { Eye, Star, Plus } from "lucide-react";
 
 import { requireAdmin } from "@/lib/session";
 import { tryConnectDB } from "@/lib/db";
@@ -16,6 +17,7 @@ import {
 import { FilterBar } from "@/components/admin/filter-bar";
 import { EntityActions } from "@/components/admin/entity-actions";
 import { SmartImage } from "@/components/ui/smart-image";
+import { Button } from "@/components/ui/button";
 import { formatPrice, pluralise, serialise } from "@/lib/utils";
 import type { QueryFilter } from "mongoose";
 import type { IHotel } from "@/models";
@@ -60,6 +62,14 @@ export default async function AdminHotelsPage({
       <AdminPageHeader
         title="Hotels"
         description="Room rates and availability come from these records. Every rate is re-checked on the server at booking."
+        action={
+          <Button asChild variant="accent">
+            <Link href="/admin/hotels/new">
+              <Plus aria-hidden />
+              Add hotel
+            </Link>
+          </Button>
+        }
       />
 
       <FilterBar
@@ -155,7 +165,7 @@ export default async function AdminHotelsPage({
                       id={String(h._id)}
                       label={h.name}
                       status={h.status}
-                      editHref={`/hotels/${h.slug}`}
+                      editHref={`/admin/hotels/${String(h._id)}`}
                     />
                   </div>
                 </Td>

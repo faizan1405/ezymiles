@@ -6,12 +6,12 @@ import { Plus, Pencil, ShieldCheck } from "lucide-react";
 
 import { saveStaff } from "@/server/admin/actions";
 import { Table, TableEmpty, Td, Th, StatusPill } from "./ui";
-import { ToggleField } from "./field-kits";
+import { ToggleField, ChipSelectField } from "./field-kits";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/overlays";
 import { Field, Input, Select } from "@/components/ui/field";
 import { toast } from "@/components/ui/toast";
-import { ADMIN_ROLES, ROLE_LABELS, ROLE_PERMISSIONS, type AdminRole } from "@/models/types";
+import { ADMIN_ROLES, ROLE_LABELS, PERMISSIONS, type AdminRole, type Permission } from "@/models/types";
 import { formatDate, initials } from "@/lib/utils";
 
 interface StaffRow {
@@ -43,9 +43,11 @@ const empty: StaffDraft = {
 export function StaffManager({
   staff,
   currentUserId,
+  rolePermissions,
 }: {
   staff: StaffRow[];
   currentUserId: string;
+  rolePermissions: Record<AdminRole, Permission[]>;
 }) {
   const router = useRouter();
   const [editing, setEditing] = React.useState<StaffDraft | null>(null);
@@ -225,18 +227,43 @@ export function StaffManager({
 
               <div className="rounded-2xl bg-sand-50 p-4">
                 <p className="text-[0.8125rem] font-semibold text-midnight-900">
-                  {ROLE_LABELS[editing.role]} can:
+                  {ROLE_LABELS[editing.role]} can, by default:
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {ROLE_PERMISSIONS[editing.role].map((p) => (
-                    <span
-                      key={p}
-                      className="rounded bg-white px-1.5 py-0.5 font-mono text-[0.625rem] text-midnight-700"
-                    >
-                      {p}
-                    </span>
-                  ))}
+                  {rolePermissions[editing.role].length === 0 ? (
+                    <span className="text-xs text-muted">Nothing — grant permissions below.</span>
+                  ) : (
+                    rolePermissions[editing.role].map((p) => (
+                      <span
+                        key={p}
+                        className="rounded bg-white px-1.5 py-0.5 font-mono text-[0.625rem] text-midnight-700"
+                      >
+                        {p}
+                      </span>
+                    ))
+                  )}
                 </div>
+                <p className="mt-1.5 text-[0.6875rem] text-muted">
+                  Change what this role can do for everyone at once from the role-permissions panel below.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <ChipSelectField
+                  label="Extra permissions for this person"
+                  options={PERMISSIONS.filter((p) => !rolePermissions[editing.role].includes(p)).map(
+                    (p) => ({ value: p, label: p }),
+                  )}
+                  value={editing.extraPermissions}
+                  onChange={(v) => setEditing({ ...editing, extraPermissions: v })}
+                />
+
+                <ChipSelectField
+                  label="Revoke permissions from this person"
+                  options={rolePermissions[editing.role].map((p) => ({ value: p, label: p }))}
+                  value={editing.revokedPermissions}
+                  onChange={(v) => setEditing({ ...editing, revokedPermissions: v })}
+                />
               </div>
 
               <ToggleField

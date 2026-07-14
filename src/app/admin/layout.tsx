@@ -22,25 +22,29 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="min-h-dvh bg-sand-50">
       <div className="flex">
-        <AdminSidebar
-          permissions={user.permissions ?? []}
-          brandName={settings.brand.name}
-          roleLabel={user.adminRole ? ROLE_LABELS[user.adminRole] : "Staff"}
-        />
+        <div className="no-print contents">
+          <AdminSidebar
+            permissions={user.permissions ?? []}
+            brandName={settings.brand.name}
+            roleLabel={user.adminRole ? ROLE_LABELS[user.adminRole] : "Staff"}
+          />
+        </div>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <AdminTopbar
-            name={user.name ?? "Staff"}
-            email={user.email ?? ""}
-            roleLabel={user.adminRole ? ROLE_LABELS[user.adminRole] : "Staff"}
-            unreadCount={unread}
-          />
+          <div className="no-print">
+            <AdminTopbar
+              name={user.name ?? "Staff"}
+              email={user.email ?? ""}
+              roleLabel={user.adminRole ? ROLE_LABELS[user.adminRole] : "Staff"}
+              unreadCount={unread}
+            />
+          </div>
 
           <main id="main" className="flex-1 p-5 lg:p-8">
             {children}
           </main>
 
-          <footer className="border-t border-hairline px-5 py-4 lg:px-8">
+          <footer className="no-print border-t border-hairline px-5 py-4 lg:px-8">
             <p className="text-xs text-muted">
               {settings.brand.name} admin ·{" "}
               <Link href="/" className="hover:underline">

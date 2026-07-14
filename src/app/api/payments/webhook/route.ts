@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
-import { Booking, Payment } from "@/models";
+import { Booking, Payment, Notification } from "@/models";
 import { getGateway } from "@/server/payments/gateway";
 import { confirmBookingAfterPayment } from "@/server/bookings";
 
@@ -64,14 +64,25 @@ export async function POST(request: Request) {
     }
 
     if (event.event === "payment.failed") {
+      if (payment.status === "failed") return NextResponse.json({ ok: true, alreadyProcessed: true });
+
       payment.status = "failed";
       payment.failureReason = entity.error_description ?? "Payment failed at gateway";
       await payment.save();
 
-      await Booking.updateOne(
+      const booking = await Booking.findOneAndUpdate(
         { _id: payment.booking, status: { $in: ["pending_payment", "draft"] } },
         { $set: { status: "failed", "payment.status": "failed" } },
       );
+
+      await Notification.create({
+        audience: "admin",
+        kind: "payment",
+        title: `Payment failed — ${booking?.reference ?? payment.booking}`,
+        body: entity.error_description ?? "Payment failed at gateway",
+        href: "/admin/payments",
+      });
+
       return NextResponse.json({ ok: true });
     }
 

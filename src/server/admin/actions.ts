@@ -9,7 +9,7 @@ import { connectDB } from "@/lib/db";
 import { assertAdmin } from "@/lib/session";
 import { getGateway } from "@/server/payments/gateway";
 import { sendMail } from "@/lib/mail";
-import { emailTemplates } from "@/lib/email-templates";
+import { renderTemplate } from "@/lib/email-templates";
 import { getSettings } from "@/lib/settings";
 import { generateReference, slugify } from "@/lib/utils";
 import {
@@ -20,6 +20,7 @@ import {
   Booking,
   Coupon,
   Destination,
+  EmailTemplate,
   FAQ,
   Hotel,
   LegalPage,
@@ -32,6 +33,7 @@ import {
   Payment,
   Refund,
   Review,
+  RolePermission,
   SiteSettings,
   SupportTicket,
   VisaApplication,
@@ -257,7 +259,7 @@ export async function updateBookingStatus(
 
     if (status === "cancelled" && booking.guestEmail) {
       const settings = await getSettings();
-      const tpl = emailTemplates.cancellationUpdate({
+      const tpl = await renderTemplate("cancellationUpdate", {
         brandName: settings.brand.name,
         name: booking.guestName ?? "there",
         reference: booking.reference,
@@ -397,7 +399,7 @@ export async function processRefund(refundId: string, approve: boolean): Promise
 
       if (booking.guestEmail) {
         const settings = await getSettings();
-        const tpl = emailTemplates.refundUpdate({
+        const tpl = await renderTemplate("refundUpdate", {
           brandName: settings.brand.name,
           name: booking.guestName ?? "there",
           reference: booking.reference,
@@ -818,6 +820,212 @@ export async function saveDestination(raw: unknown): Promise<AdminResult> {
   } catch (error) {
     console.error("[saveDestination]", error);
     return DENIED("Could not save that destination.");
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hotels                                   */
+/* -------------------------------------------------------------------------- */
+
+const hotelSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().trim().min(2),
+  slug: z.string().trim().optional(),
+  destination: z.string().min(1, "Pick a destination"),
+  city: z.string().trim().min(1),
+  country: z.string().trim().min(1),
+  address: z.string().default(""),
+  starCategory: z.coerce.number().int().min(3).max(5).default(4),
+  propertyType: z.enum(["hotel", "resort", "villa", "boutique", "homestay"]).default("hotel"),
+  summary: z.string().default(""),
+  description: z.string().default(""),
+  heroImage: z.object({ url: z.string().min(1, "Add a hero image"), alt: z.string().default("") }),
+  gallery: z.array(z.object({ url: z.string(), alt: z.string().default("") })).default([]),
+  amenities: z.array(z.string()).default([]),
+  rooms: z
+    .array(
+      z.object({
+        key: z.string().min(1),
+        name: z.string().min(1),
+        description: z.string().default(""),
+        images: z.array(z.object({ url: z.string(), alt: z.string().default("") })).default([]),
+        maxAdults: z.coerce.number().int().min(1).default(2),
+        maxChildren: z.coerce.number().int().min(0).default(1),
+        maxOccupancy: z.coerce.number().int().min(1).default(3),
+        bedType: z.string().default("King"),
+        sizeSqft: z.coerce.number().min(0).optional(),
+        amenities: z.array(z.string()).default([]),
+        mealPlan: z
+          .enum(["room_only", "breakfast", "half_board", "full_board", "all_inclusive"])
+          .default("breakfast"),
+        pricePerNightINR: z.coerce.number().min(0),
+        originalPricePerNightINR: z.coerce.number().min(0).optional(),
+        taxPercent: z.coerce.number().min(0).default(12),
+        refundable: z.boolean().default(true),
+        cancellationRule: z.string().default("Free cancellation up to 72 hours before check-in."),
+        roomsAvailable: z.coerce.number().int().min(0).default(5),
+      }),
+    )
+    .default([]),
+  coordinates: z.object({ lat: z.coerce.number(), lng: z.coerce.number() }),
+  checkInTime: z.string().default("14:00"),
+  checkOutTime: z.string().default("11:00"),
+  policies: z.array(z.string()).default([]),
+  startingPriceINR: z.coerce.number().min(0).default(0),
+  isFeatured: z.boolean().default(false),
+  status: z.enum(PUBLISH_STATUSES).default("draft"),
+  seo: z
+    .object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+      noIndex: z.boolean().default(false),
+    })
+    .optional(),
+});
+
+export async function saveHotel(raw: unknown): Promise<AdminResult> {
+  const g = await guardAction("hotels:manage");
+  if (!g.ok) return DENIED(g.message);
+
+  const parsed = hotelSchema.safeParse(raw);
+  if (!parsed.success) {
+    return DENIED(parsed.error.issues[0]?.message ?? "Please check the hotel fields.");
+  }
+
+  const d = parsed.data;
+  const slug = d.slug?.trim() ? slugify(d.slug) : slugify(d.name);
+
+  try {
+    const clash = await Hotel.findOne({ slug, _id: { $ne: d.id } }).select("_id");
+    if (clash) return DENIED("Another hotel already uses that URL slug.");
+
+    const { id, ...doc } = d;
+    let savedId = id;
+
+    // Zod widens the literal unions (starCategory 3|4|5, meal plans) to number
+    // and string. Mongoose re-validates them against the schema enums on write,
+    // so this cast is safe and the DB stays the real boundary.
+    const payload = { ...doc, slug } as unknown as Parameters<typeof Hotel.create>[0];
+
+    if (id) {
+      await Hotel.updateOne({ _id: id }, { $set: payload });
+    } else {
+      const created = await Hotel.create(payload);
+      savedId = String(created._id);
+    }
+
+    await audit(g.actor, id ? "hotel.update" : "hotel.create", "hotels", {
+      id: savedId,
+      label: d.name,
+    });
+
+    revalidatePath("/admin/hotels");
+    revalidatePath(`/hotels/${slug}`);
+    revalidatePath("/hotels");
+    revalidatePath("/");
+
+    return { ok: true, id: savedId, message: id ? "Hotel saved." : "Hotel created." };
+  } catch (error) {
+    console.error("[saveHotel]", error);
+    return DENIED("Could not save that hotel.");
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  Activities                                 */
+/* -------------------------------------------------------------------------- */
+
+const activitySchema = z.object({
+  id: z.string().optional(),
+  title: z.string().trim().min(3),
+  slug: z.string().trim().optional(),
+  destination: z.string().min(1, "Pick a destination"),
+  city: z.string().trim().min(1),
+  category: z.string().min(1, "Pick a category"),
+  summary: z.string().default(""),
+  description: z.string().default(""),
+  heroImage: z.object({ url: z.string().min(1, "Add a hero image"), alt: z.string().default("") }),
+  gallery: z.array(z.object({ url: z.string(), alt: z.string().default("") })).default([]),
+  durationMinutes: z.coerce.number().int().min(1).default(120),
+  pricePerAdultINR: z.coerce.number().min(0),
+  pricePerChildINR: z.coerce.number().min(0).default(0),
+  originalPriceINR: z.coerce.number().min(0).optional(),
+  taxPercent: z.coerce.number().min(0).default(5),
+  minParticipants: z.coerce.number().int().min(1).default(1),
+  maxParticipants: z.coerce.number().int().min(1).default(20),
+  minAge: z.coerce.number().int().min(0).optional(),
+  slots: z
+    .array(
+      z.object({
+        time: z.string().min(1),
+        label: z.string().default(""),
+        capacity: z.coerce.number().int().min(0).default(20),
+        booked: z.coerce.number().int().min(0).default(0),
+      }),
+    )
+    .default([]),
+  addOns: z
+    .array(
+      z.object({
+        key: z.string().min(1),
+        label: z.string().min(1),
+        priceINR: z.coerce.number().min(0),
+      }),
+    )
+    .default([]),
+  pickupAvailable: z.boolean().default(false),
+  pickupNote: z.string().optional(),
+  inclusions: z.array(z.string()).default([]),
+  exclusions: z.array(z.string()).default([]),
+  safetyInfo: z.array(z.string()).default([]),
+  cancellationPolicy: z
+    .string()
+    .default("Free cancellation up to 24 hours before the experience starts."),
+  instantConfirmation: z.boolean().default(true),
+  isFeatured: z.boolean().default(false),
+  status: z.enum(PUBLISH_STATUSES).default("draft"),
+});
+
+export async function saveActivity(raw: unknown): Promise<AdminResult> {
+  const g = await guardAction("activities:manage");
+  if (!g.ok) return DENIED(g.message);
+
+  const parsed = activitySchema.safeParse(raw);
+  if (!parsed.success) {
+    return DENIED(parsed.error.issues[0]?.message ?? "Please check the activity fields.");
+  }
+
+  const d = parsed.data;
+  const slug = d.slug?.trim() ? slugify(d.slug) : slugify(d.title);
+
+  try {
+    const clash = await Activity.findOne({ slug, _id: { $ne: d.id } }).select("_id");
+    if (clash) return DENIED("Another activity already uses that URL slug.");
+
+    const { id, ...doc } = d;
+    let savedId = id;
+
+    if (id) {
+      await Activity.updateOne({ _id: id }, { $set: { ...doc, slug } });
+    } else {
+      const created = await Activity.create({ ...doc, slug });
+      savedId = String(created._id);
+    }
+
+    await audit(g.actor, id ? "activity.update" : "activity.create", "activities", {
+      id: savedId,
+      label: d.title,
+    });
+
+    revalidatePath("/admin/activities");
+    revalidatePath(`/activities/${slug}`);
+    revalidatePath("/activities");
+    revalidatePath("/");
+
+    return { ok: true, id: savedId, message: id ? "Activity saved." : "Activity created." };
+  } catch (error) {
+    console.error("[saveActivity]", error);
+    return DENIED("Could not save that activity.");
   }
 }
 
@@ -1244,7 +1452,7 @@ export async function updateVisaApplication(
     }
 
     const settings = await getSettings();
-    const tpl = emailTemplates.visaUpdate({
+    const tpl = await renderTemplate("visaUpdate", {
       brandName: settings.brand.name,
       name: app.applicantName,
       reference: app.reference,
@@ -1310,7 +1518,7 @@ export async function replyToTicketAsAgent(
     }
 
     const settings = await getSettings();
-    const tpl = emailTemplates.ticketUpdate({
+    const tpl = await renderTemplate("ticketUpdate", {
       brandName: settings.brand.name,
       name: ticket.name,
       reference: ticket.reference,
@@ -1417,6 +1625,48 @@ export async function saveStaff(raw: unknown): Promise<AdminResult> {
   }
 }
 
+const rolePermissionsSchema = z.object({
+  role: z.enum(ADMIN_ROLES),
+  permissions: z.array(z.enum(PERMISSIONS)).default([]),
+});
+
+/**
+ * Lets a Super Admin decide which modules a role can reach — the one action in
+ * the panel gated by *actual role*, not just a permission flag, since it edits
+ * what permissions mean for everyone else.
+ */
+export async function saveRolePermissions(raw: unknown): Promise<AdminResult> {
+  const g = await guardAction("staff:manage");
+  if (!g.ok) return DENIED(g.message);
+  if (g.actor.role !== "super_admin") {
+    return DENIED("Only a Super Admin can change what a role can access.");
+  }
+
+  const parsed = rolePermissionsSchema.safeParse(raw);
+  if (!parsed.success) return DENIED(parsed.error.issues[0]?.message ?? "Check the selected permissions.");
+
+  const { role, permissions } = parsed.data;
+  if (role === "super_admin") {
+    return DENIED("The Super Admin role always has every permission and can't be edited.");
+  }
+
+  try {
+    await RolePermission.updateOne(
+      { role },
+      { $set: { role, permissions, updatedBy: g.actor.id } },
+      { upsert: true },
+    );
+
+    await audit(g.actor, "role_permissions.update", "staff", { id: role, label: role }, { permissions });
+
+    revalidatePath("/admin/staff");
+    return { ok: true, message: `Updated what "${role.replace(/_/g, " ")}" can access.` };
+  } catch (error) {
+    console.error("[saveRolePermissions]", error);
+    return DENIED("Could not update that role's permissions.");
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                Site settings                                */
 /* -------------------------------------------------------------------------- */
@@ -1465,6 +1715,10 @@ const settingsSchema = z.object({
     visaEnabled: z.boolean(),
     cabsEnabled: z.boolean(),
   }),
+  maintenance: z.object({
+    enabled: z.boolean(),
+    message: z.string().min(1),
+  }),
   seo: z.object({
     defaultTitle: z.string().min(1),
     titleTemplate: z.string().min(1),
@@ -1481,11 +1735,14 @@ const settingsSchema = z.object({
     aboutHighlight: z.string().min(1),
     philosophyTitle: z.string().min(1),
     philosophyText: z.string().min(1),
+    founderHeading: z.string().min(1),
     founderName: z.string().min(1),
     founderRole: z.string().min(1),
     founderStory: z.string().min(1),
     founderQuote: z.string().min(1),
+    founderQuoteSecondary: z.string().optional().default(""),
     founderImageUrl: z.string().optional().default(""),
+    founderSignatureUrl: z.string().optional().default(""),
   }),
 });
 
@@ -1511,6 +1768,7 @@ export async function saveSiteSettings(raw: unknown): Promise<AdminResult> {
           announcement: d.announcement,
           payments: d.payments,
           features: d.features,
+          maintenance: d.maintenance,
           seo: d.seo,
           "currency.rates": d.currency.rates,
           about: d.about,
@@ -1529,6 +1787,63 @@ export async function saveSiteSettings(raw: unknown): Promise<AdminResult> {
   } catch (error) {
     console.error("[saveSiteSettings]", error);
     return DENIED("Could not save those settings.");
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Email templates                               */
+/* -------------------------------------------------------------------------- */
+
+const emailTemplateSchema = z.object({
+  key: z.string().min(1),
+  name: z.string().trim().min(1),
+  subject: z.string().trim().min(1),
+  body: z.string().trim().min(1),
+  isActive: z.boolean().default(true),
+});
+
+/** Upserts a Super-Admin override for one transactional email, keyed by its fixed template key. */
+export async function saveEmailTemplate(raw: unknown): Promise<AdminResult> {
+  const g = await guardAction("settings:manage");
+  if (!g.ok) return DENIED(g.message);
+
+  const parsed = emailTemplateSchema.safeParse(raw);
+  if (!parsed.success) {
+    return DENIED(parsed.error.issues[0]?.message ?? "Please check the template fields.");
+  }
+
+  const d = parsed.data;
+
+  try {
+    await EmailTemplate.updateOne(
+      { key: d.key },
+      { $set: { name: d.name, subject: d.subject, body: d.body, isActive: d.isActive, channels: ["email"] } },
+      { upsert: true },
+    );
+
+    await audit(g.actor, "email_template.update", "settings", { id: d.key, label: d.name });
+
+    revalidatePath("/admin/settings");
+    return { ok: true, message: "Email template saved." };
+  } catch (error) {
+    console.error("[saveEmailTemplate]", error);
+    return DENIED("Could not save that email template.");
+  }
+}
+
+/** Deletes the override so the hardcoded default template takes over again. */
+export async function resetEmailTemplate(key: string): Promise<AdminResult> {
+  const g = await guardAction("settings:manage");
+  if (!g.ok) return DENIED(g.message);
+
+  try {
+    await EmailTemplate.deleteOne({ key });
+    await audit(g.actor, "email_template.reset", "settings", { id: key });
+    revalidatePath("/admin/settings");
+    return { ok: true, message: "Reverted to the default template." };
+  } catch (error) {
+    console.error("[resetEmailTemplate]", error);
+    return DENIED("Could not reset that template.");
   }
 }
 
