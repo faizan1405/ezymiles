@@ -6,7 +6,7 @@ import { Download, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, Input } from "@/components/ui/field";
 import { Table, TableEmpty, Th, Td } from "./ui";
-import { REPORT_KEYS, REPORT_LABELS, type ReportKey } from "@/server/admin/reports";
+import { REPORT_KEYS, REPORT_LABELS, type ReportKey } from "@/lib/report-constants";
 
 /** Minimal CSV writer — quotes any field containing a comma, quote or newline. */
 function toCsv(columns: string[], rows: (string | number)[][]): string {

@@ -2,6 +2,7 @@ import "server-only";
 import { tryConnectDB } from "@/lib/db";
 import { Booking, Payment, Enquiry, Lead, User, Package } from "@/models";
 import { formatDate } from "@/lib/utils";
+import { REPORT_KEYS, REPORT_LABELS, type ReportKey } from "@/lib/report-constants";
 
 /**
  * Tabular data for the admin Reports & Export section. Every report returns
@@ -9,26 +10,7 @@ import { formatDate } from "@/lib/utils";
  * cover all seven report types.
  */
 
-export const REPORT_KEYS = [
-  "bookings",
-  "revenue",
-  "enquiries",
-  "lead-conversion",
-  "payments",
-  "customers",
-  "package-performance",
-] as const;
-export type ReportKey = (typeof REPORT_KEYS)[number];
-
-export const REPORT_LABELS: Record<ReportKey, string> = {
-  bookings: "Bookings",
-  revenue: "Revenue",
-  enquiries: "Enquiries",
-  "lead-conversion": "Lead conversion",
-  payments: "Payments",
-  customers: "Customers",
-  "package-performance": "Package performance",
-};
+export { REPORT_KEYS, REPORT_LABELS, type ReportKey };
 
 export interface ReportRange {
   from?: string;
