@@ -22,7 +22,7 @@ export const usePreferences = create<PreferencesState>()(
       setHydrated: () => set({ hydrated: true }),
     }),
     {
-      name: "voyara.preferences",
+      name: "ezymiles.preferences",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ currency: s.currency }) as PreferencesState,
       onRehydrateStorage: () => (state) => state?.setHydrated(),
@@ -59,7 +59,7 @@ export const useWishlist = create<WishlistState>()(
       setHydrated: () => set({ hydrated: true }),
     }),
     {
-      name: "voyara.wishlist",
+      name: "ezymiles.wishlist",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ ids: s.ids }) as WishlistState,
       onRehydrateStorage: () => (state) => state?.setHydrated(),
@@ -81,6 +81,6 @@ export const useRecentlyViewed = create<RecentState>()(
       push: (slug) =>
         set({ slugs: [slug, ...get().slugs.filter((s) => s !== slug)].slice(0, 8) }),
     }),
-    { name: "voyara.recent", storage: createJSONStorage(() => localStorage) },
+    { name: "ezymiles.recent", storage: createJSONStorage(() => localStorage) },
   ),
 );

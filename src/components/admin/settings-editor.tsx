@@ -37,6 +37,7 @@ export function SettingsEditor({
     features: { ...settings.features },
     seo: { ...settings.seo, keywords: settings.seo.keywords ?? [] },
     rates: { ...settings.currency.rates } as Record<string, number>,
+    about: { ...settings.about },
   }));
 
   const [saving, setSaving] = React.useState(false);
@@ -53,6 +54,7 @@ export function SettingsEditor({
       features: values.features,
       seo: values.seo,
       currency: { rates: values.rates },
+      about: values.about,
     });
 
     if (result.ok) {
@@ -121,6 +123,7 @@ export function SettingsEditor({
             ["features", "Features"],
             ["seo", "SEO"],
             ["currency", "Currency"],
+            ["about", "About & Founder"],
           ].map(([value, label]) => (
             <TabsTrigger key={value} value={value}>
               {label}
@@ -615,6 +618,155 @@ export function SettingsEditor({
                   />
                 </Field>
               ))}
+            </div>
+          </Panel>
+        </TabsContent>
+
+        {/* ================================ ABOUT ================================ */}
+        <TabsContent value="about" className="space-y-5">
+          <Panel title="About Us Section">
+            <div className="space-y-4">
+              <Field label="About Title" htmlFor="ab-title" required>
+                <Input
+                  id="ab-title"
+                  value={values.about.aboutTitle}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, aboutTitle: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="About Description" htmlFor="ab-text" required>
+                <Textarea
+                  id="ab-text"
+                  rows={4}
+                  value={values.about.aboutText}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, aboutText: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Highlighted Message" htmlFor="ab-highlight" required>
+                <Input
+                  id="ab-highlight"
+                  value={values.about.aboutHighlight}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, aboutHighlight: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+            </div>
+          </Panel>
+
+          <Panel title="Our Philosophy Section">
+            <div className="space-y-4">
+              <Field label="Philosophy Title" htmlFor="ab-ph-title" required>
+                <Input
+                  id="ab-ph-title"
+                  value={values.about.philosophyTitle}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, philosophyTitle: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Philosophy Text" htmlFor="ab-ph-text" required>
+                <Textarea
+                  id="ab-ph-text"
+                  rows={4}
+                  value={values.about.philosophyText}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, philosophyText: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+            </div>
+          </Panel>
+
+          <Panel title="Founder's Note Section">
+            <div className="space-y-4">
+              <Field label="Founder Name" htmlFor="ab-fd-name" required>
+                <Input
+                  id="ab-fd-name"
+                  value={values.about.founderName}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderName: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Founder Role" htmlFor="ab-fd-role" required>
+                <Input
+                  id="ab-fd-role"
+                  value={values.about.founderRole}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderRole: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Founder's Story" htmlFor="ab-fd-story" required hint="Admin-edited version of founder's narrative. Use double newlines to separate paragraphs.">
+                <Textarea
+                  id="ab-fd-story"
+                  rows={8}
+                  value={values.about.founderStory}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderStory: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <Field label="Highlighted Founder Quote" htmlFor="ab-fd-quote" required>
+                <Textarea
+                  id="ab-fd-quote"
+                  rows={2}
+                  value={values.about.founderQuote}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      about: { ...values.about, founderQuote: e.target.value },
+                    })
+                  }
+                />
+              </Field>
+
+              <ImageField
+                label="Founder Photograph"
+                value={{ url: values.about.founderImageUrl ?? "", alt: values.about.founderName }}
+                onChange={(v) =>
+                  setValues({
+                    ...values,
+                    about: { ...values.about, founderImageUrl: v.url },
+                  })
+                }
+                folder="brand"
+                hint="Admins can upload the real founder photo. If empty, the website renders a premium profile placeholder."
+              />
             </div>
           </Panel>
         </TabsContent>

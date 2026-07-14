@@ -16,11 +16,11 @@ interface Window {
 }
 
 declare global {
-  var __voyaraRateLimit: Map<string, Window> | undefined;
+  var __ezymilesRateLimit: Map<string, Window> | undefined;
 }
 
-const hits = globalThis.__voyaraRateLimit ?? new Map<string, Window>();
-globalThis.__voyaraRateLimit = hits;
+const hits = globalThis.__ezymilesRateLimit ?? new Map<string, Window>();
+globalThis.__ezymilesRateLimit = hits;
 
 export interface RateLimitResult {
   success: boolean;
@@ -71,8 +71,8 @@ export async function guard(
 }
 
 /** Periodically drop expired windows so the Map cannot grow unbounded. */
-if (!globalThis.__voyaraRateLimitSweeper) {
-  globalThis.__voyaraRateLimitSweeper = setInterval(
+if (!globalThis.__ezymilesRateLimitSweeper) {
+  globalThis.__ezymilesRateLimitSweeper = setInterval(
     () => {
       const now = Date.now();
       for (const [key, window] of hits) {
@@ -82,9 +82,9 @@ if (!globalThis.__voyaraRateLimitSweeper) {
     10 * 60 * 1000,
   );
   // Don't hold the process open in scripts / tests.
-  globalThis.__voyaraRateLimitSweeper.unref?.();
+  globalThis.__ezymilesRateLimitSweeper.unref?.();
 }
 
 declare global {
-  var __voyaraRateLimitSweeper: ReturnType<typeof setInterval> | undefined;
+  var __ezymilesRateLimitSweeper: ReturnType<typeof setInterval> | undefined;
 }

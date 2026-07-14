@@ -498,7 +498,7 @@ export function TripBuilder({
               loading={isSubmitting}
               loadingText="Sending brief"
             >
-              Send my trip brief
+              Request My Travel Plan
               <ArrowRight aria-hidden />
             </Button>
           )}

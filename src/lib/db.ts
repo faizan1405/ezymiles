@@ -10,14 +10,14 @@ import mongoose, { type Mongoose } from "mongoose";
  */
 
 declare global {
-  var __voyaraMongoose: {
+  var __ezymilesMongoose: {
     conn: Mongoose | null;
     promise: Promise<Mongoose> | null;
   } | undefined;
 }
 
-const cache = globalThis.__voyaraMongoose ?? { conn: null, promise: null };
-globalThis.__voyaraMongoose = cache;
+const cache = globalThis.__ezymilesMongoose ?? { conn: null, promise: null };
+globalThis.__ezymilesMongoose = cache;
 
 mongoose.set("strictQuery", true);
 
@@ -34,7 +34,7 @@ export async function connectDB(): Promise<Mongoose> {
   if (!cache.promise) {
     cache.promise = mongoose
       .connect(uri, {
-        dbName: process.env.MONGODB_DB || "voyara",
+        dbName: process.env.MONGODB_DB || "ezymiles",
         bufferCommands: false,
         maxPoolSize: 10,
         serverSelectionTimeoutMS: 8000,

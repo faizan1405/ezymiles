@@ -197,7 +197,7 @@ export default async function PackagesPage({
 
       {/* ---------------------------------- SEO ----------------------------------- */}
       <section className="border-t border-hairline bg-white py-14">
-        <div className="container-page prose-voyara max-w-3xl">
+        <div className="container-page prose-ezymiles max-w-3xl">
           <h2 className="text-2xl text-midnight-900">Choosing a holiday package</h2>
           <p className="mt-4 text-[0.9375rem] leading-relaxed text-muted">
             A package should save you time, not flexibility. Everything listed here can be shortened,

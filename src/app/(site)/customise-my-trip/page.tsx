@@ -34,12 +34,10 @@ export default async function CustomiseTripPage({
 
           <div className="mt-6 max-w-3xl">
             <h1 className="text-3xl leading-tight text-midnight-900 sm:text-4xl lg:text-5xl">
-              Start from a blank page
+              Tell Us How You Want to Travel
             </h1>
             <p className="mt-4 text-[0.9375rem] leading-relaxed text-muted sm:text-base">
-              Packages are a starting point, not a straitjacket. Tell us what a good day looks like to
-              you and we&apos;ll build the trip around it — properly costed, line by line, with nothing
-              hidden until checkout.
+              Share your destination, budget and preferences. Our team will recommend a journey that genuinely suits you.
             </p>
           </div>
 
@@ -74,14 +72,19 @@ export default async function CustomiseTripPage({
           </Suspense>
         </Reveal>
 
-        <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-muted">
-          Submitting a brief costs nothing and commits you to nothing. We&apos;ll use your details only
-          to plan and quote this trip — see our{" "}
-          <Link href="/legal/privacy-policy" className="underline hover:no-underline">
-            privacy policy
-          </Link>
-          .
-        </p>
+        <div className="text-center mt-8">
+          <p className="font-display text-[1.0625rem] font-semibold text-midnight-900">
+            No pressure. No exaggerated promises. Just honest travel guidance.
+          </p>
+          <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-muted">
+            Submitting a brief costs nothing and commits you to nothing. We&apos;ll use your details only
+            to plan and quote this trip — see our{" "}
+            <Link href="/legal/privacy-policy" className="underline hover:no-underline">
+              privacy policy
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </>
   );

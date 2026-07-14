@@ -22,7 +22,7 @@ export function AnnouncementBar({ announcement }: { announcement: Settings["anno
     // sessionStorage only exists client-side, so this can't be read during
     // the initial render — an effect is the correct (only) way to hydrate it.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDismissed(sessionStorage.getItem("voyara.announcement.dismissed") === "1");
+    setDismissed(sessionStorage.getItem("ezymiles.announcement.dismissed") === "1");
   }, []);
 
   React.useEffect(() => {
@@ -40,7 +40,7 @@ export function AnnouncementBar({ announcement }: { announcement: Settings["anno
 
   const close = () => {
     setDismissed(true);
-    sessionStorage.setItem("voyara.announcement.dismissed", "1");
+    sessionStorage.setItem("ezymiles.announcement.dismissed", "1");
   };
 
   const body = (

@@ -55,7 +55,7 @@ export function SmartImage({
           wrapperClassName,
           className,
         )}
-        style={{ backgroundImage: pickGradient(safeAlt || "voyara") }}
+        style={{ backgroundImage: pickGradient(safeAlt || "ezymiles") }}
         role="img"
         aria-label={safeAlt}
       >

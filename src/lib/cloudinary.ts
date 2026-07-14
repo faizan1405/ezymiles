@@ -51,7 +51,7 @@ export function signUpload(folder: MediaFolder): UploadSignature | null {
   if (!configured()) return null;
 
   const timestamp = Math.round(Date.now() / 1000);
-  const path = `voyara/${folder}`;
+  const path = `ezymiles/${folder}`;
 
   const signature = cloudinary.utils.api_sign_request(
     {

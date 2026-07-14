@@ -15,6 +15,7 @@ export type Settings = {
   homepage: ISiteSettings["homepage"];
   seo: ISiteSettings["seo"];
   features: ISiteSettings["features"];
+  about: ISiteSettings["about"];
 };
 
 /** Build-time defaults, used whenever the database has no settings document yet. */
@@ -86,6 +87,30 @@ export const DEFAULT_SETTINGS: Settings = {
     visaEnabled: true,
     cabsEnabled: true,
   },
+  about: {
+    aboutTitle: "About EzyMiles",
+    aboutText: "EzyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
+    aboutHighlight: "Listen first. Recommend honestly. Serve responsibly.",
+    philosophyTitle: "Trust Before Transactions",
+    philosophyText: "Customers invest their money, time, emotions and dreams when planning a journey. EzyMiles values honest guidance and customer trust more than higher commissions.",
+    founderName: "Charanjit Singh",
+    founderRole: "Founder, EzyMiles",
+    founderStory: `Travel has never been just a hobby for me. It has been one of the most meaningful experiences of my life.
+
+Over the years, I have travelled extensively across India and several countries around the world. Every journey taught me something new—not just about places, but about people, cultures and the importance of good planning.
+
+Like many travellers, I have experienced situations where promises made during booking disappeared once payment was completed. Excuses replaced accountability, and support became difficult to find when it was needed the most. Those experiences inspired me to build something different.
+
+After completing nearly four decades of public service, I decided to dedicate this phase of my life to something I genuinely enjoy—helping people travel with confidence.
+
+EzyMiles is built on a simple promise: If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.
+
+My goal is not to build the biggest travel company. My goal is to build a company that people remember because it stood by them when it mattered.
+
+If, after your journey, you feel that EzyMiles made your travel easier, safer and more enjoyable, then I will consider our work successful.`,
+    founderQuote: "If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.",
+    founderImageUrl: "",
+  },
 };
 
 /**
@@ -112,6 +137,7 @@ export const getSettings = cache(async (): Promise<Settings> => {
       homepage: { ...DEFAULT_SETTINGS.homepage, ...s.homepage },
       seo: { ...DEFAULT_SETTINGS.seo, ...s.seo },
       features: { ...DEFAULT_SETTINGS.features, ...s.features },
+      about: { ...DEFAULT_SETTINGS.about, ...s.about },
     };
   } catch {
     return DEFAULT_SETTINGS;

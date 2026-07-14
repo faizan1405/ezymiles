@@ -102,8 +102,14 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-3">
             <Logo tone="dark" name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-midnight-200/65">
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-lagoon-300">
               {settings.brand.tagline}
+            </p>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-midnight-200/65">
+              {settings.brand.name} makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.
+            </p>
+            <p className="mt-4 text-sm font-bold text-white">
+              Trust Before Transactions.
             </p>
 
             <address className="mt-6 space-y-3 text-sm not-italic text-midnight-200/70">

@@ -93,6 +93,19 @@ export interface ISiteSettings {
     cabsEnabled: boolean;
   };
 
+  about: {
+    aboutTitle: string;
+    aboutText: string;
+    aboutHighlight: string;
+    philosophyTitle: string;
+    philosophyText: string;
+    founderName: string;
+    founderRole: string;
+    founderStory: string;
+    founderQuote: string;
+    founderImageUrl: string;
+  };
+
   updatedBy?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -177,6 +190,30 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       activitiesEnabled: { type: Boolean, default: true },
       visaEnabled: { type: Boolean, default: true },
       cabsEnabled: { type: Boolean, default: true },
+    },
+    about: {
+      aboutTitle: { type: String, default: "About EzyMiles" },
+      aboutText: {
+        type: String,
+        default:
+          "EzyMiles is an independent travel company focused on making family holidays, international vacations, honeymoons and weekend trips simple, transparent and stress-free.",
+      },
+      aboutHighlight: { type: String, default: "Listen first. Recommend honestly. Serve responsibly." },
+      philosophyTitle: { type: String, default: "Trust Before Transactions" },
+      philosophyText: {
+        type: String,
+        default:
+          "Customers invest their money, time, emotions and dreams when planning a journey. EzyMiles values honest guidance and customer trust more than higher commissions.",
+      },
+      founderName: { type: String, default: "Charanjit Singh" },
+      founderRole: { type: String, default: "Founder, EzyMiles" },
+      founderStory: { type: String, default: "" },
+      founderQuote: {
+        type: String,
+        default:
+          "If I recommend something to you, it will be because I genuinely believe it is right for you—not because it pays me more.",
+      },
+      founderImageUrl: { type: String, default: "" },
     },
     updatedBy: { type: Schema.Types.ObjectId, ref: "AdminUser" },
   },

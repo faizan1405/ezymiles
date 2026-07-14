@@ -12,7 +12,7 @@ import { z } from "zod";
 
 const serverSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
-  MONGODB_DB: z.string().default("voyara"),
+  MONGODB_DB: z.string().default("ezymiles"),
 
   AUTH_SECRET: z.string().min(16, "AUTH_SECRET must be at least 16 characters"),
   AUTH_URL: z.url().optional(),
@@ -35,14 +35,14 @@ const serverSchema = z.object({
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
-  MAIL_FROM: z.string().default("Voyara <no-reply@voyara.example>"),
+  MAIL_FROM: z.string().default("EzyMiles <no-reply@ezymiles.example>"),
 
   FLIGHT_PROVIDER: z.enum(["demo", "amadeus"]).default("demo"),
   AMADEUS_CLIENT_ID: z.string().optional(),
   AMADEUS_CLIENT_SECRET: z.string().optional(),
 
-  SEED_ADMIN_EMAIL: z.string().default("admin@voyara.example"),
-  SEED_ADMIN_PASSWORD: z.string().default("Voyara@2026"),
+  SEED_ADMIN_EMAIL: z.string().default("admin@ezymiles.example"),
+  SEED_ADMIN_PASSWORD: z.string().default("EzyMiles@2026"),
 
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 });

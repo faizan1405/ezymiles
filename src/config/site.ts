@@ -9,12 +9,12 @@
 
 export const BRAND = {
   /** Placeholder — replace from Admin → Site Settings. */
-  name: "[TRAVEL BRAND NAME]",
+  name: "EzyMiles",
   /** Short mark used in the logo lockup while no logo asset is uploaded. */
-  shortName: "Voyara",
-  tagline: "Journeys designed around you.",
+  shortName: "EzyMiles",
+  tagline: "More than a travel company. A travel partner.",
   description:
-    "Thoughtfully designed holidays, flights, stays and experiences — planned with you, not sold to you.",
+    "EzyMiles makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.",
   phone: "[PHONE NUMBER]",
   whatsapp: "[WHATSAPP NUMBER]",
   email: "[EMAIL ADDRESS]",

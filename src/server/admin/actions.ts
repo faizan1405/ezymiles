@@ -1475,6 +1475,18 @@ const settingsSchema = z.object({
   currency: z.object({
     rates: z.record(z.string(), z.coerce.number().positive()),
   }),
+  about: z.object({
+    aboutTitle: z.string().min(1),
+    aboutText: z.string().min(1),
+    aboutHighlight: z.string().min(1),
+    philosophyTitle: z.string().min(1),
+    philosophyText: z.string().min(1),
+    founderName: z.string().min(1),
+    founderRole: z.string().min(1),
+    founderStory: z.string().min(1),
+    founderQuote: z.string().min(1),
+    founderImageUrl: z.string().optional().default(""),
+  }),
 });
 
 export async function saveSiteSettings(raw: unknown): Promise<AdminResult> {
@@ -1501,6 +1513,7 @@ export async function saveSiteSettings(raw: unknown): Promise<AdminResult> {
           features: d.features,
           seo: d.seo,
           "currency.rates": d.currency.rates,
+          about: d.about,
           updatedBy: g.actor.id,
         },
       },

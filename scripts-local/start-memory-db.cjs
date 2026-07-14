@@ -7,7 +7,7 @@ const { MongoMemoryServer } = require("mongodb-memory-server");
 
 (async () => {
   const mongod = await MongoMemoryServer.create({
-    instance: { dbName: "voyara", port: 27117 },
+    instance: { dbName: "ezymiles", port: 27117 },
   });
   const uri = mongod.getUri();
   console.log("MONGO_MEMORY_URI=" + uri);
