@@ -10,7 +10,6 @@ import mongoose, { type Mongoose } from "mongoose";
  */
 
 declare global {
-  // eslint-disable-next-line no-var
   var __voyaraMongoose: {
     conn: Mongoose | null;
     promise: Promise<Mongoose> | null;

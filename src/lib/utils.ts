@@ -98,6 +98,21 @@ export function toDateInput(date: Date | string | number) {
   return new Date(d.getTime() - off * 60_000).toISOString().slice(0, 10);
 }
 
+/**
+ * `n` days from the moment this is called (negative for the past). Kept as a
+ * standalone helper — rather than inlining `new Date(Date.now() + …)` at each
+ * call site — so the "current instant" read stays out of component/render
+ * bodies, where the React Compiler's purity check flags it.
+ */
+export function daysFromNow(n: number): Date {
+  return addDays(new Date(), n);
+}
+
+/** `toDateInput(daysFromNow(n))`, for default values on date inputs. */
+export function futureDateInput(n: number): string {
+  return toDateInput(daysFromNow(n));
+}
+
 /* --------------------------------- Strings -------------------------------- */
 
 export function slugify(input: string) {

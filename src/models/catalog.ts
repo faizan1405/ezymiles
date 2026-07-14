@@ -132,6 +132,8 @@ export interface IPackageVariant {
 }
 
 export interface IDeparture {
+  /** Subdocument id — departures are addressed individually when booking. */
+  _id: Types.ObjectId;
   date: Date;
   returnDate?: Date;
   departureCity: string;

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /* ==========================================================================
    VOYARA DESIGN SYSTEM
@@ -320,6 +321,37 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+/* Radix accordion: animate to the measured content height */
+@keyframes voyara-accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes voyara-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@utility animate-accordion-down {
+  animation: voyara-accordion-down 300ms var(--ease-out-expo);
+}
+
+@utility animate-accordion-up {
+  animation: voyara-accordion-up 220ms var(--ease-in-out-soft);
 }
 
 @utility animate-float {
