@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, ShieldCheck, Lock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ShieldCheck, Lock } from "lucide-react";
 import {
   InstagramIcon,
   FacebookIcon,
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/brand-icons";
 import type { Settings } from "@/lib/settings";
 import type { NavData } from "@/server/nav";
+import { BRAND } from "@/config/site";
 import { Logo } from "./logo";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 
@@ -131,6 +132,12 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
                 <MapPin className="mt-0.5 size-4 shrink-0 text-lagoon-400" aria-hidden />
                 {settings.contact.address}
               </span>
+              {settings.contact.officeHours ? (
+                <span className="flex items-start gap-2.5">
+                  <Clock className="mt-0.5 size-4 shrink-0 text-lagoon-400" aria-hidden />
+                  {settings.contact.officeHours}
+                </span>
+              ) : null}
             </address>
 
             {socials.length ? (
@@ -207,7 +214,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
       <div className="border-t border-white/8">
         <div className="container-page flex flex-col gap-4 py-6 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-xs text-midnight-200/50">
-            © {year} {settings.brand.name}. All rights reserved.
+            © {year} {BRAND.legalName}. All rights reserved.
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {legal.map((l) => (

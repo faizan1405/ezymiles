@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS: Settings = {
     whatsapp: BRAND.whatsapp,
     email: BRAND.email,
     address: BRAND.address,
-    officeHours: "Mon – Sat, 9:30 am – 7:00 pm IST",
+    officeHours: "10:00 AM – 5:00 PM",
   },
   social: BRAND.social,
   announcement: {

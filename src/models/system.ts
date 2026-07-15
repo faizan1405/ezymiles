@@ -129,13 +129,16 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       faviconUrl: String,
     },
     contact: {
-      phone: { type: String, default: "[PHONE NUMBER]" },
-      whatsapp: { type: String, default: "[WHATSAPP NUMBER]" },
-      email: { type: String, default: "[EMAIL ADDRESS]" },
+      phone: { type: String, default: "+91 79000 03279" },
+      whatsapp: { type: String, default: "+91 79000 03279" },
+      email: { type: String, default: "hello@ezymiles.com" },
       salesEmail: String,
-      address: { type: String, default: "[OFFICE ADDRESS]" },
+      address: {
+        type: String,
+        default: "Plot No. 337, Industrial and Business Park, Phase 2, Chandigarh – 160002",
+      },
       mapUrl: String,
-      officeHours: { type: String, default: "Mon – Sat, 9:30 am – 7:00 pm IST" },
+      officeHours: { type: String, default: "10:00 AM – 5:00 PM" },
     },
     social: {
       instagram: String,

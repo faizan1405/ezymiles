@@ -8,17 +8,19 @@
  */
 
 export const BRAND = {
-  /** Placeholder — replace from Admin → Site Settings. */
+  /** Marketing brand shown in the logo lockup, header and page titles. */
   name: "eZyMiles",
   /** Short mark used in the logo lockup while no logo asset is uploaded. */
   shortName: "eZyMiles",
+  /** Full registered legal entity — used in the footer copyright and contact page. */
+  legalName: "Ezymiles Travel Services LLP",
   tagline: "More than a travel company. A travel partner.",
   description:
     "eZyMiles makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.",
-  phone: "[PHONE NUMBER]",
-  whatsapp: "[WHATSAPP NUMBER]",
-  email: "[EMAIL ADDRESS]",
-  address: "[OFFICE ADDRESS]",
+  phone: "+91 79000 03279",
+  whatsapp: "+91 79000 03279",
+  email: "hello@ezymiles.com",
+  address: "Plot No. 337, Industrial and Business Park, Phase 2, Chandigarh – 160002",
   primaryMarket: "India",
   social: {
     instagram: "#",

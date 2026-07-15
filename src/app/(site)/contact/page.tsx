@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 
 import { getSettings } from "@/lib/settings";
+import { BRAND } from "@/config/site";
 import { getFAQs } from "@/server/catalog";
 import { ContactForm } from "@/components/forms/contact-form";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -81,6 +82,8 @@ export default async function ContactPage() {
                     Office
                   </p>
                   <address className="mt-1 text-sm not-italic leading-relaxed text-midnight-900">
+                    <span className="font-semibold">{BRAND.legalName}</span>
+                    <br />
                     {settings.contact.address}
                   </address>
                   <p className="mt-1.5 flex items-center gap-1.5 text-xs text-muted">
