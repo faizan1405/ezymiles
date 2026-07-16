@@ -143,7 +143,7 @@ export default async function PackageDetailPage({ params }: PageProps) {
                 {pkg.isBestseller ? <Badge tone="gold">Bestseller</Badge> : null}
                 {pkg.isTrending ? <Badge tone="ink">Trending</Badge> : null}
                 {discount > 0 ? <Badge tone="sunset">{discount}% off</Badge> : null}
-                {pkg.isDemoData ? <Badge tone="warning">Demo data</Badge> : null}
+                {pkg.isDemoData ? <Badge tone="warning">Demo Package</Badge> : null}
               </div>
 
               <h1 className="mt-3 text-3xl leading-tight text-midnight-900 sm:text-4xl lg:text-[2.75rem]">
@@ -153,6 +153,13 @@ export default async function PackageDetailPage({ params }: PageProps) {
               {pkg.subtitle ? (
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted sm:text-base">
                   {pkg.subtitle}
+                </p>
+              ) : null}
+
+              {pkg.isDemoData ? (
+                <p className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs leading-relaxed text-amber-900">
+                  <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                  Sample package created for website testing. Prices, dates and availability are not live offers.
                 </p>
               ) : null}
 

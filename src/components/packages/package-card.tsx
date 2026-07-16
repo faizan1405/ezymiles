@@ -85,6 +85,11 @@ export function PackageCard({
                 Trending
               </Badge>
             ) : null}
+            {pkg.isDemoData ? (
+              <Badge tone="warning" size="sm">
+                Demo Package
+              </Badge>
+            ) : null}
           </div>
 
           <div className="absolute right-3 top-3">

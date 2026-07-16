@@ -116,8 +116,8 @@ function Channel({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-midnight-700 bg-midnight-900 p-4">
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-midnight-700 [&_svg]:size-5">
+    <div className="flex items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.06] p-4">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/12 [&_svg]:size-5">
         {icon}
       </span>
       <div className="min-w-0 flex-1">

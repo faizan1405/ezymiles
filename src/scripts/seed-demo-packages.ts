@@ -1,7 +1,7 @@
 /**
  * Demo package seed script.
  *
- * Adds 10 realistic demo travel packages (and any destinations they need)
+ * Adds 12 realistic demo travel packages (and any destinations they need)
  * for testing the packages listing, search, filters, detail pages, wishlist,
  * enquiry, custom-trip and booking flows end to end.
  *
@@ -346,6 +346,84 @@ const NEW_DESTINATIONS: NewDestinationSeed[] = [
     ],
     faqs: [],
     isFeatured: true,
+    isTrending: true,
+    status: "published",
+  },
+  {
+    name: "Andaman Islands",
+    slug: "andaman",
+    country: "India",
+    countryCode: "IN",
+    region: "Andaman & Nicobar Islands",
+    scope: "domestic",
+    themes: ["beach", "honeymoon", "adventure"],
+    summary: "Turquoise water, coral reefs, and a cellular jail with a hard history, spread across three islands.",
+    description:
+      "Port Blair, Havelock Island and Neil Island each play a different role — Port Blair for the Cellular Jail and its light-and-sound show, Havelock for Radhanagar Beach and scuba diving, and Neil Island for a slower, quieter finish. Islands are linked by ferry, so the pace is inherently unhurried.",
+    heroImage: img("photo-1573052905904-34ad8c27f0cc", "Turquoise water off a beach in the Andaman Islands"),
+    gallery: [
+      img("photo-1519046904884-53103b34b206", "A quiet cove near Havelock Island"),
+      img("photo-1540202404-a2f29016b523", "A secluded beach on Neil Island"),
+    ],
+    startingPriceINR: 28000,
+    recommendedDurationDays: 5,
+    bestMonths: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
+    coordinates: { lat: 11.7401, lng: 92.6586 },
+    highlights: [
+      "Radhanagar Beach on Havelock Island",
+      "Scuba diving and snorkelling on the reef",
+      "The Cellular Jail light-and-sound show, Port Blair",
+      "Neil Island's quieter, uncrowded beaches",
+    ],
+    faqs: [
+      {
+        question: "Do I need a permit to visit the Andaman Islands?",
+        answer:
+          "Indian citizens don't need a permit for the islands covered on this trip. Foreign nationals need a free Restricted Area Permit, issued on arrival at Port Blair airport.",
+      },
+    ],
+    isFeatured: true,
+    isTrending: false,
+    status: "published",
+  },
+  {
+    name: "Vietnam",
+    slug: "vietnam",
+    country: "Vietnam",
+    countryCode: "VN",
+    region: "Southeast Asia",
+    scope: "international",
+    themes: ["culture", "group", "adventure"],
+    summary: "Ha Long Bay's limestone karsts, Hanoi's Old Quarter, and Ho Chi Minh City's wartime history in one loop.",
+    description:
+      "Hanoi and Ho Chi Minh City bookend a trip that swings from the Old Quarter's street-food alleys to an overnight cruise among Ha Long Bay's limestone islands, then south to the Cu Chi Tunnels and a Mekong Delta day trip — enough contrast to feel like two countries in one.",
+    heroImage: img("photo-1552550049-db097c9480d1", "Limestone karsts rising out of Ha Long Bay"),
+    gallery: [
+      img("photo-1552733407-5d5c46c3bb3b", "A lantern-lit temple gate in Vietnam"),
+      img("photo-1573790387438-4da905039392", "Terraced rice fields in northern Vietnam"),
+    ],
+    startingPriceINR: 42000,
+    recommendedDurationDays: 7,
+    bestMonths: ["Nov", "Dec", "Jan", "Feb", "Mar"],
+    currencyUsed: "Vietnamese Dong (VND)",
+    languages: ["Vietnamese", "English (tourist areas)"],
+    timezone: "GMT+7",
+    visaNote: "e-visa required in advance for Indian passport holders.",
+    coordinates: { lat: 14.0583, lng: 108.2772 },
+    highlights: [
+      "An overnight cruise among Ha Long Bay's limestone islands",
+      "Hanoi's Old Quarter and Ho Chi Minh Mausoleum",
+      "The Cu Chi Tunnels outside Ho Chi Minh City",
+      "A Mekong Delta boat day trip",
+    ],
+    faqs: [
+      {
+        question: "Is a visa required for Indian passport holders?",
+        answer:
+          "Yes — an e-visa is required in advance. We handle the application as part of this package; see the package's visa details for what's included.",
+      },
+    ],
+    isFeatured: false,
     isTrending: true,
     status: "published",
   },
@@ -1336,7 +1414,186 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
     },
   },
 
-  /* ---------------------------- 6. Dubai ---------------------------- */
+  /* ---------------------------- 6. Andaman ---------------------------- */
+  {
+    title: "Andaman Island Escape",
+    slug: "andaman-island-escape",
+    subtitle: "Radhanagar Beach, a Havelock reef dive, and a slower finish on Neil Island.",
+    destinationSlug: "andaman",
+    citiesCovered: ["Port Blair", "Havelock Island", "Neil Island"],
+    scope: "domestic",
+    tripTypes: ["beach", "honeymoon", "adventure"],
+    collections: ["best-of-india", "honeymoon-escapes"],
+    durationDays: 5,
+    durationNights: 4,
+    heroImage: img("photo-1573052905904-34ad8c27f0cc", "Turquoise water off a beach in the Andaman Islands"),
+    gallery: [
+      img("photo-1519046904884-53103b34b206", "A quiet cove near Havelock Island"),
+      img("photo-1540202404-a2f29016b523", "A secluded beach on Neil Island"),
+    ],
+    overview:
+      "Five days across Port Blair, Havelock and Neil Island — the Cellular Jail's light-and-sound show on arrival, a full day at Radhanagar Beach with an optional reef dive, and a quieter last day on Neil Island before flying out of Port Blair. Inter-island transfers are by government or private ferry, weather permitting.",
+    highlights: [
+      "Radhanagar Beach, rated among Asia's best",
+      "An optional scuba or snorkelling trip on Havelock's reef",
+      "The Cellular Jail light-and-sound show",
+      "A quieter, uncrowded day on Neil Island",
+    ],
+    itinerary: [
+      {
+        day: 1,
+        city: "Port Blair",
+        title: "Arrival and the Cellular Jail",
+        description: "Airport transfer and check-in, then the Cellular Jail's evening light-and-sound show.",
+        meals: [],
+        hotel: "Port Blair city hotel",
+        transfers: "Private airport transfer",
+        activities: ["Cellular Jail light-and-sound show"],
+        optionalExperiences: ["Corbyn's Cove Beach evening walk"],
+      },
+      {
+        day: 2,
+        city: "Havelock Island",
+        title: "Ferry to Havelock and Radhanagar Beach",
+        description: "Morning ferry to Havelock, then the afternoon free at Radhanagar Beach for sunset.",
+        meals: ["breakfast"],
+        hotel: "Havelock beach resort",
+        transfers: "Ferry, Port Blair to Havelock",
+        activities: ["Radhanagar Beach sunset"],
+        optionalExperiences: ["Sunset kayaking"],
+      },
+      {
+        day: 3,
+        city: "Havelock Island",
+        title: "Reef day",
+        description: "A free day on Havelock, built around an optional scuba or snorkelling trip on the reef.",
+        meals: ["breakfast"],
+        hotel: "Havelock beach resort",
+        transfers: "None — free day",
+        activities: ["Elephant Beach walk"],
+        optionalExperiences: ["Introductory scuba dive", "Snorkelling trip to the reef", "Glass-bottom boat ride"],
+      },
+      {
+        day: 4,
+        city: "Neil Island",
+        title: "On to Neil Island",
+        description: "Ferry to Neil Island for a quieter last full day — Bharatpur and Laxmanpur beaches, at your own pace.",
+        meals: ["breakfast"],
+        hotel: "Neil Island beach cottage",
+        transfers: "Ferry, Havelock to Neil Island",
+        activities: ["Bharatpur Beach", "Laxmanpur Beach sunset"],
+        optionalExperiences: ["Natural rock bridge at low tide"],
+      },
+      {
+        day: 5,
+        city: "Port Blair",
+        title: "Departure",
+        description: "Morning ferry back to Port Blair, then a private transfer to the airport.",
+        meals: ["breakfast"],
+        transfers: "Ferry to Port Blair + private airport transfer",
+        activities: [],
+        optionalExperiences: [],
+      },
+    ],
+    variants: [
+      {
+        key: "standard",
+        label: "Standard — 3★ stays",
+        hotelCategory: 3,
+        durationDays: 5,
+        durationNights: 4,
+        pricePerAdultINR: 28000,
+        pricePerChildINR: 19000,
+        singleSupplementINR: 7000,
+        originalPricePerAdultINR: 33000,
+        isDefault: true,
+      },
+      {
+        key: "deluxe",
+        label: "Deluxe — beachfront resorts",
+        hotelCategory: 4,
+        durationDays: 5,
+        durationNights: 4,
+        pricePerAdultINR: 38000,
+        pricePerChildINR: 26000,
+        singleSupplementINR: 9500,
+        isDefault: false,
+      },
+    ],
+    departureSeeds: [
+      { inDays: 30, departureCity: "Chennai", seatsTotal: 20, seatsBooked: 8, isFixedDeparture: false, isGuaranteed: false },
+      { inDays: 60, departureCity: "Kolkata", seatsTotal: 20, seatsBooked: 2, isFixedDeparture: false, isGuaranteed: false },
+    ],
+    departureCities: ["Chennai", "Kolkata", "Delhi", "Mumbai"],
+    taxPercent: 5,
+    flightsIncluded: false,
+    mealsIncluded: true,
+    activitiesIncluded: false,
+    visaIncluded: false,
+    transfersIncluded: true,
+    hotelCategory: 3,
+    tripStyle: "private",
+    instantConfirmation: true,
+    recommendedSeason: ["Winter", "Autumn"],
+    inclusions: [
+      "4 nights accommodation as per itinerary",
+      "Daily breakfast",
+      "All inter-island ferry tickets",
+      "Airport and jetty transfers",
+      "Cellular Jail light-and-sound show ticket",
+    ],
+    exclusions: [
+      "Flights to/from Port Blair",
+      "Scuba diving and snorkelling (paid directly at the operator)",
+      "Lunches and dinners except where specified",
+      "Personal expenses and tips",
+      "Travel insurance",
+    ],
+    importantInfo: [
+      "Inter-island ferries can be rescheduled or cancelled by the operator in rough seas — the itinerary allows a buffer, but delays are possible.",
+      "Foreign nationals need a free Restricted Area Permit, issued on arrival at Port Blair airport; Indian citizens don't need one.",
+    ],
+    visaDetails: "",
+    cancellationPolicy: [
+      { window: "More than 30 days before travel", charge: "10% of package cost" },
+      { window: "15–30 days before travel", charge: "35% of package cost" },
+      { window: "Less than 15 days before travel", charge: "75% of package cost" },
+    ],
+    paymentPolicy: ["25% deposit to confirm your booking.", "Balance due 15 days before travel."],
+    termsAndConditions: [
+      "Rates are per person on twin-sharing basis unless a single supplement is selected.",
+      "Ferry timings are fixed by the operator and confirmed closer to travel.",
+    ],
+    hotels: [
+      { city: "Port Blair", name: "Port Blair city hotel", category: 3, nights: 1 },
+      { city: "Havelock Island", name: "Havelock beach resort", category: 3, nights: 2 },
+      { city: "Neil Island", name: "Neil Island beach cottage", category: 3, nights: 1 },
+    ],
+    transfersNote: "Private transfers on land; government or private ferries between islands",
+    faqs: [
+      {
+        question: "Is scuba diving included in the package price?",
+        answer:
+          "No — it's an optional paid activity you book directly with the dive operator on Havelock, typically ₹3,500–5,500 for an introductory dive.",
+      },
+      {
+        question: "How rough are the inter-island ferry crossings?",
+        answer:
+          "Generally calm October through May. The June–September monsoon can bring choppier crossings and occasional rescheduling.",
+      },
+    ],
+    isFeatured: true,
+    isTrending: true,
+    isBestseller: false,
+    status: "published",
+    seo: {
+      title: "Andaman Island Escape — 5 Days / 4 Nights Package | eZyMiles",
+      description:
+        "A 5-day Andaman Islands holiday covering Port Blair, Havelock and Neil Island, with Radhanagar Beach and an optional reef dive. Demo pricing for testing.",
+    },
+  },
+
+  /* ---------------------------- 7. Dubai ---------------------------- */
   {
     title: "Dubai Family Holiday",
     slug: "dubai-family-holiday",
@@ -1507,7 +1764,7 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
     },
   },
 
-  /* ---------------------------- 7. Bali ---------------------------- */
+  /* ---------------------------- 8. Bali ---------------------------- */
   {
     title: "Bali Honeymoon Package",
     slug: "bali-honeymoon-package",
@@ -1694,7 +1951,7 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
     },
   },
 
-  /* ---------------------------- 8. Thailand ---------------------------- */
+  /* ---------------------------- 9. Thailand ---------------------------- */
   {
     title: "Thailand Group Tour",
     slug: "thailand-group-tour",
@@ -1862,7 +2119,7 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
     },
   },
 
-  /* ---------------------------- 9. Singapore + Malaysia ---------------------------- */
+  /* ---------------------------- 10. Singapore + Malaysia ---------------------------- */
   {
     title: "Singapore and Malaysia Tour",
     slug: "singapore-malaysia-tour",
@@ -2049,7 +2306,7 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
     },
   },
 
-  /* ---------------------------- 10. Maldives ---------------------------- */
+  /* ---------------------------- 11. Maldives ---------------------------- */
   {
     title: "Maldives Luxury Escape",
     slug: "maldives-luxury-escape",
@@ -2226,6 +2483,209 @@ const DEMO_PACKAGES: DemoPackageSeed[] = [
       title: "Maldives Luxury Escape — 5 Days / 4 Nights, Overwater Villa | eZyMiles",
       description:
         "A flight-inclusive 5-day Maldives honeymoon at an adults-only overwater villa resort, all meals included. Demo pricing for testing purposes.",
+    },
+  },
+
+  /* ---------------------------- 12. Vietnam ---------------------------- */
+  {
+    title: "Vietnam Discovery Tour",
+    slug: "vietnam-discovery-tour",
+    subtitle: "Hanoi's Old Quarter, an overnight Ha Long Bay cruise, and Ho Chi Minh City's wartime history.",
+    destinationSlug: "vietnam",
+    citiesCovered: ["Hanoi", "Ha Long Bay", "Ho Chi Minh City"],
+    scope: "international",
+    tripTypes: ["culture", "group", "adventure"],
+    collections: ["trending-international", "group-departures", "flight-inclusive"],
+    durationDays: 7,
+    durationNights: 6,
+    heroImage: img("photo-1552550049-db097c9480d1", "Limestone karsts rising out of Ha Long Bay"),
+    gallery: [
+      img("photo-1552733407-5d5c46c3bb3b", "A lantern-lit temple gate in Vietnam"),
+      img("photo-1573790387438-4da905039392", "Terraced rice fields in northern Vietnam"),
+    ],
+    overview:
+      "Seven days split between Hanoi and Ho Chi Minh City, with an overnight cruise among Ha Long Bay's limestone islands in between. The south covers the Cu Chi Tunnels and a Mekong Delta boat day, on a fixed group departure with an internal flight connecting the two cities.",
+    highlights: [
+      "An overnight cruise among Ha Long Bay's limestone islands",
+      "Hanoi's Old Quarter and Ho Chi Minh Mausoleum",
+      "The Cu Chi Tunnels outside Ho Chi Minh City",
+      "A Mekong Delta boat day trip",
+    ],
+    itinerary: [
+      {
+        day: 1,
+        city: "Hanoi",
+        title: "Arrival",
+        description: "Private transfer to your Hanoi hotel. Evening free to explore the Old Quarter on foot.",
+        meals: [],
+        hotel: "Hanoi Old Quarter hotel",
+        transfers: "Private airport transfer",
+        activities: ["Old Quarter evening walk"],
+        optionalExperiences: ["Water puppet show"],
+      },
+      {
+        day: 2,
+        city: "Hanoi",
+        title: "City sightseeing",
+        description: "Ho Chi Minh Mausoleum, the One Pillar Pagoda and Hoan Kiem Lake, on a guided city tour.",
+        meals: ["breakfast"],
+        hotel: "Hanoi Old Quarter hotel",
+        transfers: "Coach, half-day city tour",
+        activities: ["Ho Chi Minh Mausoleum", "One Pillar Pagoda", "Hoan Kiem Lake"],
+        optionalExperiences: ["Vietnamese cooking class"],
+      },
+      {
+        day: 3,
+        city: "Ha Long Bay",
+        title: "Board the overnight cruise",
+        description: "Drive to Ha Long Bay and board your overnight cruise, cave visits and a sunset on deck.",
+        meals: ["breakfast", "lunch", "dinner"],
+        hotel: "Overnight cruise cabin, Ha Long Bay",
+        transfers: "Coach, Hanoi to Ha Long Bay",
+        activities: ["Sung Sot Cave", "Sunset on deck"],
+        optionalExperiences: ["Kayaking among the limestone islands", "Tai chi at sunrise"],
+      },
+      {
+        day: 4,
+        city: "Ho Chi Minh City",
+        title: "Cruise disembarkation and flight south",
+        description: "Morning cruise activities, disembark, then a flight from Hanoi to Ho Chi Minh City.",
+        meals: ["breakfast"],
+        hotel: "Ho Chi Minh City hotel",
+        transfers: "Coach to Hanoi airport + domestic flight",
+        activities: ["Morning kayaking or swim stop"],
+        optionalExperiences: [],
+      },
+      {
+        day: 5,
+        city: "Ho Chi Minh City",
+        title: "City tour and the Cu Chi Tunnels",
+        description: "The War Remnants Museum and Reunification Palace in the morning, the Cu Chi Tunnels in the afternoon.",
+        meals: ["breakfast"],
+        hotel: "Ho Chi Minh City hotel",
+        transfers: "Coach, full-day tour",
+        activities: ["War Remnants Museum", "Reunification Palace", "Cu Chi Tunnels"],
+        optionalExperiences: ["Shooting range at Cu Chi (extra cost, on site)"],
+      },
+      {
+        day: 6,
+        city: "Ho Chi Minh City",
+        title: "Mekong Delta day trip",
+        description: "A day trip to the Mekong Delta — a boat ride through the canals and a stop at a local orchard.",
+        meals: ["breakfast", "lunch"],
+        hotel: "Ho Chi Minh City hotel",
+        transfers: "Coach + river boat, full-day tour",
+        activities: ["Mekong Delta boat ride", "Local orchard and honey farm stop"],
+        optionalExperiences: ["Cai Rang floating market extension (seasonal)"],
+      },
+      {
+        day: 7,
+        city: "Ho Chi Minh City",
+        title: "Departure",
+        description: "Free morning, then a private transfer to the airport.",
+        meals: ["breakfast"],
+        transfers: "Private airport transfer",
+        activities: [],
+        optionalExperiences: [],
+      },
+    ],
+    variants: [
+      {
+        key: "standard",
+        label: "Standard — 3★/4★ stays",
+        hotelCategory: 3,
+        durationDays: 7,
+        durationNights: 6,
+        pricePerAdultINR: 42000,
+        pricePerChildINR: 29000,
+        singleSupplementINR: 10000,
+        originalPricePerAdultINR: 49000,
+        isDefault: true,
+      },
+      {
+        key: "deluxe",
+        label: "Deluxe — upgraded cruise cabin",
+        hotelCategory: 4,
+        durationDays: 7,
+        durationNights: 6,
+        pricePerAdultINR: 58000,
+        pricePerChildINR: 39000,
+        singleSupplementINR: 14000,
+        isDefault: false,
+      },
+    ],
+    departureSeeds: [
+      { inDays: 40, departureCity: "Delhi", seatsTotal: 25, seatsBooked: 14, isFixedDeparture: true, isGuaranteed: true },
+      { inDays: 70, departureCity: "Mumbai", seatsTotal: 25, seatsBooked: 5, isFixedDeparture: true, isGuaranteed: false },
+    ],
+    departureCities: ["Delhi", "Mumbai", "Bengaluru"],
+    taxPercent: 5,
+    flightsIncluded: true,
+    mealsIncluded: true,
+    activitiesIncluded: true,
+    visaIncluded: true,
+    transfersIncluded: true,
+    hotelCategory: 3,
+    tripStyle: "group",
+    instantConfirmation: false,
+    recommendedSeason: ["Winter"],
+    inclusions: [
+      "6 nights accommodation, including 1 night on the Ha Long Bay cruise",
+      "Domestic flight, Hanoi to Ho Chi Minh City",
+      "Daily breakfast, plus meals as listed on the cruise and Mekong Delta day",
+      "All sightseeing and entry fees per itinerary",
+      "Vietnam e-visa processing",
+    ],
+    exclusions: [
+      "International flights to/from Vietnam",
+      "Meals not listed in the itinerary",
+      "Optional experiences (cooking class, kayaking, shooting range)",
+      "Personal expenses and tips",
+      "Travel insurance",
+    ],
+    importantInfo: [
+      "The Hanoi–Ho Chi Minh City flight is on a fixed group schedule; seats can't be moved to an earlier or later day.",
+      "Cruise cabin categories on Ha Long Bay are allocated by the cruise operator, not chosen individually.",
+    ],
+    visaDetails:
+      "A single-entry Vietnam e-visa is arranged for you as part of this package — send scanned passport pages at least 15 days before travel.",
+    cancellationPolicy: [
+      { window: "More than 45 days before travel", charge: "15% of package cost" },
+      { window: "20–45 days before travel", charge: "40% of package cost" },
+      { window: "Less than 20 days before travel", charge: "80% of package cost" },
+    ],
+    paymentPolicy: ["30% deposit to confirm your booking.", "Balance due 20 days before travel."],
+    termsAndConditions: [
+      "Rates are per person on twin-sharing basis unless a single supplement is selected.",
+      "This is a fixed group departure — the itinerary and internal flight times are not customisable per traveller.",
+    ],
+    hotels: [
+      { city: "Hanoi", name: "Hanoi Old Quarter hotel", category: 3, nights: 2 },
+      { city: "Ha Long Bay", name: "Overnight cruise cabin", category: 4, nights: 1 },
+      { city: "Ho Chi Minh City", name: "Ho Chi Minh City hotel", category: 3, nights: 3 },
+    ],
+    flightNote: "Domestic flight, Hanoi to Ho Chi Minh City, included in the package",
+    transfersNote: "Coach transfers throughout, on a fixed group schedule",
+    faqs: [
+      {
+        question: "Is the Vietnam e-visa included?",
+        answer:
+          "Yes — a single-entry e-visa is processed for you as part of this package. You'll need to send scanned passport pages in advance.",
+      },
+      {
+        question: "Can we join partway through, skipping Hanoi?",
+        answer:
+          "This is a fixed group departure with a single start point in Hanoi, so partial joins aren't available on this itinerary.",
+      },
+    ],
+    isFeatured: false,
+    isTrending: true,
+    isBestseller: false,
+    status: "published",
+    seo: {
+      title: "Vietnam Discovery Tour — 7 Days / 6 Nights | eZyMiles",
+      description:
+        "A 7-day Vietnam group tour covering Hanoi, an overnight Ha Long Bay cruise and Ho Chi Minh City, with flights and e-visa included. Demo pricing for testing.",
     },
   },
 ];

@@ -176,7 +176,7 @@ function CouponChip({ code, tone = "light" }: { code: string; tone?: "light" | "
       className={cn(
         "inline-flex items-center gap-2 rounded-full border border-dashed px-3.5 py-2 text-[0.8125rem] font-bold tracking-wide transition-colors",
         tone === "dark"
-          ? "border-midnight-300 text-white hover:bg-midnight-800"
+          ? "border-white/30 text-white hover:bg-white/10"
           : "border-midnight-300 text-midnight-900 hover:bg-sand-50",
       )}
     >
