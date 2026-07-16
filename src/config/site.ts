@@ -37,8 +37,22 @@ export const BRAND = {
   },
 } as const;
 
+/** The canonical production origin for EzyMiles. */
+export const PRODUCTION_URL = "https://ezymiles.vercel.app";
+
+/**
+ * Absolute origin used for metadata, canonicals, Open Graph, the sitemap,
+ * robots and email links.
+ *
+ * NEXT_PUBLIC_SITE_URL wins when set (that's what Vercel provides per
+ * environment, and what preview deployments need). When it is missing we fall
+ * back per environment rather than unconditionally to localhost — otherwise a
+ * production build with an unset variable would silently emit localhost
+ * canonical tags, sitemap entries and email links. Local dev keeps localhost.
+ */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  (process.env.NODE_ENV === "production" ? PRODUCTION_URL : "http://localhost:3000");
 
 /* -------------------------------------------------------------------------- */
 /*                                  Currency                                   */
