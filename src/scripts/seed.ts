@@ -77,12 +77,12 @@ async function seedDemoTraveller() {
   const existing = await User.findOne({ email });
   if (existing) return;
 
-  const passwordHash = await bcrypt.hash("eZyMiles@2026", 12);
-
+  // No password: travellers sign in with Google. This record exists to give the
+  // account pages something to render — signing in AS them means signing in with
+  // a Google account that owns this address.
   await User.create({
     name: "Demo Traveller",
     email,
-    passwordHash,
     emailVerified: new Date(),
     phone: "9876543210",
     nationality: "Indian",
@@ -91,7 +91,7 @@ async function seedDemoTraveller() {
     whatsappOptIn: true,
   });
 
-  console.log(`Created demo traveller: ${email} / Traveller@2026`);
+  console.log(`Created demo traveller: ${email} (Google sign-in only — no password)`);
 }
 
 async function seedSiteSettings() {

@@ -4,9 +4,10 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { BadgeCheck, AlertCircle } from "lucide-react";
 
-import { changePassword, updateProfile } from "@/server/actions/account";
+import { updateProfile } from "@/server/actions/account";
 import { Button } from "@/components/ui/button";
 import { Checkbox, Field, Input, Select } from "@/components/ui/field";
+import { GoogleIcon } from "@/components/auth/google-icon";
 import { toast } from "@/components/ui/toast";
 import { CURRENCIES, CURRENCY_META, type CurrencyCode } from "@/config/site";
 import { usePreferences } from "@/store/preferences";
@@ -22,25 +23,16 @@ interface ProfileValues {
   whatsappOptIn: boolean;
 }
 
-interface PasswordValues {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 export function ProfileForm({
   defaults,
-  hasPassword,
   isVerified,
 }: {
   defaults: ProfileValues;
-  hasPassword: boolean;
   isVerified: boolean;
 }) {
   const setCurrency = usePreferences((s) => s.setCurrency);
 
   const profileForm = useForm<ProfileValues>({ defaultValues: defaults });
-  const passwordForm = useForm<PasswordValues>();
 
   const onSaveProfile = profileForm.handleSubmit(async (values) => {
     const result = await updateProfile(values);
@@ -51,17 +43,6 @@ export function ProfileForm({
       toast.success("Profile updated", result.message);
     } else {
       toast.error("Could not save", result.message);
-    }
-  });
-
-  const onChangePassword = passwordForm.handleSubmit(async (values) => {
-    const result = await changePassword(values);
-
-    if (result.ok) {
-      passwordForm.reset();
-      toast.success("Password changed", result.message);
-    } else {
-      toast.error("Could not change password", result.message);
     }
   });
 
@@ -143,60 +124,16 @@ export function ProfileForm({
         </form>
       </section>
 
-      {/* -------------------------------- Password ------------------------------- */}
+      {/* --------------------------------- Sign-in -------------------------------- */}
       <section className="rounded-2xl border border-hairline bg-white p-6">
-        <h2 className="text-xl text-midnight-900">Password</h2>
-
-        {!hasPassword ? (
-          <p className="mt-4 rounded-xl bg-sand-50 p-4 text-sm text-muted">
-            You sign in with Google, so there&apos;s no password on this account. Use{" "}
-            <a href="/forgot-password" className="font-semibold text-lagoon-700 underline hover:no-underline">
-              forgot password
-            </a>{" "}
-            if you&apos;d like to add one.
-          </p>
-        ) : (
-          <form onSubmit={onChangePassword} className="mt-6 space-y-5" noValidate>
-            <Field label="Current password" htmlFor="p-current" required>
-              <Input
-                id="p-current"
-                type="password"
-                autoComplete="current-password"
-                {...passwordForm.register("currentPassword", { required: true })}
-              />
-            </Field>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="New password" htmlFor="p-new" required>
-                <Input
-                  id="p-new"
-                  type="password"
-                  autoComplete="new-password"
-                  {...passwordForm.register("newPassword", { required: true })}
-                />
-              </Field>
-
-              <Field label="Confirm new password" htmlFor="p-confirm" required>
-                <Input
-                  id="p-confirm"
-                  type="password"
-                  autoComplete="new-password"
-                  {...passwordForm.register("confirmPassword", { required: true })}
-                />
-              </Field>
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
-              variant="outline"
-              loading={passwordForm.formState.isSubmitting}
-              loadingText="Updating"
-            >
-              Change password
-            </Button>
-          </form>
-        )}
+        <h2 className="text-xl text-midnight-900">Sign-in</h2>
+        <p className="mt-4 flex items-start gap-2.5 rounded-xl bg-sand-50 p-4 text-sm leading-relaxed text-muted">
+          <GoogleIcon className="mt-px size-4 shrink-0" aria-hidden />
+          <span>
+            You sign in with Google, so there&apos;s no password to manage here. Your password stays
+            with Google — EzyMiles never sees it.
+          </span>
+        </p>
       </section>
     </div>
   );

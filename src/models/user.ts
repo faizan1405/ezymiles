@@ -8,6 +8,12 @@ export interface IUser {
   name: string;
   email: string;
   emailVerified: Date | null;
+  /**
+   * Legacy. Travellers sign in with Google; nothing reads or writes this any
+   * more. Kept on the schema so the hashes already in the database aren't
+   * silently orphaned — drop the field and the data once the migration is
+   * confirmed done. Staff passwords live on AdminUser and are still in use.
+   */
   passwordHash?: string;
   image?: string;
   phone?: string;
@@ -64,6 +70,44 @@ const UserSchema = new Schema<IUser>(
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ phone: 1 });
 UserSchema.index({ createdAt: -1 });
+
+/* --------------------------------- Account --------------------------------- */
+
+/**
+ * An OAuth identity linked to a traveller, in the shape Auth.js uses.
+ *
+ * Written by hand rather than through @auth/mongodb-adapter: sessions are JWTs,
+ * and a traveller is a Mongoose document with defaults, validation and indexes
+ * that an adapter writing raw to the same collection would bypass.
+ *
+ * No access or refresh tokens are kept — nothing here calls a Google API on the
+ * traveller's behalf, so storing them would be a liability with no use.
+ */
+export interface IAccount {
+  _id: Types.ObjectId;
+  user: Types.ObjectId;
+  type: string;
+  provider: string;
+  providerAccountId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const AccountSchema = new Schema<IAccount>(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    type: { type: String, required: true, default: "oidc" },
+    provider: { type: String, required: true },
+    providerAccountId: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
+// One Google identity resolves to exactly one traveller. This unique index — not
+// application code — is what makes a duplicate Account record impossible, even
+// if two sign-ins race each other.
+AccountSchema.index({ provider: 1, providerAccountId: 1 }, { unique: true });
+AccountSchema.index({ user: 1 });
 
 /* -------------------------------- AdminUser -------------------------------- */
 
@@ -132,6 +176,7 @@ const RoleSchema = new Schema<IRole>(
 RoleSchema.index({ key: 1 }, { unique: true });
 
 export const User: Model<IUser> = models.User || model<IUser>("User", UserSchema);
+export const Account: Model<IAccount> = models.Account || model<IAccount>("Account", AccountSchema);
 export const AdminUser: Model<IAdminUser> =
   models.AdminUser || model<IAdminUser>("AdminUser", AdminUserSchema);
 export const Role: Model<IRole> = models.Role || model<IRole>("Role", RoleSchema);

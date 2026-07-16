@@ -37,7 +37,6 @@ export default async function ProfilePage() {
       </header>
 
       <ProfileForm
-        hasPassword={Boolean(doc.passwordHash)}
         isVerified={Boolean(user.emailVerified)}
         defaults={{
           name: user.name,

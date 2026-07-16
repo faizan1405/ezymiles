@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Accordion, AccordionItem, Sheet, SheetContent } from "@/components/ui/overlays";
 import { Button } from "@/components/ui/button";
 import { CurrencySelector } from "./currency-selector";
+import { SocialIcons, InstagramHandle, socialLinks } from "./social-links";
 import type { NavData } from "@/server/nav";
 import type { Settings } from "@/lib/settings";
 import { formatPrice, whatsappLink } from "@/lib/utils";
@@ -127,6 +128,24 @@ export function MobileNav({
               </Button>
             </div>
           </div>
+
+          {socialLinks(settings.social).length ? (
+            <div className="mt-6 border-t border-hairline pt-5">
+              <p className="text-[0.625rem] font-bold uppercase tracking-widest text-muted">
+                Follow {settings.brand.name}
+              </p>
+              <SocialIcons
+                social={settings.social}
+                brandName={settings.brand.name}
+                className="mt-3"
+              />
+              <InstagramHandle
+                social={settings.social}
+                brandName={settings.brand.name}
+                className="mt-3"
+              />
+            </div>
+          ) : null}
 
           <p className="mt-6 pb-4 text-center text-xs text-muted">{settings.contact.officeHours}</p>
         </nav>

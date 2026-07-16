@@ -180,51 +180,15 @@ export type VisaApplicationInput = z.input<typeof visaApplicationSchema>;
 
 /* ----------------------------------- Auth ---------------------------------- */
 
+/**
+ * Staff sign-in only. Travellers sign in with Google and have no password, so
+ * there is deliberately no register / forgot / reset schema here any more.
+ */
 export const loginSchema = z.object({
   email: emailField,
   password: z.string().min(1, "Enter your password"),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
-
-export const registerSchema = z
-  .object({
-    name: nameField,
-    email: emailField,
-    phone: phoneField,
-    password: z
-      .string()
-      .min(8, "Use at least 8 characters")
-      .max(72, "Password is too long")
-      .regex(/[a-z]/, "Include a lowercase letter")
-      .regex(/[A-Z]/, "Include an uppercase letter")
-      .regex(/[0-9]/, "Include a number"),
-    confirmPassword: z.string(),
-    marketingOptIn: z.boolean().default(false),
-    consent: consentField,
-  })
-  .refine((d) => d.password === d.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-export type RegisterInput = z.input<typeof registerSchema>;
-
-export const forgotPasswordSchema = z.object({ email: emailField });
-
-export const resetPasswordSchema = z
-  .object({
-    token: z.string().min(10),
-    password: z
-      .string()
-      .min(8, "Use at least 8 characters")
-      .regex(/[a-z]/, "Include a lowercase letter")
-      .regex(/[A-Z]/, "Include an uppercase letter")
-      .regex(/[0-9]/, "Include a number"),
-    confirmPassword: z.string(),
-  })
-  .refine((d) => d.password === d.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
 
 /* --------------------------------- Booking --------------------------------- */
 

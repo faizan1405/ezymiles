@@ -235,19 +235,50 @@ export function SettingsEditor({
           </Panel>
 
           <Panel title="Social links">
+            <p className="mb-4 text-xs leading-relaxed text-muted">
+              Leave a field blank to hide that icon everywhere — footer, mobile menu, contact and
+              about. Paste the full profile URL, starting with https://
+            </p>
+
             <div className="grid gap-4 sm:grid-cols-2">
-              {(["instagram", "facebook", "youtube", "linkedin", "x"] as const).map((key) => (
-                <Field key={key} label={key === "x" ? "X (Twitter)" : key} htmlFor={`s-${key}`}>
+              {(
+                [
+                  ["facebook", "Facebook URL", "https://www.facebook.com/…"],
+                  ["instagram", "Instagram URL", "https://www.instagram.com/…"],
+                  ["youtube", "YouTube URL", "https://www.youtube.com/@…"],
+                  ["linkedin", "LinkedIn URL", "https://www.linkedin.com/company/…"],
+                  ["x", "X (Twitter) URL", "https://x.com/…"],
+                ] as const
+              ).map(([key, label, placeholder]) => (
+                <Field key={key} label={label} htmlFor={`s-${key}`}>
                   <Input
                     id={`s-${key}`}
                     value={values.social[key] ?? ""}
                     onChange={(e) =>
                       setValues({ ...values, social: { ...values.social, [key]: e.target.value } })
                     }
-                    placeholder="https://…"
+                    placeholder={placeholder}
                   />
                 </Field>
               ))}
+
+              <Field
+                label="Instagram handle"
+                htmlFor="s-instagramHandle"
+                hint="Shown as text beside the icons. Include the @."
+              >
+                <Input
+                  id="s-instagramHandle"
+                  value={values.social.instagramHandle ?? ""}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      social: { ...values.social, instagramHandle: e.target.value },
+                    })
+                  }
+                  placeholder="@ezymiles.travel"
+                />
+              </Field>
             </div>
           </Panel>
         </TabsContent>

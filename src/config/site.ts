@@ -22,12 +22,18 @@ export const BRAND = {
   email: "hello@ezymiles.com",
   address: "Plot No. 337, Industrial and Business Park, Phase 2, Chandigarh – 160002",
   primaryMarket: "India",
+  /**
+   * Official profiles. An empty string hides that icon everywhere — never use
+   * "#" as a stand-in, which renders a dead link. Editable at runtime from
+   * Admin → Site Settings → Social links.
+   */
   social: {
-    instagram: "#",
-    facebook: "#",
-    youtube: "#",
-    linkedin: "#",
-    x: "#",
+    instagram: "https://www.instagram.com/ezymiles.travel",
+    instagramHandle: "@ezymiles.travel",
+    facebook: "https://www.facebook.com/share/1DUABCoPvd/",
+    youtube: "",
+    linkedin: "",
+    x: "",
   },
 } as const;
 

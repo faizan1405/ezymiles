@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, ShieldCheck, Lock } from "lucide-react";
 import {
-  InstagramIcon,
-  FacebookIcon,
-  YoutubeIcon,
-  LinkedinIcon,
-  XIcon,
-} from "@/components/ui/brand-icons";
+  SocialIcons,
+  InstagramHandle,
+  socialLinks,
+  FOLLOW_DESCRIPTION,
+} from "./social-links";
 import type { Settings } from "@/lib/settings";
 import type { NavData } from "@/server/nav";
 import { BRAND } from "@/config/site";
@@ -71,13 +70,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
     { href: "/legal/cookie-policy", label: "Cookie policy" },
   ];
 
-  const socials = [
-    { href: settings.social.instagram, label: "Instagram", Icon: InstagramIcon },
-    { href: settings.social.facebook, label: "Facebook", Icon: FacebookIcon },
-    { href: settings.social.youtube, label: "YouTube", Icon: YoutubeIcon },
-    { href: settings.social.linkedin, label: "LinkedIn", Icon: LinkedinIcon },
-    { href: settings.social.x, label: "X", Icon: XIcon },
-  ].filter((s) => s.href);
+  const hasSocials = socialLinks(settings.social).length > 0;
 
   return (
     <footer className="mt-auto bg-midnight-950 text-midnight-100">
@@ -140,22 +133,25 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
               ) : null}
             </address>
 
-            {socials.length ? (
-              <ul className="mt-6 flex gap-2">
-                {socials.map(({ href, label, Icon }) => (
-                  <li key={label}>
-                    <a
-                      href={href!}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="flex size-10 items-center justify-center rounded-full border border-midnight-800 text-midnight-200 transition-colors hover:border-lagoon-500 hover:bg-midnight-900 hover:text-white"
-                    >
-                      <Icon className="size-4" aria-hidden />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            {hasSocials ? (
+              <div className="mt-8">
+                <h3 className="text-eyebrow text-lagoon-300">Follow {settings.brand.name}</h3>
+                <p className="mt-2 max-w-xs text-sm leading-relaxed text-midnight-200">
+                  {FOLLOW_DESCRIPTION}
+                </p>
+                <SocialIcons
+                  social={settings.social}
+                  brandName={settings.brand.name}
+                  tone="dark"
+                  className="mt-4"
+                />
+                <InstagramHandle
+                  social={settings.social}
+                  brandName={settings.brand.name}
+                  tone="dark"
+                  className="mt-3"
+                />
+              </div>
             ) : null}
           </div>
 

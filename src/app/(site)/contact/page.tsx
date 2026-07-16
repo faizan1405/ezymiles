@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Accordion, AccordionItem } from "@/components/ui/overlays";
 import { Button } from "@/components/ui/button";
 import { FaqJsonLd } from "@/components/seo/json-ld";
+import { FollowSection } from "@/components/layout/social-links";
 import { whatsappLink } from "@/lib/utils";
 import type { IFAQ } from "@/models";
 
@@ -107,6 +108,8 @@ export default async function ContactPage() {
                 </a>
               </Button>
             </div>
+
+            <FollowSection settings={settings} className="mt-8" />
           </div>
 
           {/* --------------------------------- Form --------------------------------- */}

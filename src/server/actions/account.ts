@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { Booking, Notification, SupportTicket, User } from "@/models";
 import { requireUser } from "@/lib/session";
@@ -168,57 +167,6 @@ export async function updateProfile(raw: unknown): Promise<AccountActionResult> 
   } catch (error) {
     console.error("[updateProfile]", error);
     return { ok: false, message: "We couldn't save those changes. Please try again." };
-  }
-}
-
-const changePasswordSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Enter your current password"),
-    newPassword: z
-      .string()
-      .min(8, "Use at least 8 characters")
-      .regex(/[a-z]/, "Include a lowercase letter")
-      .regex(/[A-Z]/, "Include an uppercase letter")
-      .regex(/[0-9]/, "Include a number"),
-    confirmPassword: z.string(),
-  })
-  .refine((d) => d.newPassword === d.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-export async function changePassword(raw: unknown): Promise<AccountActionResult> {
-  const user = await requireUser();
-
-  const limit = await guard("change-password", { limit: 5, windowSeconds: 900 });
-  if (!limit.success) return { ok: false, message: "Too many attempts. Please wait." };
-
-  const parsed = changePasswordSchema.safeParse(raw);
-  if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? "Please check the form." };
-  }
-
-  try {
-    await connectDB();
-
-    const doc = await User.findById(user.id).select("+passwordHash");
-    if (!doc?.passwordHash) {
-      return {
-        ok: false,
-        message: "This account signs in with Google, so there's no password to change.",
-      };
-    }
-
-    const valid = await bcrypt.compare(parsed.data.currentPassword, doc.passwordHash);
-    if (!valid) return { ok: false, message: "Your current password isn't right." };
-
-    doc.passwordHash = await bcrypt.hash(parsed.data.newPassword, 12);
-    await doc.save();
-
-    return { ok: true, message: "Password changed." };
-  } catch (error) {
-    console.error("[changePassword]", error);
-    return { ok: false, message: "We couldn't change your password. Please try again." };
   }
 }
 

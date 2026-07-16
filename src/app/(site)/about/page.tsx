@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { SectionHeading } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { FollowSection } from "@/components/layout/social-links";
 
 export const metadata: Metadata = {
   title: "About us",
@@ -155,6 +156,15 @@ export default async function AboutPage() {
               </div>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* -------------------------------- Follow us ------------------------------- */}
+      <section className="border-t border-hairline bg-canvas py-14">
+        <div className="container-page">
+          <Reveal>
+            <FollowSection settings={settings} className="mx-auto max-w-2xl" />
+          </Reveal>
         </div>
       </section>
 

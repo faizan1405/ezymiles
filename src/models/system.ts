@@ -29,6 +29,8 @@ export interface ISiteSettings {
 
   social: {
     instagram?: string;
+    /** Display-only, e.g. "@ezymiles.travel". */
+    instagramHandle?: string;
     facebook?: string;
     youtube?: string;
     linkedin?: string;
@@ -142,6 +144,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
     },
     social: {
       instagram: String,
+      instagramHandle: String,
       facebook: String,
       youtube: String,
       linkedin: String,

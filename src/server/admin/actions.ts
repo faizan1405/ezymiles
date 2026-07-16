@@ -1671,6 +1671,16 @@ export async function saveRolePermissions(raw: unknown): Promise<AdminResult> {
 /*                                Site settings                                */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Blank clears the link (and hides the icon site-wide). Anything else must be a
+ * real absolute URL — a bare "#" would render a dead icon.
+ */
+const socialUrl = z
+  .string()
+  .trim()
+  .refine((v) => v === "" || /^https?:\/\/\S+$/.test(v), "Enter a full URL starting with https://")
+  .optional();
+
 const settingsSchema = z.object({
   brand: z.object({
     name: z.string().min(1),
@@ -1685,11 +1695,12 @@ const settingsSchema = z.object({
     officeHours: z.string().optional(),
   }),
   social: z.object({
-    instagram: z.string().optional(),
-    facebook: z.string().optional(),
-    youtube: z.string().optional(),
-    linkedin: z.string().optional(),
-    x: z.string().optional(),
+    instagram: socialUrl,
+    instagramHandle: z.string().trim().optional(),
+    facebook: socialUrl,
+    youtube: socialUrl,
+    linkedin: socialUrl,
+    x: socialUrl,
   }),
   announcement: z.object({
     enabled: z.boolean(),

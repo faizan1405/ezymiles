@@ -46,17 +46,26 @@ export function UserMenu({ tone = "light" }: { tone?: "light" | "dark" }) {
   }
 
   const name = session.user.name ?? "Traveller";
+  const image = session.user.image;
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         className={cn(
-          "flex size-10 items-center justify-center rounded-full text-[0.8125rem] font-bold transition-transform hover:scale-105",
+          "flex size-10 items-center justify-center overflow-hidden rounded-full text-[0.8125rem] font-bold transition-transform hover:scale-105",
           tone === "dark" ? "bg-midnight-700 text-white" : "bg-midnight-900 text-white",
         )}
         aria-label={`Account menu for ${name}`}
       >
-        {initials(name)}
+        {/* Google's avatar when we have one, initials when we don't. Plain <img>
+            rather than next/image: it's a 40px avatar from a host that already
+            serves it optimised, so a loader round trip would buy nothing. */}
+        {image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={image} alt="" width={40} height={40} className="size-full object-cover" referrerPolicy="no-referrer" />
+        ) : (
+          initials(name)
+        )}
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
