@@ -91,7 +91,7 @@ function OfferHero({ offer }: { offer: OfferDTO }) {
         <h3 className="mt-4 max-w-lg font-display text-3xl leading-tight text-white sm:text-4xl">
           {offer.title}
         </h3>
-        <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/70">
+        <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-midnight-100">
           {offer.headline || offer.description}
         </p>
 
@@ -105,7 +105,7 @@ function OfferHero({ offer }: { offer: OfferDTO }) {
           {offer.couponCode ? <CouponChip code={offer.couponCode} tone="dark" /> : null}
         </div>
 
-        <p className="mt-5 flex items-center gap-1.5 text-xs text-white/50">
+        <p className="mt-5 flex items-center gap-1.5 text-xs text-midnight-200">
           <Timer className="size-3.5" aria-hidden />
           Ends {formatDate(offer.endsAt)}
         </p>
@@ -176,7 +176,7 @@ function CouponChip({ code, tone = "light" }: { code: string; tone?: "light" | "
       className={cn(
         "inline-flex items-center gap-2 rounded-full border border-dashed px-3.5 py-2 text-[0.8125rem] font-bold tracking-wide transition-colors",
         tone === "dark"
-          ? "border-white/30 text-white hover:bg-white/10"
+          ? "border-midnight-300 text-white hover:bg-midnight-800"
           : "border-midnight-300 text-midnight-900 hover:bg-sand-50",
       )}
     >

@@ -168,7 +168,7 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
                   <span
                     className={cn(
                       "pointer-events-none absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[0.625rem] font-semibold transition-opacity duration-300",
-                      isActive ? "text-gild-300 opacity-100" : "text-white/45 opacity-0 lg:opacity-100",
+                      isActive ? "text-gild-300 opacity-100" : "text-midnight-200 opacity-0 lg:opacity-100",
                     )}
                   >
                     {d.name}
@@ -188,7 +188,7 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduced ? { opacity: 0 } : { opacity: 0, y: 12 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="pointer-events-auto flex w-[min(34rem,90%)] items-center gap-4 rounded-2xl glass-dark p-4"
+                  className="pointer-events-auto flex w-[min(34rem,90%)] items-center gap-4 rounded-2xl border border-midnight-700 bg-midnight-900 p-4"
                 >
                   <div className="relative size-20 shrink-0 overflow-hidden rounded-xl">
                     <SmartImage
@@ -205,7 +205,7 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
                       {active.country}
                     </p>
                     <p className="truncate font-display text-lg text-white">{active.name}</p>
-                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[0.6875rem] text-white/65">
+                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[0.6875rem] text-midnight-100">
                       <span className="flex items-center gap-1">
                         <CalendarRange className="size-3" aria-hidden />
                         {active.bestMonths.slice(0, 3).join(", ") || "Year-round"}
@@ -217,7 +217,7 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
                     </div>
                     <div className="mt-1.5">
                       <Price amountINR={active.startingPriceINR} className="text-sm text-white" compact />
-                      <span className="ml-1 text-[0.625rem] text-white/50">starting</span>
+                      <span className="ml-1 text-[0.625rem] text-midnight-200">starting</span>
                     </div>
                   </div>
 
@@ -234,7 +234,7 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-xs text-white/40"
+                  className="text-xs text-midnight-300"
                 >
                   Hover or tap a marker to see details
                 </motion.p>
@@ -249,14 +249,14 @@ export function TravelMap({ destinations }: { destinations: DestinationCardDTO[]
             <li key={d.id}>
               <Link
                 href={`/destinations/${d.slug}`}
-                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-3 transition-colors active:bg-white/8"
+                className="flex items-center gap-3 rounded-2xl border border-midnight-800 bg-midnight-900 p-3 transition-colors active:bg-midnight-800"
               >
                 <div className="relative size-14 shrink-0 overflow-hidden rounded-xl">
                   <SmartImage src={d.heroImage} alt={d.heroAlt} fill sizes="56px" className="object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-white">{d.name}</p>
-                  <p className="truncate text-xs text-white/55">
+                  <p className="truncate text-xs text-midnight-200">
                     {d.country} · {pluralise(d.packageCount, "package")}
                   </p>
                 </div>

@@ -44,19 +44,13 @@ export function Breadcrumbs({
                       className={cn(
                         "transition-colors",
                         tone === "dark"
-                          ? "text-white/60 hover:text-white"
+                          ? "text-midnight-100 hover:text-white"
                           : "text-muted hover:text-midnight-900",
                       )}
                     >
                       {crumb.name}
                     </Link>
-                    <ChevronRight
-                      className={cn(
-                        "size-3.5",
-                        tone === "dark" ? "text-white/30" : "text-midnight-300",
-                      )}
-                      aria-hidden
-                    />
+                    <ChevronRight className="size-3.5 text-midnight-300" aria-hidden />
                   </>
                 )}
               </li>

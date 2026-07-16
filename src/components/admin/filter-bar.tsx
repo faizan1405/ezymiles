@@ -82,7 +82,7 @@ export function FilterBar({
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.5 text-[0.625rem] font-bold",
-                      active ? "bg-white/20" : "bg-sand-100 text-midnight-600",
+                      active ? "bg-midnight-700" : "bg-sand-100 text-midnight-600",
                     )}
                   >
                     {tab.count}

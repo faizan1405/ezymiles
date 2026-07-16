@@ -101,7 +101,7 @@ export function TripBuilder({
     return (
       <div
         className={cn(
-          "flex flex-col items-center rounded-3xl border border-lagoon-100 bg-lagoon-50/60 p-10 text-center",
+          "flex flex-col items-center rounded-3xl border border-lagoon-100 bg-lagoon-50 p-10 text-center",
           className,
         )}
         role="status"

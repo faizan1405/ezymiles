@@ -515,20 +515,20 @@ function Notice({
   footer?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
+    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
       <p className="flex items-center gap-2 text-sm font-bold text-amber-900">
         <span className="[&_svg]:size-4">{icon}</span>
         {title}
       </p>
       <ul className="mt-2.5 space-y-1.5">
         {items.map((item) => (
-          <li key={item} className="text-[0.8125rem] leading-relaxed text-amber-900/80">
+          <li key={item} className="text-[0.8125rem] leading-relaxed text-amber-900">
             {item}
           </li>
         ))}
       </ul>
       {footer ? (
-        <p className="mt-3 flex items-start gap-1.5 border-t border-amber-200 pt-3 text-xs text-amber-900/70">
+        <p className="mt-3 flex items-start gap-1.5 border-t border-amber-200 pt-3 text-xs text-amber-800">
           <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           {footer}
         </p>

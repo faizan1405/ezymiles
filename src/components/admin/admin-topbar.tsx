@@ -18,7 +18,7 @@ export function AdminTopbar({
   unreadCount: number;
 }) {
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-end gap-2 border-b border-hairline bg-white/90 px-5 backdrop-blur-lg lg:px-8">
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-end gap-2 border-b border-hairline bg-white px-5 lg:px-8">
       <Link
         href="/"
         target="_blank"

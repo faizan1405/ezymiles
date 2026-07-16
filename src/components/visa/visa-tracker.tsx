@@ -201,7 +201,7 @@ export function VisaTracker() {
                   {STATUS_LABELS[application.status]}
                 </p>
                 {application.statusHistory.slice(-1).map((h) => (
-                  <p key={h.at} className="mt-1 text-[0.8125rem] text-red-800/80">
+                  <p key={h.at} className="mt-1 text-[0.8125rem] text-red-800">
                     {h.note ?? "Contact our team for the details and your options."}
                   </p>
                 ))}

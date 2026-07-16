@@ -88,7 +88,7 @@ export default async function VisaCountryPage({ params, searchParams }: PageProp
               <span aria-hidden>{country.flagEmoji}</span>
               {country.country} visa
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-white/80">{country.summary}</p>
+            <p className="mt-4 text-base leading-relaxed text-midnight-50">{country.summary}</p>
           </div>
         </div>
       </section>
@@ -187,19 +187,19 @@ export default async function VisaCountryPage({ params, searchParams }: PageProp
 
             {/* ------------------------------- Eligibility ---------------------------- */}
             {country.eligibilityNotes?.length ? (
-              <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
+              <section className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
                 <h2 className="flex items-center gap-2 text-lg text-amber-900">
                   <ShieldAlert className="size-5" aria-hidden />
                   Eligibility and disclaimer
                 </h2>
                 <ul className="mt-3 space-y-2">
                   {country.eligibilityNotes.map((note) => (
-                    <li key={note} className="text-[0.875rem] leading-relaxed text-amber-900/85">
+                    <li key={note} className="text-[0.875rem] leading-relaxed text-amber-900">
                       • {note}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-4 border-t border-amber-200 pt-4 text-xs leading-relaxed text-amber-900/75">
+                <p className="mt-4 border-t border-amber-200 pt-4 text-xs leading-relaxed text-amber-800">
                   Approval is at the sole discretion of the {country.country} embassy, consulate or
                   immigration authority. We cannot influence, guarantee or expedite a decision, and
                   government fees are generally non-refundable if an application is refused.

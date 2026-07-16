@@ -58,7 +58,7 @@ export default async function AdminFlightsPage() {
       {/* ----------------------------- Provider status ---------------------------- */}
       <div
         className={`mb-6 flex flex-col gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between ${
-          isLive ? "border-emerald-200 bg-emerald-50/50" : "border-amber-200 bg-amber-50/60"
+          isLive ? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50"
         }`}
       >
         <div className="flex items-start gap-3">

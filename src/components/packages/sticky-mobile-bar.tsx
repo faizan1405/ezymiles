@@ -59,7 +59,7 @@ export function StickyMobileBar({
           animate={reduced ? { opacity: 1 } : { y: 0 }}
           exit={reduced ? { opacity: 0 } : { y: "100%" }}
           transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          className="no-print fixed inset-x-0 bottom-0 z-70 border-t border-hairline bg-white/95 backdrop-blur-lg lg:hidden"
+          className="no-print fixed inset-x-0 bottom-0 z-70 border-t border-hairline bg-white lg:hidden"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           <div className="container-page flex items-center justify-between gap-4 py-3">

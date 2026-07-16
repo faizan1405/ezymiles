@@ -27,14 +27,14 @@ export function CurrencySelector({
         className={cn(
           "flex items-center gap-1 rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors",
           tone === "dark"
-            ? "text-white/85 hover:bg-white/12 hover:text-white"
+            ? "text-white hover:bg-white/12 hover:text-white"
             : "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
         )}
         aria-label={`Change currency, currently ${active}`}
       >
         <span aria-hidden>{CURRENCY_META[active as CurrencyCode].symbol.trim()}</span>
         <span>{active}</span>
-        <ChevronDown className="size-3.5 opacity-60" aria-hidden />
+        <ChevronDown className="size-3.5" aria-hidden />
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>

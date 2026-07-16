@@ -693,11 +693,11 @@ export function CheckoutFlow({
                       <span className="font-semibold text-lagoon-900">Due now</span>
                       <Price amountINR={quote.deposit.amountINR} className="text-base text-lagoon-900" />
                     </div>
-                    <div className="mt-1 flex items-baseline justify-between text-xs text-lagoon-800/75">
+                    <div className="mt-1 flex items-baseline justify-between text-xs text-lagoon-700">
                       <span>Balance later</span>
                       <Price
                         amountINR={quote.totalINR - quote.deposit.amountINR}
-                        className="text-xs font-medium text-lagoon-800/75"
+                        className="text-xs font-medium text-lagoon-700"
                       />
                     </div>
                   </div>

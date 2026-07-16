@@ -59,7 +59,7 @@ export function SmartImage({
         role="img"
         aria-label={safeAlt}
       >
-        <span className="px-4 text-center font-display text-sm text-white/70">{safeAlt}</span>
+        <span className="px-4 text-center font-display text-sm text-white">{safeAlt}</span>
       </div>
     );
   }

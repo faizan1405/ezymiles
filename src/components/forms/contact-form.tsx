@@ -48,7 +48,7 @@ export function ContactForm() {
 
   if (reference) {
     return (
-      <div className="rounded-2xl border border-lagoon-100 bg-lagoon-50/70 p-8 text-center" role="status">
+      <div className="rounded-2xl border border-lagoon-100 bg-lagoon-50 p-8 text-center" role="status">
         <CheckCircle2 className="mx-auto size-10 text-lagoon-600" aria-hidden />
         <h3 className="mt-4 text-xl text-midnight-900">Message received</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted">

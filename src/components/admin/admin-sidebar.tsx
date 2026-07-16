@@ -136,7 +136,7 @@ export function AdminSidebar({
     <nav className="flex flex-col gap-6 p-4" aria-label="Admin">
       {groups.map((group) => (
         <div key={group.title}>
-          <p className="mb-2 px-3 text-[0.625rem] font-bold uppercase tracking-widest text-white/35">
+          <p className="mb-2 px-3 text-[0.625rem] font-bold uppercase tracking-widest text-midnight-300">
             {group.title}
           </p>
           <ul className="space-y-0.5">
@@ -150,8 +150,8 @@ export function AdminSidebar({
                     className={cn(
                       "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                       active
-                        ? "bg-white/12 text-white"
-                        : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                        ? "bg-midnight-800 text-white"
+                        : "text-midnight-200 hover:bg-midnight-900 hover:text-white",
                     )}
                   >
                     <Icon className="size-4 shrink-0" aria-hidden />
@@ -194,7 +194,7 @@ export function AdminSidebar({
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close menu"
-                className="flex size-9 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white"
+                className="flex size-9 items-center justify-center rounded-full text-midnight-200 hover:bg-midnight-800 hover:text-white"
               >
                 <X className="size-4" aria-hidden />
               </button>
@@ -210,7 +210,7 @@ export function AdminSidebar({
           <Link href="/admin" aria-label="Admin dashboard">
             <Logo tone="dark" name={brandName} />
           </Link>
-          <p className="mt-3 inline-flex rounded-full bg-white/10 px-2.5 py-1 text-[0.625rem] font-bold uppercase tracking-wider text-lagoon-300">
+          <p className="mt-3 inline-flex rounded-full bg-midnight-800 px-2.5 py-1 text-[0.625rem] font-bold uppercase tracking-wider text-lagoon-300">
             {roleLabel}
           </p>
         </div>

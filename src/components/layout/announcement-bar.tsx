@@ -47,7 +47,7 @@ export function AnnouncementBar({ announcement }: { announcement: Settings["anno
     <span className="flex items-center gap-2 text-center">
       <Sparkles className="size-3.5 shrink-0 text-gild-300" aria-hidden />
       {current.emphasis ? (
-        <span className="hidden rounded-full bg-white/12 px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wider text-gild-200 sm:inline">
+        <span className="hidden rounded-full bg-midnight-800 px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wider text-gild-200 sm:inline">
           {current.emphasis}
         </span>
       ) : null}
@@ -83,7 +83,7 @@ export function AnnouncementBar({ announcement }: { announcement: Settings["anno
           type="button"
           onClick={close}
           aria-label="Dismiss announcement"
-          className="-mr-2 ml-2 shrink-0 rounded-full p-1.5 text-white/55 transition-colors hover:bg-white/10 hover:text-white"
+          className="-mr-2 ml-2 shrink-0 rounded-full p-1.5 text-midnight-300 transition-colors hover:bg-midnight-800 hover:text-white"
         >
           <X className="size-3.5" aria-hidden />
         </button>

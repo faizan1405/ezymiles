@@ -94,23 +94,23 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
     "relative flex items-center gap-1 rounded-full px-3 py-2 text-[0.875rem] font-semibold transition-colors duration-200",
     solid
       ? "text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950"
-      : "text-white/90 hover:bg-white/12 hover:text-white",
+      : "text-white hover:bg-white/12 hover:text-white",
   );
 
   const iconButtonClass = cn(
     "flex size-10 items-center justify-center rounded-full transition-colors",
     solid
       ? "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900"
-      : "text-white/85 hover:bg-white/12 hover:text-white",
+      : "text-white hover:bg-white/12 hover:text-white",
   );
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-90 w-full transition-[background-color,box-shadow,backdrop-filter] duration-500",
+          "sticky top-0 z-90 w-full transition-[background-color,box-shadow] duration-500",
           solid
-            ? "border-b border-hairline bg-white/85 shadow-[0_1px_0_rgb(16_25_43/0.04)] backdrop-blur-xl backdrop-saturate-150"
+            ? "border-b border-hairline bg-white shadow-[0_1px_0_rgb(16_25_43/0.04)]"
             : "bg-transparent",
         )}
         onMouseLeave={scheduleClose}
@@ -295,7 +295,7 @@ function MegaTrigger({
     >
       {label}
       <ChevronDown
-        className={cn("size-3.5 opacity-60 transition-transform duration-300", isOpen && "rotate-180")}
+        className={cn("size-3.5 transition-transform duration-300", isOpen && "rotate-180")}
         aria-hidden
       />
     </button>
@@ -407,7 +407,7 @@ function HolidaysMenu({ nav, scope }: { nav: NavData; scope: "domestic" | "inter
                 {nav.promo.discountLabel || "Limited offer"}
               </p>
               <p className="mt-1 truncate font-display text-base">{nav.promo.title}</p>
-              <p className="truncate text-xs text-white/70">{nav.promo.headline}</p>
+              <p className="truncate text-xs text-lagoon-100">{nav.promo.headline}</p>
             </div>
             <ArrowRight
               className="size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
@@ -457,7 +457,7 @@ function ActivitiesMenu({ nav }: { nav: NavData }) {
             <Link
               key={href}
               href={href}
-              className="group flex items-center gap-3 rounded-xl border border-hairline p-3 transition-all hover:border-lagoon-200 hover:bg-lagoon-50/50"
+              className="group flex items-center gap-3 rounded-xl border border-hairline p-3 transition-all hover:border-lagoon-200 hover:bg-lagoon-50"
             >
               <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sand-100 text-lagoon-700 transition-colors group-hover:bg-white">
                 <Icon className="size-[1.15rem]" aria-hidden />

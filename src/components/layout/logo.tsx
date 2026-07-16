@@ -30,7 +30,7 @@ export function Logo({
       <span
         className={cn(
           "flex size-9 items-center justify-center rounded-xl transition-colors",
-          isDark ? "bg-white/15 backdrop-blur-sm" : "wash-ocean",
+          isDark ? "bg-midnight-800" : "wash-ocean",
         )}
         aria-hidden
       >
@@ -57,7 +57,7 @@ export function Logo({
         <span
           className={cn(
             "mt-0.5 text-[0.5625rem] font-bold uppercase tracking-[0.18em]",
-            isDark ? "text-white/60" : "text-lagoon-700",
+            isDark ? "text-midnight-100" : "text-lagoon-700",
           )}
         >
           Travel Atelier

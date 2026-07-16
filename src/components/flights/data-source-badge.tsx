@@ -20,7 +20,7 @@ const META: Record<DataSource, { Icon: typeof Radio; className: string; tooltip:
   },
   demo: {
     Icon: FlaskConical,
-    className: "bg-midnight-900/[0.06] text-midnight-700",
+    className: "bg-sand-100 text-midnight-700",
     tooltip:
       "Demo data generated for this environment. Not live airline inventory and not ticketable.",
   },

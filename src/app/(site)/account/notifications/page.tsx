@@ -105,7 +105,7 @@ export default async function NotificationsPage() {
                     href={n.href}
                     className={cn(
                       "flex items-start gap-3 rounded-2xl border p-4 transition-colors hover:bg-sand-50",
-                      n.isRead ? "border-hairline bg-white" : "border-lagoon-100 bg-lagoon-50/30",
+                      n.isRead ? "border-hairline bg-white" : "border-lagoon-100 bg-lagoon-50",
                     )}
                   >
                     {body}
@@ -114,7 +114,7 @@ export default async function NotificationsPage() {
                   <div
                     className={cn(
                       "flex items-start gap-3 rounded-2xl border p-4",
-                      n.isRead ? "border-hairline bg-white" : "border-lagoon-100 bg-lagoon-50/30",
+                      n.isRead ? "border-hairline bg-white" : "border-lagoon-100 bg-lagoon-50",
                     )}
                   >
                     {body}

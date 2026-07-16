@@ -107,7 +107,7 @@ export default async function VisaPage() {
                       <li key={String(c._id)}>
                         <Link
                           href={`/visa/${c.slug}`}
-                          className="group flex items-center justify-between gap-3 rounded-2xl border border-hairline bg-white p-4 transition-colors hover:border-lagoon-300 hover:bg-lagoon-50/40"
+                          className="group flex items-center justify-between gap-3 rounded-2xl border border-hairline bg-white p-4 transition-colors hover:border-lagoon-300 hover:bg-lagoon-50"
                         >
                           <span className="flex min-w-0 items-center gap-3">
                             <span className="text-2xl" aria-hidden>

@@ -39,7 +39,7 @@ export default async function AdminMediaPage() {
       {!cloudinary ? (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
           <p className="text-sm font-bold text-amber-900">Cloudinary isn&apos;t configured</p>
-          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-amber-900/85">
+          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-amber-900">
             Uploads are disabled until you add <code className="font-mono">CLOUDINARY_CLOUD_NAME</code>,{" "}
             <code className="font-mono">CLOUDINARY_API_KEY</code> and{" "}
             <code className="font-mono">CLOUDINARY_API_SECRET</code>. Everything still works — you can

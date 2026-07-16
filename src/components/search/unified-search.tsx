@@ -72,7 +72,7 @@ export function UnifiedSearch({
       className={cn(
         "rounded-3xl",
         variant === "hero"
-          ? "border border-white/25 bg-white/92 p-2 shadow-panel backdrop-blur-xl"
+          ? "border border-hairline bg-white p-2 shadow-panel"
           : "border border-hairline bg-surface p-2 shadow-lift",
       )}
     >

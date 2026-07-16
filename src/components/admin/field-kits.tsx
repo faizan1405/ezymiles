@@ -171,7 +171,7 @@ export function RepeatableField<T>({
       ) : (
         <ul className="space-y-3">
           {items.map((item, i) => (
-            <li key={i} className="rounded-2xl border border-hairline bg-sand-50/60 p-4">
+            <li key={i} className="rounded-2xl border border-hairline bg-sand-50 p-4">
               <div className="mb-3 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-wider text-muted">
                   <GripVertical className="size-3.5" aria-hidden />

@@ -146,14 +146,14 @@ export default async function ActivityPage({ params }: PageProps) {
           </section>
 
           {activity.safetyInfo?.length ? (
-            <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
+            <section className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
               <h2 className="flex items-center gap-2 text-lg text-amber-900">
                 <ShieldAlert className="size-5" aria-hidden />
                 Safety information
               </h2>
               <ul className="mt-3 space-y-2">
                 {activity.safetyInfo.map((item: string) => (
-                  <li key={item} className="text-[0.875rem] leading-relaxed text-amber-900/85">
+                  <li key={item} className="text-[0.875rem] leading-relaxed text-amber-900">
                     • {item}
                   </li>
                 ))}

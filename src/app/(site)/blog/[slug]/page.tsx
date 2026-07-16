@@ -171,7 +171,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <div className="mt-12 rounded-3xl wash-ocean p-8 text-white">
               <h2 className="font-display text-xl">Get the next one</h2>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">
+              <p className="mt-2 text-sm leading-relaxed text-lagoon-100">
                 Two emails a month. Guides like this, plus fares worth acting on.
               </p>
               <div className="mt-6">

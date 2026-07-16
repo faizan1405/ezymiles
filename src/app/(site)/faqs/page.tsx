@@ -78,7 +78,7 @@ export default async function FAQsPage() {
 
             <div className="rounded-3xl wash-ocean p-8 text-center text-white sm:p-12">
               <h2 className="font-display text-2xl">Still stuck?</h2>
-              <p className="mx-auto mt-3 max-w-md text-[0.9375rem] leading-relaxed text-white/75">
+              <p className="mx-auto mt-3 max-w-md text-[0.9375rem] leading-relaxed text-lagoon-100">
                 A real person answers the phone, the WhatsApp and the email. Usually the same person.
               </p>
               <Button asChild size="lg" variant="gold" className="mt-6">

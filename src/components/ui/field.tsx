@@ -59,7 +59,7 @@ export function Field({ label, htmlFor, hint, error, required, className, childr
 
 const controlBase = [
   "w-full rounded-xl border bg-white text-midnight-900",
-  "px-3.5 text-[0.9375rem] placeholder:text-midnight-900/35",
+  "px-3.5 text-[0.9375rem] placeholder:text-muted",
   "transition-colors duration-200",
   "focus:border-lagoon-500 focus:outline-none focus:ring-4 focus:ring-lagoon-500/12",
   "disabled:cursor-not-allowed disabled:bg-sand-50 disabled:text-muted",
@@ -94,7 +94,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
   return (
     <div className="relative">
       <span
-        className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-midnight-900/40 [&_svg]:size-4"
+        className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted [&_svg]:size-4"
         aria-hidden
       >
         {leadingIcon}
@@ -151,7 +151,7 @@ export const Select = React.forwardRef<
         {children}
       </select>
       <ChevronDown
-        className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-midnight-900/40"
+        className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted"
         aria-hidden
       />
     </div>

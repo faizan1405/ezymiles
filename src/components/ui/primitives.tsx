@@ -26,7 +26,7 @@ const badgeVariants = cva(
   {
     variants: {
       tone: {
-        neutral: "bg-midnight-900/[0.06] text-midnight-700",
+        neutral: "bg-sand-100 text-midnight-700",
         ink: "bg-midnight-900 text-white",
         lagoon: "bg-lagoon-50 text-lagoon-800",
         gold: "bg-gild-100 text-gild-800",
@@ -127,7 +127,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-hairline bg-sand-50/60 px-6 py-16 text-center",
+        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-hairline bg-sand-50 px-6 py-16 text-center",
         className,
       )}
     >
@@ -193,7 +193,7 @@ export function SectionHeading({
           <p
             className={cn(
               "mt-4 text-[0.9375rem] leading-relaxed sm:text-base",
-              tone === "dark" ? "text-midnight-100/75" : "text-muted",
+              tone === "dark" ? "text-midnight-100" : "text-muted",
             )}
           >
             {description}

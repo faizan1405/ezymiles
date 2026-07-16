@@ -80,7 +80,7 @@ export default async function CabsPage({
                 <li key={key}>
                   <div
                     className={`flex gap-4 rounded-2xl border p-5 transition-colors ${
-                      mode === key ? "border-lagoon-300 bg-lagoon-50/50" : "border-hairline bg-white"
+                      mode === key ? "border-lagoon-300 bg-lagoon-50" : "border-hairline bg-white"
                     }`}
                   >
                     <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-sand-100 text-lagoon-700">

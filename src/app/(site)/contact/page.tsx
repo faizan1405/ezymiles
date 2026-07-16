@@ -96,7 +96,7 @@ export default async function ContactPage() {
 
             <div className="mt-8 rounded-2xl wash-ocean p-6 text-white">
               <h3 className="font-display text-lg">Travelling right now?</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/75">
+              <p className="mt-2 text-sm leading-relaxed text-lagoon-100">
                 If you&apos;re on a trip booked with us and something has gone wrong, call the number
                 above — it&apos;s answered 24/7 for travellers in the air or on the ground.
               </p>
@@ -163,7 +163,7 @@ function ContactChannel({
       <a
         href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="group flex gap-4 rounded-2xl border border-hairline bg-white p-5 transition-colors hover:border-lagoon-300 hover:bg-lagoon-50/40"
+        className="group flex gap-4 rounded-2xl border border-hairline bg-white p-5 transition-colors hover:border-lagoon-300 hover:bg-lagoon-50"
       >
         <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-sand-100 text-lagoon-700 transition-colors group-hover:bg-white [&_svg]:size-5">
           {icon}

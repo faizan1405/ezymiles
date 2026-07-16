@@ -186,7 +186,7 @@ function DestinationCard({
             </Link>
           </h3>
 
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.6875rem] text-white/70">
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.6875rem] text-midnight-100">
             <span className="flex items-center gap-1">
               <Clock className="size-3" aria-hidden />
               {d.recommendedDurationDays} days
@@ -201,10 +201,10 @@ function DestinationCard({
 
           <div className="mt-3 flex items-end justify-between gap-2">
             <div>
-              <p className="text-[0.625rem] uppercase tracking-wide text-white/50">Starting from</p>
+              <p className="text-[0.625rem] uppercase tracking-wide text-midnight-200">Starting from</p>
               <Price amountINR={d.startingPriceINR} className="text-base text-white" compact />
             </div>
-            <span className="rounded-full bg-white/12 px-2.5 py-1 text-[0.625rem] font-semibold text-white backdrop-blur-sm">
+            <span className="rounded-full bg-midnight-800 px-2.5 py-1 text-[0.625rem] font-semibold text-white">
               {pluralise(d.packageCount, "package")}
             </span>
           </div>

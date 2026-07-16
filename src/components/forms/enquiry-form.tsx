@@ -74,7 +74,7 @@ export function EnquiryForm({
     return (
       <div
         className={cn(
-          "flex flex-col items-center rounded-2xl border border-lagoon-100 bg-lagoon-50/70 p-8 text-center",
+          "flex flex-col items-center rounded-2xl border border-lagoon-100 bg-lagoon-50 p-8 text-center",
           className,
         )}
         role="status"

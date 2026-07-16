@@ -144,7 +144,7 @@ export function Hero({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: reduced ? 0 : 0.35, ease: EASE_OUT_EXPO }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
+            className="mt-6 max-w-xl text-base leading-relaxed text-midnight-50 sm:text-lg"
           >
             {subheadline}
           </motion.p>
@@ -171,7 +171,7 @@ export function Hero({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: reduced ? 0 : 0.6 }}
-            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-[0.8125rem] text-white/75"
+            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-[0.8125rem] text-midnight-100"
           >
             <li className="flex items-center gap-2">
               <Star className="size-4 fill-gild-400 text-gild-400" aria-hidden />
@@ -238,7 +238,7 @@ export function Hero({
                 "h-1 rounded-full transition-all duration-500",
                 i === index % usableSlides.length
                   ? "w-10 bg-white"
-                  : "w-4 bg-white/35 hover:bg-white/60",
+                  : "w-4 bg-midnight-200 hover:bg-white",
               )}
             />
           ))}

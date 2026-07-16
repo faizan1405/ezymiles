@@ -100,7 +100,7 @@ export default async function LegalDetailPage({ params }: PageProps) {
               <p className="text-sm font-bold text-amber-900">
                 Placeholder text — not legal advice, and not ready to publish
               </p>
-              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-amber-900/85">
+              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-amber-900">
                 This page sets out the structure and the questions a lawyer needs to answer. It must
                 be reviewed and completed by a qualified professional in your jurisdiction before the
                 site goes live. Replace it from{" "}
@@ -139,7 +139,7 @@ export default async function LegalDetailPage({ params }: PageProps) {
                           key={i}
                           className={
                             isPlaceholderLine
-                              ? "rounded-xl border border-dashed border-amber-300 bg-amber-50/60 p-3 text-[0.875rem] leading-relaxed text-amber-900"
+                              ? "rounded-xl border border-dashed border-amber-300 bg-amber-50 p-3 text-[0.875rem] leading-relaxed text-amber-900"
                               : "text-[0.9375rem] leading-relaxed text-muted"
                           }
                         >

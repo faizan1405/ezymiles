@@ -97,7 +97,7 @@ export default async function DestinationPage({ params }: PageProps) {
             <h1 className="mt-3 text-4xl leading-[1.1] text-white sm:text-5xl lg:text-6xl">
               {destination.name}
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-white/80">{destination.summary}</p>
+            <p className="mt-5 text-base leading-relaxed text-midnight-50">{destination.summary}</p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="accent">

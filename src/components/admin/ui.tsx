@@ -75,9 +75,9 @@ export function StatTile({
       className={cn(
         "h-full rounded-2xl border p-5 transition-colors",
         tone === "warning"
-          ? "border-sunset-200 bg-sunset-50/50"
+          ? "border-sunset-200 bg-sunset-50"
           : tone === "success"
-            ? "border-emerald-200 bg-emerald-50/40"
+            ? "border-emerald-200 bg-emerald-50"
             : "border-hairline bg-white",
         href && "hover:border-midnight-300",
       )}
@@ -175,7 +175,7 @@ export function TableEmpty({ colSpan, message }: { colSpan: number; message: str
 /* ------------------------------- Status pill ------------------------------- */
 
 const TONES = {
-  neutral: "bg-midnight-900/[0.06] text-midnight-700",
+  neutral: "bg-sand-100 text-midnight-700",
   success: "bg-emerald-50 text-emerald-800",
   warning: "bg-amber-50 text-amber-800",
   danger: "bg-red-50 text-red-700",

@@ -165,7 +165,7 @@ export function RegisterForm({ googleEnabled }: { googleEnabled: boolean }) {
                     passed ? "text-emerald-700" : "text-muted",
                   )}
                 >
-                  <Check className={cn("size-3.5", !passed && "opacity-30")} aria-hidden />
+                  <Check className="size-3.5" aria-hidden />
                   {rule.label}
                 </li>
               );

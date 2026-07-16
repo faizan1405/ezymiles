@@ -42,7 +42,7 @@ export default async function AboutPage() {
             <h1 className="font-display text-4xl leading-[1.1] text-white sm:text-5xl lg:text-6xl">
               {settings.about.aboutTitle}
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-white/80 md:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-midnight-50 md:text-lg">
               {settings.brand.tagline}
             </p>
           </div>
@@ -62,7 +62,7 @@ export default async function AboutPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="flex h-full flex-col justify-center rounded-3xl border border-gild-200/40 bg-gild-50/20 p-8 text-center shadow-tile">
+            <div className="flex h-full flex-col justify-center rounded-3xl border border-gild-200 bg-gild-50 p-8 text-center shadow-tile">
               <span className="mx-auto flex size-12 items-center justify-center rounded-2xl wash-gold text-gild-950">
                 <HeartHandshake className="size-6" />
               </span>
@@ -117,7 +117,7 @@ export default async function AboutPage() {
                     <span className="flex size-16 items-center justify-center rounded-full bg-sand-100 text-lagoon-600">
                       <User className="size-8" />
                     </span>
-                    <h4 className="mt-5 font-display text-sm font-semibold tracking-wider text-midnight-900/60 uppercase">
+                    <h4 className="mt-5 font-display text-sm font-semibold tracking-wider text-muted uppercase">
                       Founder Photograph
                     </h4>
                     <p className="mt-2 text-xs leading-relaxed text-muted max-w-xs">

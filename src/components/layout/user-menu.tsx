@@ -29,7 +29,7 @@ export function UserMenu({ tone = "light" }: { tone?: "light" | "dark" }) {
   const triggerClass = cn(
     "flex size-10 items-center justify-center rounded-full transition-colors",
     tone === "dark"
-      ? "text-white/85 hover:bg-white/12 hover:text-white"
+      ? "text-white hover:bg-white/12 hover:text-white"
       : "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
   );
 
@@ -52,7 +52,7 @@ export function UserMenu({ tone = "light" }: { tone?: "light" | "dark" }) {
       <DropdownMenu.Trigger
         className={cn(
           "flex size-10 items-center justify-center rounded-full text-[0.8125rem] font-bold transition-transform hover:scale-105",
-          tone === "dark" ? "bg-white/18 text-white" : "bg-midnight-900 text-white",
+          tone === "dark" ? "bg-midnight-700 text-white" : "bg-midnight-900 text-white",
         )}
         aria-label={`Account menu for ${name}`}
       >

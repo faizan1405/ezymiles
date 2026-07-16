@@ -82,14 +82,14 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
   return (
     <footer className="mt-auto bg-midnight-950 text-midnight-100">
       {/* ------------------------------ Newsletter ------------------------------ */}
-      <div className="border-b border-white/8">
+      <div className="border-b border-midnight-800">
         <div className="container-page grid gap-8 py-14 lg:grid-cols-2 lg:items-center lg:gap-16">
           <div>
             <h2 className="text-3xl text-white sm:text-4xl">
               Two emails a month.
               <span className="block text-lagoon-300">Zero noise.</span>
             </h2>
-            <p className="mt-4 max-w-md text-[0.9375rem] leading-relaxed text-midnight-200/70">
+            <p className="mt-4 max-w-md text-[0.9375rem] leading-relaxed text-midnight-200">
               Seasonal windows worth booking, honest destination notes, and the occasional
               early-bird fare before it goes public.
             </p>
@@ -106,14 +106,14 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
             <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-lagoon-300">
               {settings.brand.tagline}
             </p>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-midnight-200/65">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-midnight-200">
               {settings.brand.name} makes travel planning simple, transparent and stress-free through honest recommendations and responsible support.
             </p>
             <p className="mt-4 text-sm font-bold text-white">
               Trust Before Transactions.
             </p>
 
-            <address className="mt-6 space-y-3 text-sm not-italic text-midnight-200/70">
+            <address className="mt-6 space-y-3 text-sm not-italic text-midnight-200">
               <a
                 href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
                 className="flex items-start gap-2.5 transition-colors hover:text-white"
@@ -149,7 +149,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
-                      className="flex size-10 items-center justify-center rounded-full border border-white/12 text-midnight-200/70 transition-colors hover:border-white/30 hover:bg-white/8 hover:text-white"
+                      className="flex size-10 items-center justify-center rounded-full border border-midnight-800 text-midnight-200 transition-colors hover:border-lagoon-500 hover:bg-midnight-900 hover:text-white"
                     >
                       <Icon className="size-4" aria-hidden />
                     </a>
@@ -165,13 +165,13 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
                 <h3 className="text-eyebrow mb-4 text-lagoon-300">{col.title}</h3>
                 <ul className="space-y-2.5">
                   {col.links.length === 0 ? (
-                    <li className="text-sm text-midnight-200/40">Coming soon</li>
+                    <li className="text-sm text-midnight-300">Coming soon</li>
                   ) : (
                     col.links.map((l) => (
                       <li key={l.href + l.label}>
                         <Link
                           href={l.href}
-                          className="text-sm text-midnight-200/70 transition-colors hover:text-white"
+                          className="text-sm text-midnight-200 transition-colors hover:text-white"
                         >
                           {l.label}
                         </Link>
@@ -185,8 +185,8 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
         </div>
 
         {/* ------------------------------ Trust row ------------------------------ */}
-        <div className="mt-12 flex flex-col gap-6 border-t border-white/8 pt-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-midnight-200/60">
+        <div className="mt-12 flex flex-col gap-6 border-t border-midnight-800 pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-midnight-300">
             <span className="flex items-center gap-2">
               <Lock className="size-4 text-lagoon-400" aria-hidden />
               256-bit encrypted checkout
@@ -201,7 +201,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
             {["UPI", "Visa", "Mastercard", "RuPay", "Amex", "Net banking"].map((p) => (
               <span
                 key={p}
-                className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-[0.625rem] font-semibold uppercase tracking-wide text-midnight-200/70"
+                className="rounded-md border border-midnight-800 bg-midnight-900 px-2.5 py-1.5 text-[0.625rem] font-semibold uppercase tracking-wide text-midnight-200"
               >
                 {p}
               </span>
@@ -211,9 +211,9 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
       </div>
 
       {/* -------------------------------- Legal -------------------------------- */}
-      <div className="border-t border-white/8">
+      <div className="border-t border-midnight-800">
         <div className="container-page flex flex-col gap-4 py-6 lg:flex-row lg:items-center lg:justify-between">
-          <p className="text-xs text-midnight-200/50">
+          <p className="text-xs text-midnight-300">
             © {year} {BRAND.legalName}. All rights reserved.
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
@@ -221,7 +221,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-xs text-midnight-200/50 transition-colors hover:text-white"
+                  className="text-xs text-midnight-300 transition-colors hover:text-white"
                 >
                   {l.label}
                 </Link>

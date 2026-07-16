@@ -50,7 +50,7 @@ export function NewsletterForm({
       <div
         className={cn(
           "flex items-center gap-3 rounded-2xl p-5",
-          dark ? "bg-white/8 text-white" : "bg-lagoon-50 text-lagoon-900",
+          dark ? "bg-midnight-900 text-white" : "bg-lagoon-50 text-lagoon-900",
           className,
         )}
         role="status"
@@ -60,7 +60,7 @@ export function NewsletterForm({
         </span>
         <div>
           <p className="text-sm font-semibold">You&apos;re on the list.</p>
-          <p className={cn("text-xs", dark ? "text-white/60" : "text-lagoon-800/70")}>
+          <p className={cn("text-xs", dark ? "text-midnight-200" : "text-lagoon-700")}>
             Look out for our next dispatch.
           </p>
         </div>
@@ -85,7 +85,7 @@ export function NewsletterForm({
             className={cn(
               "h-13",
               dark &&
-                "border-white/15 bg-white/8 text-white placeholder:text-white/40 focus:border-lagoon-400 focus:ring-lagoon-400/20",
+                "border-midnight-700 bg-midnight-900 text-white placeholder:text-midnight-300 focus:border-lagoon-400 focus:ring-lagoon-400/20",
             )}
             {...register("email")}
           />
@@ -113,7 +113,7 @@ export function NewsletterForm({
         <Checkbox
           id="newsletter-whatsapp"
           label={
-            <span className={dark ? "text-white/65" : undefined}>
+            <span className={dark ? "text-midnight-200" : undefined}>
               Also send me travel updates on WhatsApp
             </span>
           }
@@ -122,7 +122,7 @@ export function NewsletterForm({
         <Checkbox
           id="newsletter-consent"
           label={
-            <span className={dark ? "text-white/65" : undefined}>
+            <span className={dark ? "text-midnight-200" : undefined}>
               I agree to receive emails and accept the{" "}
               <Link href="/legal/privacy-policy" className="underline hover:no-underline">
                 privacy policy

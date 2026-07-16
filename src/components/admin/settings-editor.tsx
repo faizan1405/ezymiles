@@ -315,7 +315,7 @@ export function SettingsEditor({
 
                 <ul className="space-y-3">
                   {values.announcement.items.map((item, i) => (
-                    <li key={i} className="rounded-2xl border border-hairline bg-sand-50/60 p-4">
+                    <li key={i} className="rounded-2xl border border-hairline bg-sand-50 p-4">
                       <div className="grid gap-3 sm:grid-cols-[8rem_1fr_10rem_auto]">
                         <Field label="Badge" htmlFor={`an-${i}-badge`}>
                           <Input

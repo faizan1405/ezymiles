@@ -51,23 +51,23 @@ export function Testimonials({ reviews }: { reviews: ReviewDTO[] }) {
 
 function TestimonialCard({ review: r, onPlay }: { review: ReviewDTO; onPlay: () => void }) {
   return (
-    <figure className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-      <Quote className="size-7 shrink-0 text-lagoon-400/50" aria-hidden />
+    <figure className="flex h-full flex-col rounded-2xl border border-midnight-800 bg-midnight-900 p-6">
+      <Quote className="size-7 shrink-0 text-lagoon-700" aria-hidden />
 
       <blockquote className="mt-4 flex-1">
         {r.title ? (
           <p className="mb-2 font-display text-lg leading-snug text-white">{r.title}</p>
         ) : null}
-        <p className="text-[0.9375rem] leading-relaxed text-white/70">
+        <p className="text-[0.9375rem] leading-relaxed text-midnight-100">
           {r.body.length > 260 ? `${r.body.slice(0, 260).trimEnd()}…` : r.body}
         </p>
       </blockquote>
 
       <div className="mt-5">
-        <Rating value={r.rating} size="sm" className="[&_span]:text-white/80" />
+        <Rating value={r.rating} size="sm" className="[&_span]:text-white" />
       </div>
 
-      <figcaption className="mt-5 flex items-center gap-3 border-t border-white/10 pt-5">
+      <figcaption className="mt-5 flex items-center gap-3 border-t border-midnight-800 pt-5">
         <div className="relative size-11 shrink-0 overflow-hidden rounded-full bg-lagoon-700">
           {r.authorPhoto ? (
             <SmartImage src={r.authorPhoto} alt={r.authorName} fill sizes="44px" className="object-cover" />
@@ -88,7 +88,7 @@ function TestimonialCard({ review: r, onPlay }: { review: ReviewDTO; onPlay: () 
               </span>
             ) : null}
           </p>
-          <p className="truncate text-xs text-white/50">
+          <p className="truncate text-xs text-midnight-200">
             {[r.destination ?? r.subjectTitle, r.travelledOn ? formatDate(r.travelledOn, { month: "short", year: "numeric" }) : null]
               .filter(Boolean)
               .join(" · ")}
@@ -100,7 +100,7 @@ function TestimonialCard({ review: r, onPlay }: { review: ReviewDTO; onPlay: () 
             type="button"
             onClick={onPlay}
             aria-label={`Play ${r.authorName}'s video review`}
-            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-midnight-800 text-white transition-colors hover:bg-midnight-700"
           >
             <PlayCircle className="size-5" aria-hidden />
           </button>

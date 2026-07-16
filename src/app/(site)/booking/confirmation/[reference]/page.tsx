@@ -194,10 +194,10 @@ export default async function ConfirmationPage({
                 ]
             ).map((stepText, i) => (
               <li key={stepText} className="flex gap-3">
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white/15 text-[0.6875rem] font-bold">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-midnight-800 text-[0.6875rem] font-bold">
                   {i + 1}
                 </span>
-                <span className="text-[0.9375rem] leading-relaxed text-white/80">{stepText}</span>
+                <span className="text-[0.9375rem] leading-relaxed text-lagoon-100">{stepText}</span>
               </li>
             ))}
           </ol>
@@ -245,7 +245,7 @@ function Row({
   highlight?: boolean;
 }) {
   return (
-    <div className={`flex items-center justify-between gap-4 px-6 py-4 ${highlight ? "bg-sunset-50/50" : ""}`}>
+    <div className={`flex items-center justify-between gap-4 px-6 py-4 ${highlight ? "bg-sunset-50" : ""}`}>
       <dt className="text-sm text-muted">{label}</dt>
       <dd className="font-semibold text-midnight-900">{children}</dd>
     </div>

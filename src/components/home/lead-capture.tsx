@@ -53,7 +53,7 @@ export function LeadCapture({ whatsapp }: { whatsapp: string }) {
               {/* -------------------------------- Channels ------------------------------- */}
               <div className="wash-ocean p-8 text-white sm:p-10 lg:p-12">
                 <h3 className="font-display text-2xl">Or just talk to a human</h3>
-                <p className="mt-3 text-[0.9375rem] leading-relaxed text-white/70">
+                <p className="mt-3 text-[0.9375rem] leading-relaxed text-lagoon-100">
                   No script, no pressure. Tell us roughly what you&apos;re thinking and
                   we&apos;ll tell you honestly whether it works.
                 </p>
@@ -116,13 +116,13 @@ function Channel({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.06] p-4">
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/12 [&_svg]:size-5">
+    <div className="flex items-center gap-4 rounded-2xl border border-midnight-700 bg-midnight-900 p-4">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-midnight-700 [&_svg]:size-5">
         {icon}
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold">{title}</p>
-        <p className="mt-0.5 text-xs text-white/60">{description}</p>
+        <p className="mt-0.5 text-xs text-midnight-200">{description}</p>
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>

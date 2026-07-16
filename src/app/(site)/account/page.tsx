@@ -197,7 +197,7 @@ function StatCard({
     <Link
       href={href}
       className={`group rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-tile motion-reduce:hover:translate-y-0 ${
-        tone === "warning" ? "border-sunset-200 bg-sunset-50/50" : "border-hairline bg-white"
+        tone === "warning" ? "border-sunset-200 bg-sunset-50" : "border-hairline bg-white"
       }`}
     >
       <dt className="flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-wider text-muted">

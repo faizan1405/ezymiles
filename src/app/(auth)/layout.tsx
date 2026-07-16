@@ -48,7 +48,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
           <p className="max-w-md font-display text-3xl leading-snug text-white">
             {settings.brand.tagline}
           </p>
-          <footer className="mt-4 text-sm text-white/60">
+          <footer className="mt-4 text-sm text-midnight-50">
             Sign in to track your trips, keep your wishlist, and pick up where you left off.
           </footer>
         </blockquote>

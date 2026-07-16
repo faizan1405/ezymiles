@@ -174,7 +174,7 @@ export function HomepageEditor({ homepage }: { homepage: Settings["homepage"] })
             ) : (
               <ul className="space-y-4">
                 {values.heroSlides.map((slide, i) => (
-                  <li key={i} className="rounded-2xl border border-hairline bg-sand-50/60 p-4">
+                  <li key={i} className="rounded-2xl border border-hairline bg-sand-50 p-4">
                     <div className="mb-3 flex items-center justify-between">
                       <span className="text-[0.625rem] font-bold uppercase tracking-wider text-muted">
                         Slide {i + 1}
