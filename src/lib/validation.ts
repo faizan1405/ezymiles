@@ -76,7 +76,10 @@ export const enquirySchema = z.object({
   campaign: campaignSchema,
   consent: consentField,
   /** Honeypot — must stay empty. Bots fill it, humans never see it. */
-  website: z.string().max(0).optional(),
+  // Honeypot: real users never see this field. We deliberately DON'T reject a
+  // filled value here — the server action detects it and returns a silent
+  // success so bots never learn the field is a trap. See submitContact() et al.
+  website: z.string().optional(),
 });
 export type EnquiryInput = z.input<typeof enquirySchema>;
 
@@ -99,7 +102,10 @@ export const callbackSchema = z.object({
     .optional(),
   sourcePage: z.string().default("/"),
   consent: consentField,
-  website: z.string().max(0).optional(),
+  // Honeypot: real users never see this field. We deliberately DON'T reject a
+  // filled value here — the server action detects it and returns a silent
+  // success so bots never learn the field is a trap. See submitContact() et al.
+  website: z.string().optional(),
 });
 export type CallbackInput = z.input<typeof callbackSchema>;
 
@@ -126,7 +132,10 @@ export const customTripSchema = z.object({
   email: emailField,
   consent: consentField,
   sourcePage: z.string().default("/customise-my-trip"),
-  website: z.string().max(0).optional(),
+  // Honeypot: real users never see this field. We deliberately DON'T reject a
+  // filled value here — the server action detects it and returns a silent
+  // success so bots never learn the field is a trap. See submitContact() et al.
+  website: z.string().optional(),
 });
 export type CustomTripInput = z.input<typeof customTripSchema>;
 
@@ -141,7 +150,10 @@ export const contactSchema = z.object({
   message: z.string().trim().min(10, "Tell us a little more (10 characters minimum)").max(2000),
   consent: consentField,
   sourcePage: z.string().default("/contact"),
-  website: z.string().max(0).optional(),
+  // Honeypot: real users never see this field. We deliberately DON'T reject a
+  // filled value here — the server action detects it and returns a silent
+  // success so bots never learn the field is a trap. See submitContact() et al.
+  website: z.string().optional(),
 });
 export type ContactInput = z.input<typeof contactSchema>;
 
@@ -159,7 +171,10 @@ export const visaApplicationSchema = z.object({
   travellerCount: z.coerce.number().int().min(1).max(20).default(1),
   message: z.string().trim().max(1000).optional(),
   consent: consentField,
-  website: z.string().max(0).optional(),
+  // Honeypot: real users never see this field. We deliberately DON'T reject a
+  // filled value here — the server action detects it and returns a silent
+  // success so bots never learn the field is a trap. See submitContact() et al.
+  website: z.string().optional(),
 });
 export type VisaApplicationInput = z.input<typeof visaApplicationSchema>;
 

@@ -33,7 +33,11 @@ type MenuKey = "domestic" | "international" | "activities" | null;
 
 /**
  * Routes whose first screen is a full-bleed image hero. On these the header
- * starts transparent and resolves into a solid, blurred bar once scrolled.
+ * starts as a solid deep-navy bar (matching the hero's dark scrim) and
+ * switches to a solid white bar once scrolled. The header is never
+ * transparent — it sits above the hero in normal flow, not over it, so a
+ * transparent background would just expose the page's white background
+ * behind white text.
  */
 const HERO_ROUTES = [/^\/$/, /^\/destinations\/[^/]+$/, /^\/about$/];
 
@@ -111,7 +115,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
           "sticky top-0 z-90 w-full transition-[background-color,box-shadow] duration-500",
           solid
             ? "border-b border-hairline bg-white shadow-[0_1px_0_rgb(16_25_43/0.04)]"
-            : "bg-transparent",
+            : "border-b border-white/10 bg-midnight-950",
         )}
         onMouseLeave={scheduleClose}
       >
@@ -214,6 +218,23 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
             </div>
 
             <UserMenu tone={tone} />
+
+            {/* Real click-to-call link. Icon shows from lg; the visible number
+                appears at 2xl where there is room. tel: strips spaces so the
+                dialled value is the normalised +917900003279. */}
+            <a
+              href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
+              aria-label={`Call ${settings.brand.name} at ${settings.contact.phone}`}
+              className={cn(
+                "hidden items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors lg:inline-flex",
+                solid
+                  ? "text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950"
+                  : "text-white hover:bg-white/12 hover:text-white",
+              )}
+            >
+              <Phone className="size-[1.05rem]" aria-hidden />
+              <span className="hidden 2xl:inline">{settings.contact.phone}</span>
+            </a>
 
             <Button
               asChild
