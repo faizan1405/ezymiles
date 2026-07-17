@@ -17,6 +17,9 @@ export async function getCurrentUser() {
 export async function requireUser() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?callbackUrl=/account");
+  // Staff have no traveller data behind their session — the middleware redirect
+  // is a fast first pass, not the security boundary, so this must hold too.
+  if (user.isAdmin) redirect("/admin");
   return user;
 }
 

@@ -26,13 +26,22 @@ const SeoSchema = new Schema(
 
 /* ------------------------------- Destination ------------------------------- */
 
+export const DESTINATION_TYPES = ["country", "city", "region", "emirate"] as const;
+export type DestinationType = (typeof DESTINATION_TYPES)[number];
+
 export interface IDestination {
   _id: Types.ObjectId;
   name: string;
   slug: string;
+  /** Alternate names this destination is also known/searched by (e.g. "USA", "US" for United States). Used to prevent duplicate records. */
+  aliases: string[];
   country: string;
   countryCode: string;
   region: string;
+  /** country | city | region | emirate — city/emirate records usually carry a parentDestination. */
+  type: DestinationType;
+  /** Country/region this destination belongs to (e.g. Dubai -> United Arab Emirates). Not set for top-level countries/regions. */
+  parentDestination?: Types.ObjectId | null;
   scope: "domestic" | "international";
   themes: string[];
   summary: string;
@@ -51,9 +60,17 @@ export interface IDestination {
   faqs: { question: string; answer: string }[];
   isFeatured: boolean;
   isTrending: boolean;
+  /** Curated into the "Popular hotel destinations" collection. */
+  hotelFeatured: boolean;
+  /** Curated into the "Explore international destinations" homepage rail. */
+  packageFeatured: boolean;
+  /** Manual sort order for curated rails and the admin list. Lower sorts first. */
+  displayOrder: number;
   status: PublishStatus;
   seo?: { title?: string; description?: string; keywords?: string[]; ogImage?: string; noIndex?: boolean };
   viewCount: number;
+  /** Set by the demo seed scripts so seeded content is labelled everywhere it surfaces. */
+  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -63,9 +80,12 @@ const DestinationSchema = new Schema<IDestination>(
   {
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, lowercase: true, trim: true },
+    aliases: [String],
     country: { type: String, required: true },
     countryCode: { type: String, default: "IN" },
     region: { type: String, default: "" },
+    type: { type: String, enum: DESTINATION_TYPES, default: "country" },
+    parentDestination: { type: Schema.Types.ObjectId, ref: "Destination", default: null },
     scope: { type: String, enum: ["domestic", "international"], required: true },
     themes: [{ type: String, index: true }],
     summary: { type: String, default: "" },
@@ -87,9 +107,13 @@ const DestinationSchema = new Schema<IDestination>(
     faqs: [{ _id: false, question: String, answer: String }],
     isFeatured: { type: Boolean, default: false },
     isTrending: { type: Boolean, default: false },
+    hotelFeatured: { type: Boolean, default: false },
+    packageFeatured: { type: Boolean, default: false },
+    displayOrder: { type: Number, default: 0 },
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
     seo: SeoSchema,
     viewCount: { type: Number, default: 0 },
+    isDemoData: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
@@ -98,6 +122,8 @@ const DestinationSchema = new Schema<IDestination>(
 DestinationSchema.index({ slug: 1 }, { unique: true });
 DestinationSchema.index({ scope: 1, status: 1, deletedAt: 1 });
 DestinationSchema.index({ isFeatured: 1, isTrending: 1 });
+DestinationSchema.index({ hotelFeatured: 1, packageFeatured: 1, displayOrder: 1 });
+DestinationSchema.index({ parentDestination: 1 });
 DestinationSchema.index({ name: "text", country: "text", summary: "text" });
 
 /* --------------------------------- Package --------------------------------- */

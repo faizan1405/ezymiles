@@ -143,6 +143,7 @@ export const PACKAGE_COLLECTIONS = [
   { slug: "weekend-breaks", label: "Weekend Breaks" },
   { slug: "group-departures", label: "Group Departures" },
   { slug: "flight-inclusive", label: "Flight-Inclusive Deals" },
+  { slug: "cruises", label: "Cruises" },
 ] as const;
 
 export type PackageCollectionSlug = (typeof PACKAGE_COLLECTIONS)[number]["slug"];

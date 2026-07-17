@@ -148,7 +148,7 @@ export function SettingsEditor({
                   onChange={(e) =>
                     setValues({ ...values, brand: { ...values.brand, name: e.target.value } })
                   }
-                  placeholder="Replace [TRAVEL BRAND NAME] with the real name"
+                  placeholder="e.g. eZyMiles"
                 />
               </Field>
 

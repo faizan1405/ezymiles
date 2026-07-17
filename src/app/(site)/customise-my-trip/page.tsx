@@ -25,6 +25,7 @@ export default async function CustomiseTripPage({
   const destinations = await getDestinations({ limit: 60 });
 
   const preset = typeof sp.destination === "string" ? sp.destination : undefined;
+  const presetTravelStyle = typeof sp.tripType === "string" ? sp.tripType : undefined;
 
   return (
     <>
@@ -68,6 +69,7 @@ export default async function CustomiseTripPage({
             <TripBuilder
               destinations={destinations.map((d) => ({ name: d.name, slug: d.slug }))}
               defaultDestination={preset}
+              defaultTravelStyle={presetTravelStyle}
             />
           </Suspense>
         </Reveal>

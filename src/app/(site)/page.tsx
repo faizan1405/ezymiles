@@ -16,6 +16,7 @@ import {
 import { Hero } from "@/components/home/hero";
 import { UnifiedSearch } from "@/components/search/unified-search";
 import { DestinationExplorer } from "@/components/home/destination-explorer";
+import { InternationalDestinationsRail } from "@/components/home/international-destinations-rail";
 import { PackageRail } from "@/components/packages/package-rail";
 import { TripBuilder } from "@/components/forms/trip-builder";
 import { TravelMap } from "@/components/home/travel-map";
@@ -38,6 +39,7 @@ export default async function HomePage() {
   // One parallel fan-out rather than a waterfall — every rail is independent.
   const [
     destinations,
+    internationalDestinations,
     trendingIntl,
     bestOfIndia,
     honeymoon,
@@ -56,6 +58,7 @@ export default async function HomePage() {
     visaCountries,
   ] = await Promise.all([
     getDestinations({ limit: 24 }),
+    getDestinations({ packageFeatured: true, limit: 12 }),
     getPackagesByCollection("trending-international", 8),
     getPackagesByCollection("best-of-india", 8),
     getPackagesByCollection("honeymoon-escapes", 8),
@@ -124,6 +127,10 @@ export default async function HomePage() {
       {on("liveActivity") ? <LiveActivity data={liveActivity} /> : null}
 
       {on("destinations") ? <DestinationExplorer destinations={destinations} /> : null}
+
+      {on("internationalDestinations") ? (
+        <InternationalDestinationsRail destinations={internationalDestinations} />
+      ) : null}
 
       {on("trendingInternational") ? (
         <PackageRail

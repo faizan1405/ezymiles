@@ -756,9 +756,12 @@ const destinationSchema = z.object({
   id: z.string().optional(),
   name: z.string().trim().min(2),
   slug: z.string().trim().optional(),
+  aliases: z.array(z.string()).default([]),
   country: z.string().trim().min(2),
   countryCode: z.string().trim().default("IN"),
   region: z.string().optional(),
+  type: z.enum(["country", "city", "region", "emirate"]).default("country"),
+  parentDestination: z.string().optional(),
   scope: z.enum(["domestic", "international"]),
   themes: z.array(z.string()).default([]),
   summary: z.string().trim().max(400).default(""),
@@ -777,6 +780,13 @@ const destinationSchema = z.object({
   faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
   isFeatured: z.boolean().default(false),
   isTrending: z.boolean().default(false),
+  hotelFeatured: z.boolean().default(false),
+  packageFeatured: z.boolean().default(false),
+  displayOrder: z.coerce.number().default(0),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  seoKeywords: z.array(z.string()).default([]),
+  noIndex: z.boolean().default(false),
   status: z.enum(PUBLISH_STATUSES).default("draft"),
 });
 
@@ -796,7 +806,22 @@ export async function saveDestination(raw: unknown): Promise<AdminResult> {
     const clash = await Destination.findOne({ slug, _id: { $ne: d.id } }).select("_id");
     if (clash) return DENIED("Another destination already uses that URL slug.");
 
-    const { id, ...doc } = d;
+    if (d.parentDestination) {
+      const parent = await Destination.findById(d.parentDestination).select("_id");
+      if (!parent) return DENIED("The selected parent destination no longer exists.");
+    }
+
+    const { id, seoTitle, seoDescription, seoKeywords, noIndex, parentDestination, ...rest } = d;
+    const doc = {
+      ...rest,
+      parentDestination: parentDestination || null,
+      seo: {
+        title: seoTitle || undefined,
+        description: seoDescription || undefined,
+        keywords: seoKeywords,
+        noIndex,
+      },
+    };
     let savedId = id;
 
     if (id) {

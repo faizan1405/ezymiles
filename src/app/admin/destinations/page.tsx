@@ -57,7 +57,7 @@ export default async function AdminDestinationsPage({
     query.$or = [{ name: rx }, { country: rx }, { slug: rx }];
   }
 
-  const rows = await Destination.find(query).sort({ name: 1 }).lean();
+  const rows = await Destination.find(query).sort({ displayOrder: 1, name: 1 }).lean();
   const destinations = serialise(rows) as unknown as IDestination[];
 
   // One grouped count rather than a query per row.
@@ -154,6 +154,16 @@ export default async function AdminDestinationsPage({
                           {d.isTrending ? (
                             <span className="rounded bg-sand-100 px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase text-midnight-600">
                               Trending
+                            </span>
+                          ) : null}
+                          {d.packageFeatured ? (
+                            <span className="rounded bg-sand-100 px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase text-midnight-600">
+                              Intl. rail
+                            </span>
+                          ) : null}
+                          {d.hotelFeatured ? (
+                            <span className="rounded bg-sand-100 px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase text-midnight-600">
+                              Hotel rail
                             </span>
                           ) : null}
                         </span>

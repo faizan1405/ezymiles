@@ -19,9 +19,12 @@ export interface DestinationFormValues {
   id?: string;
   name: string;
   slug: string;
+  aliases: string[];
   country: string;
   countryCode: string;
   region: string;
+  type: "country" | "city" | "region" | "emirate";
+  parentDestination: string;
   scope: "domestic" | "international";
   themes: string[];
   summary: string;
@@ -41,15 +44,25 @@ export interface DestinationFormValues {
   faqs: { question: string; answer: string }[];
   isFeatured: boolean;
   isTrending: boolean;
+  hotelFeatured: boolean;
+  packageFeatured: boolean;
+  displayOrder: number;
+  seoTitle: string;
+  seoDescription: string;
+  seoKeywords: string[];
+  noIndex: boolean;
   status: "draft" | "scheduled" | "published" | "archived";
 }
 
 export const emptyDestination: DestinationFormValues = {
   name: "",
   slug: "",
+  aliases: [],
   country: "",
   countryCode: "IN",
   region: "",
+  type: "country",
+  parentDestination: "",
   scope: "international",
   themes: [],
   summary: "",
@@ -69,6 +82,13 @@ export const emptyDestination: DestinationFormValues = {
   faqs: [],
   isFeatured: false,
   isTrending: false,
+  hotelFeatured: false,
+  packageFeatured: false,
+  displayOrder: 0,
+  seoTitle: "",
+  seoDescription: "",
+  seoKeywords: [],
+  noIndex: false,
   status: "draft",
 };
 
@@ -77,7 +97,14 @@ const MONTHS = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
-export function DestinationEditor({ initial }: { initial: DestinationFormValues }) {
+export function DestinationEditor({
+  initial,
+  destinations = [],
+}: {
+  initial: DestinationFormValues;
+  /** Candidate parent destinations (countries/regions), for the emirate/city hierarchy picker. Excludes the destination being edited. */
+  destinations?: { id: string; name: string; type: string }[];
+}) {
   const router = useRouter();
   const [values, setValues] = React.useState(initial);
   const [saving, setSaving] = React.useState(false);
@@ -200,6 +227,34 @@ export function DestinationEditor({ initial }: { initial: DestinationFormValues 
                 />
               </Field>
 
+              <Field label="Type" htmlFor="d-type" hint="City/emirate destinations usually have a parent.">
+                <Select
+                  id="d-type"
+                  value={values.type}
+                  onChange={(e) => set("type", e.target.value as DestinationFormValues["type"])}
+                >
+                  <option value="country">Country</option>
+                  <option value="region">Region</option>
+                  <option value="city">City</option>
+                  <option value="emirate">Emirate</option>
+                </Select>
+              </Field>
+
+              <Field label="Parent destination" htmlFor="d-parent">
+                <Select
+                  id="d-parent"
+                  value={values.parentDestination}
+                  onChange={(e) => set("parentDestination", e.target.value)}
+                >
+                  <option value="">None</option>
+                  {destinations.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+
               <Field label="Summary" htmlFor="d-summary" className="sm:col-span-2">
                 <Textarea
                   id="d-summary"
@@ -233,6 +288,13 @@ export function DestinationEditor({ initial }: { initial: DestinationFormValues 
                 options={TRIP_TYPES.map((t) => ({ value: t.slug, label: t.label }))}
                 value={values.themes}
                 onChange={(v) => set("themes", v)}
+              />
+
+              <StringListField
+                label="Aliases"
+                hint="Alternate names travellers might search for (e.g. USA, US). Helps prevent duplicate destinations."
+                value={values.aliases}
+                onChange={(v) => set("aliases", v)}
               />
             </div>
           </Panel>
@@ -409,6 +471,75 @@ export function DestinationEditor({ initial }: { initial: DestinationFormValues 
                 description="Appears under the Trending tab on the homepage."
                 checked={values.isTrending}
                 onChange={(v) => set("isTrending", v)}
+              />
+              <ToggleField
+                label="International destinations rail"
+                description="Included in the homepage 'Explore international destinations' rail."
+                checked={values.packageFeatured}
+                onChange={(v) => set("packageFeatured", v)}
+              />
+              <ToggleField
+                label="Hotel destinations rail"
+                description="Included in the 'Popular hotel destinations' section on /hotels."
+                checked={values.hotelFeatured}
+                onChange={(v) => set("hotelFeatured", v)}
+              />
+
+              <Field
+                label="Display order"
+                htmlFor="d-order"
+                hint="Lower numbers sort first within curated rails and the admin list."
+              >
+                <Input
+                  id="d-order"
+                  type="number"
+                  value={values.displayOrder}
+                  onChange={(e) => set("displayOrder", Number(e.target.value))}
+                />
+              </Field>
+            </div>
+          </Panel>
+
+          <Panel title="SEO">
+            <div className="space-y-4">
+              <Field
+                label="Meta title"
+                htmlFor="d-seotitle"
+                hint={`${(values.seoTitle || values.name).length}/60 characters`}
+              >
+                <Input
+                  id="d-seotitle"
+                  value={values.seoTitle}
+                  onChange={(e) => set("seoTitle", e.target.value)}
+                  placeholder={values.name}
+                />
+              </Field>
+
+              <Field
+                label="Meta description"
+                htmlFor="d-seodesc"
+                hint={`${values.seoDescription.length}/160 characters`}
+              >
+                <Textarea
+                  id="d-seodesc"
+                  rows={3}
+                  value={values.seoDescription}
+                  onChange={(e) => set("seoDescription", e.target.value)}
+                  placeholder={values.summary}
+                />
+              </Field>
+
+              <StringListField
+                label="Keywords"
+                value={values.seoKeywords}
+                onChange={(v) => set("seoKeywords", v)}
+              />
+
+              <ToggleField
+                label="Hide from search engines"
+                description="Adds noindex. Use for private or unlisted destinations."
+                checked={values.noIndex}
+                onChange={(v) => set("noIndex", v)}
               />
             </div>
           </Panel>

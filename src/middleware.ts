@@ -38,10 +38,17 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (pathname.startsWith("/account") && !token) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(url);
+  if (pathname.startsWith("/account")) {
+    if (!token) {
+      const url = new URL("/login", request.url);
+      url.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(url);
+    }
+    // A staff session has no traveller data behind it — send them to the panel
+    // they actually have, rather than showing them an empty public dashboard.
+    if (token.isAdmin) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
   }
 
   return NextResponse.next();

@@ -101,6 +101,10 @@ export interface DestinationFilter {
   scope?: "domestic" | "international";
   theme?: string;
   trending?: boolean;
+  /** Curated into the "Explore international destinations" homepage rail. */
+  packageFeatured?: boolean;
+  /** Curated into the "Popular hotel destinations" collection. */
+  hotelFeatured?: boolean;
   limit?: number;
 }
 
@@ -113,10 +117,12 @@ export const getDestinations = cache(
     if (filter.scope) match.scope = filter.scope;
     if (filter.theme) match.themes = filter.theme;
     if (filter.trending) match.isTrending = true;
+    if (filter.packageFeatured) match.packageFeatured = true;
+    if (filter.hotelFeatured) match.hotelFeatured = true;
 
     const pipeline: PipelineStage[] = [
       { $match: match },
-      { $sort: { isFeatured: -1, isTrending: -1, startingPriceINR: 1 } },
+      { $sort: { displayOrder: 1, isFeatured: -1, isTrending: -1, startingPriceINR: 1 } },
       { $limit: clamp(filter.limit ?? 12, 1, 60) },
       {
         $lookup: {

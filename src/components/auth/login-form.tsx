@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { ShieldCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { GoogleIcon } from "./google-icon";
+import { StaffLoginForm } from "./staff-login-form";
 
 /**
  * Traveller sign-in. Google is the only way in — there is no password to type,
@@ -47,11 +49,20 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
   // exactly where they left off rather than on a generic dashboard.
   const callbackUrl = params.get("callbackUrl") ?? "/account";
 
+  // Staff never land here by choice — middleware and requireAdmin both send
+  // unauthenticated /admin requests to `/login?callbackUrl=/admin...`, so that
+  // prefix is what tells this page which audience to render.
+  const isStaffPortal = callbackUrl.startsWith("/admin");
+
   const [loading, setLoading] = React.useState(false);
   const [failed, setFailed] = React.useState<string | null>(null);
 
   const errorCode = params.get("error");
   const error = failed ?? (errorCode ? (ERRORS[errorCode] ?? FALLBACK) : null);
+
+  if (isStaffPortal) {
+    return <StaffLoginForm callbackUrl={callbackUrl} />;
+  }
 
   async function onSignIn() {
     setLoading(true);
@@ -129,6 +140,12 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
       <p className="mt-6 flex items-start justify-center gap-2 text-center text-xs leading-relaxed text-muted">
         <ShieldCheck className="mt-px size-4 shrink-0 text-lagoon-600" aria-hidden />
         <span>Secure sign-in powered by Google. EzyMiles never receives your Google password.</span>
+      </p>
+
+      <p className="mt-4 text-center text-xs text-muted">
+        <Link href="/login?callbackUrl=/admin" className="underline-offset-4 hover:underline">
+          Staff sign-in
+        </Link>
       </p>
     </div>
   );

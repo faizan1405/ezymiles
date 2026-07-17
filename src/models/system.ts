@@ -125,7 +125,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
   {
     key: { type: String, default: "default" },
     brand: {
-      name: { type: String, default: "[TRAVEL BRAND NAME]" },
+      name: { type: String, default: "eZyMiles" },
       tagline: { type: String, default: "Journeys designed around you." },
       logoUrl: String,
       faviconUrl: String,

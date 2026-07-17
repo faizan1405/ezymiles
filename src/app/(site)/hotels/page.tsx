@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BedDouble, MapPin, Star, Wifi, Waves, Utensils, Dumbbell, Car } from "lucide-react";
 
-import { getHotels, getHotelCities, type HotelFilter } from "@/server/catalog";
+import { getHotels, getHotelCities, getDestinations, getDestinationBySlug, type HotelFilter } from "@/server/catalog";
 import { SmartImage } from "@/components/ui/smart-image";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Pagination } from "@/components/ui/pagination";
@@ -10,6 +10,7 @@ import { Price } from "@/components/ui/price";
 import { Badge, EmptyState, Rating } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { HotelSearchBar } from "@/components/hotels/hotel-search-bar";
+import { HotelDestinationsRail } from "@/components/hotels/hotel-destinations-rail";
 import { buildQueryString } from "@/lib/utils";
 
 export const revalidate = 600;
@@ -47,16 +48,28 @@ export default async function HotelsPage({
     .map(Number)
     .filter(Boolean);
 
+  const destinationSlug = one(sp, "destination");
+
   const filter: HotelFilter = {
     query: one(sp, "q"),
     city: one(sp, "city"),
+    destinationSlug,
     starCategory: stars,
     sort: (one(sp, "sort") ?? "recommended") as HotelFilter["sort"],
     page: Math.max(1, Number(one(sp, "page") ?? 1) || 1),
     pageSize: 9,
   };
 
-  const [result, cities] = await Promise.all([getHotels(filter), getHotelCities()]);
+  // The curated destinations rail is a browse aid for the unfiltered view —
+  // once someone has searched or filtered, results speak for themselves.
+  const hasActiveFilters = Boolean(filter.query || filter.city || destinationSlug || stars.length);
+
+  const [result, cities, hotelDestinations, filterDestination] = await Promise.all([
+    getHotels(filter),
+    getHotelCities(),
+    hasActiveFilters ? Promise.resolve([]) : getDestinations({ hotelFeatured: true, limit: 14 }),
+    destinationSlug ? getDestinationBySlug(destinationSlug) : Promise.resolve(null),
+  ]);
 
   const checkIn = one(sp, "checkIn");
   const checkOut = one(sp, "checkOut");
@@ -90,6 +103,8 @@ export default async function HotelsPage({
           </div>
         </div>
       </header>
+
+      {!hasActiveFilters ? <HotelDestinationsRail destinations={hotelDestinations} /> : null}
 
       <div className="container-page section-y !pt-10">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -129,8 +144,16 @@ export default async function HotelsPage({
         {result.items.length === 0 ? (
           <EmptyState
             icon={<BedDouble />}
-            title="No properties match that search"
-            description="Try a different city or loosen the star filter — or ask us and we'll find something."
+            title={
+              filterDestination
+                ? `No properties in ${filterDestination.name} yet`
+                : "No properties match that search"
+            }
+            description={
+              filterDestination
+                ? "We don't have a published property there yet — tell us your dates and we'll find one for you."
+                : "Try a different city or loosen the star filter — or ask us and we'll find something."
+            }
             action={
               <Button asChild variant="accent">
                 <Link href="/contact">Ask us to find a stay</Link>

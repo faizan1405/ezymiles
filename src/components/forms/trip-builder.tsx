@@ -41,10 +41,12 @@ const STEP_FIELDS: FieldPath<CustomTripInput>[][] = [
 export function TripBuilder({
   destinations = [],
   defaultDestination,
+  defaultTravelStyle,
   className,
 }: {
   destinations?: { name: string; slug: string }[];
   defaultDestination?: string;
+  defaultTravelStyle?: string;
   className?: string;
 }) {
   const [step, setStep] = React.useState(0);
@@ -70,7 +72,7 @@ export function TripBuilder({
       adults: 2,
       children: 0,
       budgetPerPersonINR: 80_000,
-      travelStyle: "",
+      travelStyle: TRIP_TYPES.some((t) => t.slug === defaultTravelStyle) ? defaultTravelStyle! : "",
       hotelCategory: 4,
       flightsRequired: true,
       visaRequired: false,

@@ -20,7 +20,13 @@ export default async function EditDestinationPage({
   const { id } = await params;
 
   await connectDB();
-  const doc = await Destination.findById(id).lean().catch(() => null);
+  const [doc, parentCandidates] = await Promise.all([
+    Destination.findById(id).lean().catch(() => null),
+    Destination.find({ deletedAt: null, _id: { $ne: id } })
+      .select("name type")
+      .sort({ name: 1 })
+      .lean(),
+  ]);
   if (!doc) notFound();
 
   const d = serialise(doc) as unknown as IDestination;
@@ -29,9 +35,12 @@ export default async function EditDestinationPage({
     id: String(d._id),
     name: d.name,
     slug: d.slug,
+    aliases: d.aliases ?? [],
     country: d.country,
     countryCode: d.countryCode ?? "IN",
     region: d.region ?? "",
+    type: d.type ?? "country",
+    parentDestination: d.parentDestination ? String(d.parentDestination) : "",
     scope: d.scope,
     themes: d.themes ?? [],
     summary: d.summary ?? "",
@@ -51,13 +60,24 @@ export default async function EditDestinationPage({
     faqs: d.faqs ?? [],
     isFeatured: d.isFeatured,
     isTrending: d.isTrending,
+    hotelFeatured: d.hotelFeatured ?? false,
+    packageFeatured: d.packageFeatured ?? false,
+    displayOrder: d.displayOrder ?? 0,
+    seoTitle: d.seo?.title ?? "",
+    seoDescription: d.seo?.description ?? "",
+    seoKeywords: d.seo?.keywords ?? [],
+    noIndex: d.seo?.noIndex ?? false,
     status: d.status,
   };
+
+  const destinationOptions = (
+    serialise(parentCandidates) as unknown as { _id: string; name: string; type: string }[]
+  ).map((p) => ({ id: p._id, name: p.name, type: p.type }));
 
   return (
     <div>
       <AdminPageHeader title={d.name} description={`${d.country} · ${d.viewCount ?? 0} views`} />
-      <DestinationEditor initial={initial} />
+      <DestinationEditor initial={initial} destinations={destinationOptions} />
     </div>
   );
 }
