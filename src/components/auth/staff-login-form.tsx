@@ -2,12 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { Lock } from "lucide-react";
 
 import { loginSchema, type LoginInput } from "@/lib/validation";
+import { getSafeAdminCallbackUrl } from "@/lib/admin-callback-url";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 
@@ -27,6 +29,7 @@ const CODE_MESSAGES: Record<string, string> = {
 const FALLBACK = "We couldn't sign you in. Please try again.";
 
 export function StaffLoginForm({ callbackUrl }: { callbackUrl: string }) {
+  const router = useRouter();
   const [serverError, setServerError] = React.useState<string | null>(null);
 
   const {
@@ -35,6 +38,12 @@ export function StaffLoginForm({ callbackUrl }: { callbackUrl: string }) {
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
 
+  // Resolved once, up front, and reused for both the sign-in request and the
+  // post-success navigation — this component's own default is always
+  // `/admin`, never the traveller `?? "/account"` fallback the Google button
+  // uses one page up.
+  const destination = getSafeAdminCallbackUrl(callbackUrl);
+
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
 
@@ -42,7 +51,7 @@ export function StaffLoginForm({ callbackUrl }: { callbackUrl: string }) {
       email: values.email,
       password: values.password,
       redirect: false,
-      redirectTo: callbackUrl,
+      redirectTo: destination,
     });
 
     if (!result || result.error) {
@@ -50,7 +59,12 @@ export function StaffLoginForm({ callbackUrl }: { callbackUrl: string }) {
       return;
     }
 
-    window.location.href = result.url ?? callbackUrl;
+    // Navigate using the allowlisted destination computed above rather than
+    // `result.url` — the session cookie is already set by the fetch inside
+    // `signIn()` above, so a client-side transition (not a hard reload) is
+    // enough for the server to see the new admin session.
+    router.replace(destination);
+    router.refresh();
   });
 
   return (
