@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock, ShieldCheck, Lock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ShieldCheck, Lock, MessageCircle } from "lucide-react";
 import {
   SocialIcons,
   InstagramHandle,
@@ -11,6 +11,7 @@ import type { NavData } from "@/server/nav";
 import { BRAND } from "@/config/site";
 import { Logo } from "./logo";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
+import { whatsappLink } from "@/lib/utils";
 
 export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData }) {
   const year = new Date().getFullYear();
@@ -107,13 +108,27 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
             </p>
 
             <address className="mt-6 space-y-3 text-sm not-italic text-midnight-200">
-              <a
-                href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
-                className="flex items-start gap-2.5 transition-colors hover:text-white"
-              >
-                <Phone className="mt-0.5 size-4 shrink-0 text-lagoon-400" aria-hidden />
-                {settings.contact.phone}
-              </a>
+              <span className="flex items-start justify-between gap-2.5">
+                <a
+                  href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
+                  className="flex items-start gap-2.5 transition-colors hover:text-white"
+                >
+                  <Phone className="mt-0.5 size-4 shrink-0 text-lagoon-400" aria-hidden />
+                  {settings.contact.phone}
+                </a>
+                <a
+                  href={whatsappLink(
+                    settings.contact.whatsapp,
+                    "Hi! I'd like help planning a trip.",
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Chat with ${settings.brand.name} on WhatsApp`}
+                  className="text-midnight-300 transition-colors hover:text-[#25D366]"
+                >
+                  <MessageCircle className="size-4 shrink-0" aria-hidden />
+                </a>
+              </span>
               <a
                 href={`mailto:${settings.contact.email}`}
                 className="flex items-start gap-2.5 transition-colors hover:text-white"
