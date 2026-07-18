@@ -57,7 +57,7 @@ export default async function AdminDestinationsPage({
     query.$or = [{ name: rx }, { country: rx }, { slug: rx }];
   }
 
-  const rows = await Destination.find(query).sort({ displayOrder: 1, name: 1 }).lean();
+  const rows = await Destination.find(query).sort({ displayOrder: 1, name: 1 }).limit(500).lean();
   const destinations = serialise(rows) as unknown as IDestination[];
 
   // One grouped count rather than a query per row.

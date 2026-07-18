@@ -36,7 +36,10 @@ export async function connectDB(): Promise<Mongoose> {
       .connect(uri, {
         dbName: process.env.MONGODB_DB || "ezymiles",
         bufferCommands: false,
-        maxPoolSize: 10,
+        // The homepage alone fans out ~20 independent queries in one
+        // Promise.all; a pool of 10 forces half of them to queue. 25 lets a
+        // cold render run its whole fan-out concurrently.
+        maxPoolSize: 25,
         serverSelectionTimeoutMS: 8000,
       })
       .then((m) => m);

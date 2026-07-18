@@ -58,7 +58,7 @@ export default async function AdminActivitiesPage({
     query.$or = [{ title: rx }, { city: rx }, { slug: rx }];
   }
 
-  const rows = await Activity.find(query).sort({ city: 1, title: 1 }).lean();
+  const rows = await Activity.find(query).sort({ city: 1, title: 1 }).limit(500).lean();
   const activities = serialise(rows) as unknown as IActivity[];
 
   return (

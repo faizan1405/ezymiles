@@ -23,7 +23,7 @@ export default async function AdminFAQsPage() {
     );
   }
 
-  const rows = await FAQ.find({}).sort({ group: 1, order: 1 }).lean();
+  const rows = await FAQ.find({}).sort({ group: 1, order: 1 }).limit(500).lean();
   const faqs = serialise(rows) as unknown as IFAQ[];
 
   return (

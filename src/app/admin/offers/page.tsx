@@ -23,7 +23,7 @@ export default async function AdminOffersPage() {
     );
   }
 
-  const rows = await Offer.find({}).sort({ order: 1, createdAt: -1 }).lean();
+  const rows = await Offer.find({}).sort({ order: 1, createdAt: -1 }).limit(500).lean();
   const offers = serialise(rows) as unknown as IOffer[];
 
   return (

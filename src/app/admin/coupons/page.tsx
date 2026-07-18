@@ -23,7 +23,7 @@ export default async function AdminCouponsPage() {
     );
   }
 
-  const rows = await Coupon.find({}).sort({ createdAt: -1 }).lean();
+  const rows = await Coupon.find({}).sort({ createdAt: -1 }).limit(500).lean();
   const coupons = serialise(rows) as unknown as ICoupon[];
 
   return (

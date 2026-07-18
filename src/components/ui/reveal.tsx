@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
-import { EASE_OUT_EXPO, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+
+/** ease-out-expo, matching the old framer-motion EASE_OUT_EXPO curve. */
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 type Direction = "up" | "down" | "left" | "right" | "none";
 
@@ -15,6 +16,53 @@ const OFFSETS: Record<Direction, { x: number; y: number }> = {
   none: { x: 0, y: 0 },
 };
 
+/** Matches the old framer viewportOnce: fire once, a little before centred. */
+const IO_OPTIONS: IntersectionObserverInit = {
+  threshold: 0.2,
+  rootMargin: "0px 0px -80px 0px",
+};
+
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
+
+/**
+ * Fires `true` once, the first time the element scrolls into view. Falls back
+ * to `true` immediately where IntersectionObserver is unavailable so content is
+ * never stuck hidden.
+ */
+function useInViewOnce<T extends Element>(): { ref: React.RefObject<T | null>; inView: boolean } {
+  const ref = React.useRef<T>(null);
+  const [inView, setInView] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        setInView(true);
+        observer.disconnect();
+      }
+    }, IO_OPTIONS);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, inView };
+}
+
 /**
  * Scroll-triggered reveal. Under `prefers-reduced-motion` it collapses to a
  * plain fade with no transform, so nothing slides across the viewport.
@@ -25,7 +73,7 @@ export function Reveal({
   delay = 0,
   duration = 0.65,
   className,
-  as = "div",
+  as: Tag = "div",
 }: {
   children: React.ReactNode;
   direction?: Direction;
@@ -34,78 +82,90 @@ export function Reveal({
   className?: string;
   as?: "div" | "section" | "li" | "article" | "span";
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
+  const { ref, inView } = useInViewOnce<HTMLElement>();
   const offset = reduced ? OFFSETS.none : OFFSETS[direction];
-  const MotionTag = motion[as] as typeof motion.div;
+  const d = reduced ? 0.3 : duration;
+  const delaySec = reduced ? 0 : delay;
 
-  return (
-    <MotionTag
-      className={className}
-      initial={{ opacity: 0, ...offset }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={viewportOnce}
-      transition={{ duration: reduced ? 0.3 : duration, delay: reduced ? 0 : delay, ease: EASE_OUT_EXPO }}
-    >
-      {children}
-    </MotionTag>
-  );
+  const style: React.CSSProperties = {
+    opacity: inView ? 1 : 0,
+    transform: inView ? "translate3d(0, 0, 0)" : `translate3d(${offset.x}px, ${offset.y}px, 0)`,
+    transition: `opacity ${d}s ${EASE} ${delaySec}s, transform ${d}s ${EASE} ${delaySec}s`,
+    willChange: "opacity, transform",
+  };
+
+  return React.createElement(Tag, { ref, className, style }, children);
 }
+
+/* -------------------------- Staggered reveal group ------------------------- */
+
+type RevealGroupCtx = { inView: boolean; reduced: boolean; stagger: number };
+const RevealGroupContext = React.createContext<RevealGroupCtx | null>(null);
 
 /** Staggered list — children animate in sequence as the group enters view. */
 export function RevealGroup({
   children,
   stagger = 0.08,
   className,
-  as = "div",
+  as: Tag = "div",
 }: {
   children: React.ReactNode;
   stagger?: number;
   className?: string;
   as?: "div" | "ul" | "section";
 }) {
-  const reduced = useReducedMotion();
-  const MotionTag = motion[as] as typeof motion.div;
+  const reduced = usePrefersReducedMotion();
+  const { ref, inView } = useInViewOnce<HTMLElement>();
 
-  const container: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: reduced ? 0 : stagger } },
-  };
+  const value = React.useMemo<RevealGroupCtx>(
+    () => ({ inView, reduced, stagger }),
+    [inView, reduced, stagger],
+  );
+
+  // Assign each direct child its position so <RevealItem> can offset its delay.
+  let index = 0;
+  const items = React.Children.map(children, (child) =>
+    React.isValidElement(child)
+      ? React.cloneElement(child as React.ReactElement<{ __staggerIndex?: number }>, {
+          __staggerIndex: index++,
+        })
+      : child,
+  );
 
   return (
-    <MotionTag
-      className={className}
-      variants={container}
-      initial="hidden"
-      whileInView="show"
-      viewport={viewportOnce}
-    >
-      {children}
-    </MotionTag>
+    <RevealGroupContext.Provider value={value}>
+      {React.createElement(Tag, { ref, className }, items)}
+    </RevealGroupContext.Provider>
   );
 }
 
 export function RevealItem({
   children,
   className,
-  as = "div",
+  as: Tag = "div",
+  __staggerIndex = 0,
 }: {
   children: React.ReactNode;
   className?: string;
   as?: "div" | "li" | "article";
+  /** Injected by <RevealGroup>; not part of the public API. */
+  __staggerIndex?: number;
 }) {
-  const reduced = useReducedMotion();
-  const MotionTag = motion[as] as typeof motion.div;
+  const ctx = React.useContext(RevealGroupContext);
+  const reduced = ctx?.reduced ?? false;
+  const inView = ctx?.inView ?? true;
+  const stagger = ctx?.stagger ?? 0.08;
+  const delaySec = reduced ? 0 : __staggerIndex * stagger;
 
-  const item: Variants = {
-    hidden: { opacity: 0, y: reduced ? 0 : 22 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT_EXPO } },
+  const style: React.CSSProperties = {
+    opacity: inView ? 1 : 0,
+    transform: inView ? "translate3d(0, 0, 0)" : `translate3d(0, ${reduced ? 0 : 22}px, 0)`,
+    transition: `opacity 0.6s ${EASE} ${delaySec}s, transform 0.6s ${EASE} ${delaySec}s`,
+    willChange: "opacity, transform",
   };
 
-  return (
-    <MotionTag className={className} variants={item}>
-      {children}
-    </MotionTag>
-  );
+  return React.createElement(Tag, { className, style }, children);
 }
 
 /* ------------------------------ Count-up number ---------------------------- */
@@ -123,9 +183,8 @@ export function CountUp({
   duration?: number;
   className?: string;
 }) {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduced = useReducedMotion();
+  const { ref, inView } = useInViewOnce<HTMLSpanElement>();
+  const reduced = usePrefersReducedMotion();
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
@@ -174,7 +233,7 @@ export function Tilt({
   className?: string;
   max?: number;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const ref = React.useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = React.useState(false);
   const [style, setStyle] = React.useState<React.CSSProperties>({});

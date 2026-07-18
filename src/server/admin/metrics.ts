@@ -1,4 +1,5 @@
 import "server-only";
+import { after } from "next/server";
 import { tryConnectDB } from "@/lib/db";
 import {
   Booking,
@@ -57,8 +58,14 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   if (!(await tryConnectDB())) return EMPTY;
 
   // Best-effort: there's no background job runner, so "follow-up due" admin
-  // notifications are synced on every dashboard view instead.
-  syncFollowUpNotifications().catch((error) => console.error("[syncFollowUpNotifications]", error));
+  // notifications are synced on every dashboard view instead. Deferred with
+  // after() so this write runs once the response is sent, rather than competing
+  // with the metric fan-out below for connection-pool slots.
+  after(() =>
+    syncFollowUpNotifications().catch((error) =>
+      console.error("[syncFollowUpNotifications]", error),
+    ),
+  );
 
   const now = new Date();
   const d30 = new Date(now.getTime() - 30 * 86_400_000);

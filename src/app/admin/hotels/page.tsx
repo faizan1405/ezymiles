@@ -54,7 +54,9 @@ export default async function AdminHotelsPage({
     query.$or = [{ name: rx }, { city: rx }, { slug: rx }];
   }
 
-  const rows = await Hotel.find(query).sort({ city: 1, name: 1 }).lean();
+  // Safety cap well above realistic catalog size — bounds the query without
+  // hiding real inventory. Add pagination here if the catalog ever approaches it.
+  const rows = await Hotel.find(query).sort({ city: 1, name: 1 }).limit(500).lean();
   const hotels = serialise(rows) as unknown as IHotel[];
 
   return (

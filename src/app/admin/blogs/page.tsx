@@ -54,7 +54,7 @@ export default async function AdminBlogsPage({
     query.$or = [{ title: rx }, { category: rx }, { slug: rx }];
   }
 
-  const rows = await BlogPost.find(query).sort({ updatedAt: -1 }).lean();
+  const rows = await BlogPost.find(query).sort({ updatedAt: -1 }).limit(500).lean();
   const posts = serialise(rows) as unknown as IBlogPost[];
 
   return (
