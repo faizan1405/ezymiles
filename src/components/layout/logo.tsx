@@ -3,9 +3,8 @@ import { cn } from "@/lib/utils";
 /**
  * Wordmark + monogram lockup.
  *
- * The monogram is an original mark: a compass rose reduced to a single stroke
- * that also reads as a paper plane. When the client uploads a logo from the
- * admin panel it replaces the whole lockup.
+ * Falls back to an inline SVG of the eZyMiles brand logo when no custom
+ * logo image has been uploaded via the admin panel.
  */
 export function Logo({
   tone = "light",
@@ -24,43 +23,66 @@ export function Logo({
   }
 
   const isDark = tone === "dark";
+  const circleFill = isDark ? "#e2e8f0" : "#0f1d3d";
+  const markStroke = isDark ? "#0f1d3d" : "#22d3ee";
+  const markAccent = isDark ? "#334155" : "#0e7490";
+  const wordmarkFill = isDark ? "#e2e8f0" : "#0f1d3d";
+  const taglineFill = isDark ? "#94a3b8" : "#22d3ee";
 
   return (
-    <span className={cn("flex items-center gap-2.5", className)}>
-      <span
-        className={cn(
-          "flex size-9 items-center justify-center rounded-xl transition-colors",
-          isDark ? "bg-midnight-800" : "wash-ocean",
-        )}
-        aria-hidden
+    <span className={cn("flex items-center gap-2", className)}>
+      {/* ── Brand mark ── */}
+      <svg
+        viewBox="0 0 220 56"
+        className="h-8 w-auto shrink-0"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
-        <svg viewBox="0 0 24 24" className="size-5" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          <path
-            d="M12 2.5 15.2 9.6l7.3 1-5.3 4.9 1.4 7.1-6.6-3.6-6.6 3.6 1.4-7.1L1.5 10.6l7.3-1z"
-            stroke="white"
-            strokeWidth="1.4"
-            opacity="0.35"
-          />
-          <path d="M4 13.5 20 6l-6 14-2.4-5.6z" fill="white" />
-        </svg>
-      </span>
+        {/* Circle badge */}
+        <circle cx="28" cy="30" r="23" fill={circleFill} />
 
+        {/* Subtle inner ring */}
+        <circle cx="28" cy="30" r="19" stroke={markAccent} strokeWidth="0.8" opacity="0.4" />
+
+        {/* Stylised "e" letterform — bowl + crossbar that extends into a flowing tail */}
+        <path
+          d="M18 20C18 14.5 23.5 11.5 29 16C34.5 20.5 34.5 29.5 29 34.5C25 38 18.5 37.5 17.5 32C17.3 30.2 18.8 29 21 29C25 29 28.5 27 31 23.5L44 15"
+          stroke={markStroke}
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          fill="none"
+        />
+
+        {/* Airplane silhouette at tip of tail */}
+        <g transform="translate(42, 5.5) scale(0.58)" fill={markStroke}>
+          <path d="M14 2L16 8L22 9.5L16 11L14 17L12 11L6 9.5L12 8Z" />
+        </g>
+      </svg>
+
+      {/* ── Wordmark + tagline ── */}
       <span className="flex flex-col leading-none">
         <span
-          className={cn(
-            "font-display text-[1.0625rem] font-semibold tracking-tight",
-            isDark ? "text-white" : "text-midnight-950",
-          )}
+          className="font-display text-[1.05rem] font-bold tracking-tight"
+          style={{ color: wordmarkFill }}
         >
           {name}
         </span>
-        <span
-          className={cn(
-            "mt-0.5 text-[0.5625rem] font-bold uppercase tracking-[0.18em]",
-            isDark ? "text-midnight-100" : "text-lagoon-700",
-          )}
-        >
-          Travel Atelier
+        <span className="mt-[3px] flex items-center gap-1.5">
+          <span
+            className="h-px w-2"
+            style={{ backgroundColor: taglineFill }}
+          />
+          <span
+            className="text-[0.55rem] font-bold uppercase tracking-[0.2em]"
+            style={{ color: taglineFill }}
+          >
+            Travel Atelier
+          </span>
+          <span
+            className="h-px w-2"
+            style={{ backgroundColor: taglineFill }}
+          />
         </span>
       </span>
     </span>
