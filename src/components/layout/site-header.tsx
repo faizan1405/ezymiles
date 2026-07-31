@@ -122,7 +122,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
         <div className="container-page flex h-[var(--header-height)] items-center gap-2">
           <Link
             href="/"
-            className="mr-2 shrink-0 rounded-lg focus-visible:outline-offset-4"
+            className="mr-2 shrink-0 rounded-lg px-1 py-1 transition-transform duration-200 hover:scale-[1.04] focus-visible:outline-offset-4 active:scale-[0.98]"
             aria-label={`${settings.brand.name} — home`}
           >
             <Logo tone={tone} name={settings.brand.name} logoUrl={settings.brand.logoUrl} />

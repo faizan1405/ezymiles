@@ -286,7 +286,7 @@ function PackageSearch({ destinations }: { destinations: { name: string; slug: s
   };
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr_auto]">
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_minmax(0,1fr)]">
       <Field label="Destination" htmlFor="pk-destination">
         <Select id="pk-destination" name="destination" defaultValue="">
           <option value="">Anywhere</option>
@@ -396,7 +396,7 @@ function FlightSearch() {
         </p>
       ) : null}
 
-      <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto]">
+      <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_minmax(0,1fr)]">
         <Field label="From" htmlFor="fl-from">
           <Input
             id="fl-from"
@@ -446,7 +446,7 @@ function FlightSearch() {
           />
         </Field>
 
-        <div className="flex items-end">
+        <div className="flex items-end justify-end">
           <SubmitButton label="Search flights" />
         </div>
       </div>
@@ -508,7 +508,7 @@ function HotelSearch({ cities }: { cities: string[] }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_minmax(0,1fr)]">
       <Field label="City or property" htmlFor="ht-city">
         <Input id="ht-city" name="city" placeholder="Goa, Udaipur, Dubai…" list="hotel-cities" />
         <datalist id="hotel-cities">
@@ -544,7 +544,7 @@ function HotelSearch({ cities }: { cities: string[] }) {
         <TravellerPicker adults={pax.adults} childCount={pax.children} onChange={setPax} label="Guests" />
       </Field>
 
-      <div className="flex items-end">
+      <div className="flex items-end justify-end">
         <SubmitButton label="Search hotels" />
       </div>
 
@@ -575,7 +575,7 @@ function ActivitySearch({ destinations }: { destinations: { name: string; slug: 
   };
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr_auto]">
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1.2fr_minmax(0,1fr)]">
       <Field label="Destination" htmlFor="ac-dest">
         <Select id="ac-dest" name="destination" defaultValue="">
           <option value="">Anywhere</option>
@@ -612,7 +612,7 @@ function ActivitySearch({ destinations }: { destinations: { name: string; slug: 
         </Select>
       </Field>
 
-      <div className="flex items-end">
+      <div className="flex items-end justify-end">
         <SubmitButton label="Find experiences" />
       </div>
     </form>
@@ -643,7 +643,7 @@ function VisaSearch({ countries }: { countries: { country: string; slug: string 
   };
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1.3fr_1fr_1fr_auto]">
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_minmax(0,1fr)]">
       <Field label="Nationality" htmlFor="vs-nat">
         <Select id="vs-nat" name="nationality" defaultValue="Indian">
           <option value="Indian">Indian</option>
@@ -677,7 +677,7 @@ function VisaSearch({ countries }: { countries: { country: string; slug: string 
         </Select>
       </Field>
 
-      <div className="flex items-end">
+      <div className="flex items-end justify-end">
         <SubmitButton label="Check requirements" />
       </div>
     </form>
@@ -735,7 +735,7 @@ function CabSearch() {
         ))}
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-[1.3fr_1.3fr_1fr_1fr_auto]">
+      <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_minmax(0,1fr)]">
         <Field label="Pickup" htmlFor="cb-pickup">
           <Input id="cb-pickup" name="pickup" required placeholder="Airport terminal, hotel, address…" />
         </Field>
@@ -757,7 +757,7 @@ function CabSearch() {
           <Input id="cb-time" name="time" type="time" defaultValue="09:00" />
         </Field>
 
-        <div className="flex items-end">
+        <div className="flex items-end justify-end">
           <SubmitButton label="Get quote" />
         </div>
       </div>

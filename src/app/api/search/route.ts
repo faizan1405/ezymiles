@@ -74,6 +74,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ hits });
   } catch (error) {
     console.error("[api/search]", error);
-    return NextResponse.json({ hits: [] }, { status: 200 });
+    return NextResponse.json({ hits: [] }, { status: 500 });
   }
 }

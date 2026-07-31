@@ -19,13 +19,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     unread = await Notification.countDocuments({ audience: "admin", isRead: false }).catch(() => 0);
   }
 
+  const adminName = process.env.NEXT_PUBLIC_ADMIN_NAME?.trim() || settings.brand.name;
+
   return (
     <div className="min-h-dvh bg-sand-50">
       <div className="flex">
         <div className="no-print contents">
           <AdminSidebar
             permissions={user.permissions ?? []}
-            brandName={settings.brand.name}
+            brandName={adminName}
             roleLabel={user.adminRole ? ROLE_LABELS[user.adminRole] : "Staff"}
           />
         </div>
@@ -46,7 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
           <footer className="no-print border-t border-hairline px-5 py-4 lg:px-8">
             <p className="text-xs text-muted">
-              {settings.brand.name} admin ·{" "}
+              {adminName} ·{" "}
               <Link href="/" className="hover:underline">
                 View the live site
               </Link>

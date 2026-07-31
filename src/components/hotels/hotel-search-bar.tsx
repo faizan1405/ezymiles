@@ -35,7 +35,7 @@ export function HotelSearchBar({
   return (
     <form
       onSubmit={onSubmit}
-      className="grid gap-3 rounded-2xl border border-hairline bg-white p-3 shadow-tile lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr_auto]"
+      className="grid gap-3 rounded-2xl border border-hairline bg-white p-3 shadow-tile lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_minmax(0,1fr)]"
     >
       <Field label="City or property" htmlFor="h-q">
         <Input

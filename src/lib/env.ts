@@ -16,6 +16,7 @@ const serverSchema = z.object({
 
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 characters (run: npx auth secret)"),
   AUTH_URL: z.string().url().optional(),
+  AUTH_TRUST_HOST: z.string().optional(),
 
   AUTH_GOOGLE_ID: z.string().optional(),
   AUTH_GOOGLE_SECRET: z.string().optional(),

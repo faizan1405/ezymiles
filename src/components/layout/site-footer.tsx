@@ -170,7 +170,7 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
             ) : null}
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-5">
+          <div className="grid gap-8 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-3 xl:grid-cols-5">
             {columns.map((col) => (
               <nav key={col.title} aria-label={col.title}>
                 <h3 className="text-eyebrow mb-4 text-lagoon-300">{col.title}</h3>
