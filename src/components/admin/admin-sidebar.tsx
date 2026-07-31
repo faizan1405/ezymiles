@@ -189,7 +189,9 @@ export function AdminSidebar({
           />
           <div className="absolute inset-y-0 left-0 flex w-72 flex-col overflow-y-auto bg-midnight-950">
             <div className="flex items-center justify-between p-4">
-              <Logo tone="dark" name={brandName} />
+              <Link href="/admin" className="inline-block" aria-label="Admin dashboard">
+                <Logo tone="dark" name={brandName} />
+              </Link>
               <button
                 type="button"
                 onClick={() => setOpen(false)}

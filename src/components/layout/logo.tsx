@@ -19,7 +19,7 @@ export function Logo({
 }) {
   if (logoUrl) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={logoUrl} alt={name} className={cn("h-14 w-auto", className)} />;
+    return <img src={logoUrl} alt={name} className={cn("h-12 w-auto md:h-14", className)} />;
   }
 
   const isDark = tone === "dark";

@@ -22,7 +22,9 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     if (!user?.isAdmin) {
       return (
         <div className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-sand-50 px-6 text-center">
-          <Logo name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
+          <Link href="/" aria-label={`${settings.brand.name} — home`}>
+            <Logo name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
+          </Link>
           <p className="max-w-md text-balance text-[0.9375rem] leading-relaxed text-muted">
             {settings.maintenance.message}
           </p>

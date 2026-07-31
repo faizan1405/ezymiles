@@ -96,7 +96,9 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
       <div className="container-page py-14">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-3">
-            <Logo tone="dark" name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
+            <Link href="/" className="inline-block" aria-label={`${settings.brand.name} — home`}>
+              <Logo tone="dark" name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
+            </Link>
             <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-lagoon-300">
               {settings.brand.tagline}
             </p>
