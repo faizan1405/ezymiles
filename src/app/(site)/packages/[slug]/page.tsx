@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import {
   Clock,
@@ -19,9 +20,7 @@ import {
 import { getPackageBySlug, getRelatedPackages, getReviewsForSubject } from "@/server/catalog";
 import { getSettings } from "@/lib/settings";
 import { Gallery } from "@/components/packages/gallery";
-import { ItineraryTimeline } from "@/components/packages/itinerary-timeline";
 import { BookingCard } from "@/components/packages/booking-card";
-import { StickyMobileBar } from "@/components/packages/sticky-mobile-bar";
 import { RecentlyViewed } from "@/components/packages/recently-viewed";
 import { PackageCard } from "@/components/packages/package-card";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -31,6 +30,15 @@ import { ReviewList } from "@/components/reviews/review-list";
 import { FaqJsonLd, TourProductJsonLd } from "@/components/seo/json-ld";
 import { formatDuration, percentOff } from "@/lib/utils";
 import { SITE_URL } from "@/config/site";
+
+// Below-the-fold heavy components — framer-motion code-split so the initial
+// package page renders without bundling them.
+const ItineraryTimeline = dynamic(
+  () => import("@/components/packages/itinerary-timeline").then((m) => m.ItineraryTimeline),
+);
+const StickyMobileBar = dynamic(
+  () => import("@/components/packages/sticky-mobile-bar").then((m) => m.StickyMobileBar),
+);
 
 export const revalidate = 600;
 

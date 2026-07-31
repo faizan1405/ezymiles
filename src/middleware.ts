@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { getSafeAdminCallbackUrl } from "@/lib/admin-callback-url";
+import { getSafeAccountCallbackUrl } from "@/lib/account-callback-url";
 
 /**
  * Fast edge-side gate for /account and /admin.
@@ -29,8 +31,10 @@ export async function middleware(request: NextRequest) {
 
   if (pathname.startsWith("/admin")) {
     if (!token) {
+      const raw = request.nextUrl.searchParams.get("callbackUrl");
+      const safe = getSafeAdminCallbackUrl(raw);
       const url = new URL("/login", request.url);
-      url.searchParams.set("callbackUrl", pathname);
+      url.searchParams.set("callbackUrl", safe);
       return NextResponse.redirect(url);
     }
     if (!token.isAdmin) {
@@ -40,8 +44,10 @@ export async function middleware(request: NextRequest) {
 
   if (pathname.startsWith("/account")) {
     if (!token) {
+      const raw = request.nextUrl.searchParams.get("callbackUrl");
+      const safe = getSafeAccountCallbackUrl(raw);
       const url = new URL("/login", request.url);
-      url.searchParams.set("callbackUrl", pathname);
+      url.searchParams.set("callbackUrl", safe);
       return NextResponse.redirect(url);
     }
     // A staff session has no traveller data behind it — send them to the panel

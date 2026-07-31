@@ -40,7 +40,8 @@ export function SmartImage({
   fill,
   sizes,
   priority,
-  quality = 82,
+  quality = 80,
+  loading,
   ...props
 }: SmartImageProps) {
   const [failed, setFailed] = React.useState(false);
@@ -72,6 +73,7 @@ export function SmartImage({
       sizes={sizes ?? (fill ? "(max-width: 768px) 100vw, 50vw" : undefined)}
       priority={priority}
       quality={quality}
+      loading={priority ? undefined : "lazy"}
       onError={() => setFailed(true)}
       className={cn(className)}
       {...props}

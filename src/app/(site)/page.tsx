@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import {
@@ -19,7 +20,6 @@ import { DestinationExplorer } from "@/components/home/destination-explorer";
 import { InternationalDestinationsRail } from "@/components/home/international-destinations-rail";
 import { PackageRail } from "@/components/packages/package-rail";
 import { TripBuilder } from "@/components/forms/trip-builder";
-import { TravelMap } from "@/components/home/travel-map";
 import { Experiences } from "@/components/home/experiences";
 import { WhyChooseUs } from "@/components/home/why-choose-us";
 import { LiveActivity } from "@/components/home/live-activity";
@@ -30,6 +30,11 @@ import { LeadCapture } from "@/components/home/lead-capture";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/primitives";
+
+// Framer-motion code-split — this map is heavy and below the fold.
+const TravelMap = dynamic(
+  () => import("@/components/home/travel-map").then((m) => m.TravelMap),
+);
 
 export const revalidate = 300;
 

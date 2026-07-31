@@ -39,7 +39,7 @@ export default async function BlogPage({
 
   return (
     <>
-      <header className="border-b border-hairline wash-ivory pb-10 pt-8">
+      <header className="border-b border-hairline wash-ivory pb-12 pt-8">
         <div className="container-page">
           <Breadcrumbs items={[{ name: "Travel inspiration", href: "/blog" }]} />
 
@@ -88,7 +88,7 @@ export default async function BlogPage({
         </div>
       </header>
 
-      <div className="container-page section-y !pt-12">
+      <div className="container-page section-y">
         {result.items.length === 0 ? (
           <EmptyState
             icon={<BookOpen />}

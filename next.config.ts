@@ -12,7 +12,14 @@ const nextConfig: NextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 430, 640, 768, 1024, 1280, 1440, 1920, 2560],
+    minimumCacheTTL: 31536000,
   },
+
+  // Reduce initial JS payload by enabling compression
+  compress: true,
+
+  // Enable static optimization and reduce bundle analysis
+  reactStrictMode: true,
 
   serverExternalPackages: ["mongoose", "razorpay", "cloudinary", "nodemailer"],
 

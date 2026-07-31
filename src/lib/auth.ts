@@ -52,6 +52,16 @@ const deny = (code: string) => `/login?error=${code}`;
 /*                                  Providers                                  */
 /* -------------------------------------------------------------------------- */
 
+// Refuse to boot with trustHost off but no AUTH_URL — that's the configuration
+// that makes Google return redirect_uri_mismatch. Loud on the server, silent
+// to the browser: the login page renders a generic error on its own.
+if (process.env.NODE_ENV === "production" && !process.env.AUTH_URL) {
+  throw new Error(
+    "[auth] AUTH_URL is required in production. Set it in Vercel project Settings → Environment Variables " +
+      "(e.g. https://ezymiles.in) so Auth.js can build the correct Google OAuth callback URL.",
+  );
+}
+
 const providers: NextAuthConfig["providers"] = [
   Credentials({
     id: "credentials",
@@ -249,7 +259,12 @@ export const authConfig: NextAuthConfig = {
   providers,
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: { signIn: "/login", error: "/login" },
-  trustHost: true,
+  // trustHost is deliberately false: set AUTH_URL in every environment
+  // (Vercel project settings or .env.local) so Auth.js can derive the correct
+  // callback URL without trusting whatever the browser sends in the Host header.
+  // trustHost: true would allow host-header injection when a proxy doesn't strip
+  // attacker-controlled headers.
+  trustHost: false,
 
   callbacks: {
     async signIn({ user, account, profile }) {

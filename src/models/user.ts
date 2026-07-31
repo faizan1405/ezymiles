@@ -8,13 +8,6 @@ export interface IUser {
   name: string;
   email: string;
   emailVerified: Date | null;
-  /**
-   * Legacy. Travellers sign in with Google; nothing reads or writes this any
-   * more. Kept on the schema so the hashes already in the database aren't
-   * silently orphaned — drop the field and the data once the migration is
-   * confirmed done. Staff passwords live on AdminUser and are still in use.
-   */
-  passwordHash?: string;
   image?: string;
   phone?: string;
   countryCode?: string;
@@ -25,10 +18,6 @@ export interface IUser {
   whatsappOptIn: boolean;
   wishlist: Types.ObjectId[];
   recentlyViewed: { package: Types.ObjectId; viewedAt: Date }[];
-  verificationToken?: string;
-  verificationTokenExpiry?: Date;
-  resetToken?: string;
-  resetTokenExpiry?: Date;
   lastLoginAt?: Date;
   deletedAt?: Date | null;
   createdAt: Date;
@@ -40,7 +29,6 @@ const UserSchema = new Schema<IUser>(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, lowercase: true, trim: true },
     emailVerified: { type: Date, default: null },
-    passwordHash: { type: String, select: false },
     image: String,
     phone: { type: String, trim: true },
     countryCode: { type: String, default: "+91" },
@@ -57,10 +45,6 @@ const UserSchema = new Schema<IUser>(
         viewedAt: { type: Date, default: Date.now },
       },
     ],
-    verificationToken: { type: String, select: false },
-    verificationTokenExpiry: { type: Date, select: false },
-    resetToken: { type: String, select: false },
-    resetTokenExpiry: { type: Date, select: false },
     lastLoginAt: Date,
     deletedAt: { type: Date, default: null },
   },

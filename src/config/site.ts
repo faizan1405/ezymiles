@@ -38,7 +38,7 @@ export const BRAND = {
 } as const;
 
 /** The canonical production origin for EzyMiles. */
-export const PRODUCTION_URL = "https://ezymiles.vercel.app";
+export const PRODUCTION_URL = "https://ezymiles.in";
 
 /**
  * Absolute origin used for metadata, canonicals, Open Graph, the sitemap,

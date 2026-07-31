@@ -14,8 +14,8 @@ const serverSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
   MONGODB_DB: z.string().default("ezymiles"),
 
-  AUTH_SECRET: z.string().min(16, "AUTH_SECRET must be at least 16 characters"),
-  AUTH_URL: z.url().optional(),
+  AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 characters (run: npx auth secret)"),
+  AUTH_URL: z.string().url().optional(),
 
   AUTH_GOOGLE_ID: z.string().optional(),
   AUTH_GOOGLE_SECRET: z.string().optional(),

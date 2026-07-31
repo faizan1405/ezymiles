@@ -120,7 +120,7 @@ export default async function PackagesPage({
   return (
     <>
       {/* --------------------------------- Header --------------------------------- */}
-      <header className="border-b border-hairline wash-ivory pb-10 pt-8">
+      <header className="border-b border-hairline wash-ivory pb-12 pt-8">
         <div className="container-page">
           <Breadcrumbs items={[{ name: "Packages", href: "/packages" }]} />
 
@@ -137,9 +137,9 @@ export default async function PackagesPage({
       </header>
 
       {/* --------------------------------- Results -------------------------------- */}
-      <div className="container-page section-y !pt-10">
+      <div className="container-page section-y">
         <Suspense fallback={<ResultsSkeleton view={view} />}>
-          <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+          <div className="grid gap-10 lg:grid-cols-[17rem_1fr]">
             <div className="lg:contents">
               <PackageFilters
                 destinations={destinations.map((d) => ({ name: d.name, slug: d.slug }))}
@@ -171,7 +171,7 @@ export default async function PackagesPage({
                 <>
                   <ul
                     className={cn(
-                      "grid gap-6",
+                      "grid gap-8",
                       view === "grid" ? "sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
                     )}
                   >

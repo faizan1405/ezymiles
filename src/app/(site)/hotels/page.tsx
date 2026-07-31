@@ -84,7 +84,7 @@ export default async function HotelsPage({
 
   return (
     <>
-      <header className="border-b border-hairline wash-ivory pb-10 pt-8">
+      <header className="border-b border-hairline wash-ivory pb-12 pt-8">
         <div className="container-page">
           <Breadcrumbs items={[{ name: "Hotels", href: "/hotels" }]} />
 
@@ -106,7 +106,7 @@ export default async function HotelsPage({
 
       {!hasActiveFilters ? <HotelDestinationsRail destinations={hotelDestinations} /> : null}
 
-      <div className="container-page section-y !pt-10">
+      <div className="container-page section-y">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted" aria-live="polite">
             <span className="font-semibold text-midnight-900">{result.total}</span>{" "}

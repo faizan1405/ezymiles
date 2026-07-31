@@ -30,7 +30,7 @@ export function Logo({
   const taglineFill = isDark ? "#94a3b8" : "#22d3ee";
 
   return (
-    <span className={cn("flex items-center gap-2", className)}>
+    <span className={cn("flex items-center gap-1", className)}>
       {/* ── Brand mark ── */}
       <svg
         viewBox="0 0 220 56"

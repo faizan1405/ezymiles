@@ -71,7 +71,7 @@ export default async function ActivitiesPage({
 
   return (
     <>
-      <header className="border-b border-hairline wash-ivory pb-10 pt-8">
+      <header className="border-b border-hairline wash-ivory pb-12 pt-8">
         <div className="container-page">
           <Breadcrumbs items={[{ name: "Activities", href: "/activities" }]} />
 
@@ -146,7 +146,7 @@ export default async function ActivitiesPage({
         </div>
       </header>
 
-      <div className="container-page section-y !pt-10">
+      <div className="container-page section-y">
         <p className="mb-6 text-sm text-muted" aria-live="polite">
           <span className="font-semibold text-midnight-900">{result.total}</span>{" "}
           {result.total === 1 ? "experience" : "experiences"}
