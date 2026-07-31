@@ -95,7 +95,6 @@ export interface PackageFormValues {
   seoDescription: string;
   seoKeywords: string[];
   noIndex: boolean;
-  isDemoData: boolean;
 }
 
 export const emptyPackage: PackageFormValues = {
@@ -157,7 +156,6 @@ export const emptyPackage: PackageFormValues = {
   seoDescription: "",
   seoKeywords: [],
   noIndex: false,
-  isDemoData: false,
 };
 
 const SEASONS = ["Spring", "Summer", "Monsoon", "Autumn", "Winter"];
@@ -989,12 +987,6 @@ export function PackageEditor({
                 label="Bestseller"
                 checked={values.isBestseller}
                 onChange={(v) => set("isBestseller", v)}
-              />
-              <ToggleField
-                label="Demo data"
-                description="Shows a 'demo pricing' badge everywhere this package appears. Turn OFF for real inventory."
-                checked={values.isDemoData}
-                onChange={(v) => set("isDemoData", v)}
               />
             </div>
           </Panel>

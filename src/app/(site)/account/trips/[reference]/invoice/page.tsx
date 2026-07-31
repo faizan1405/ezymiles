@@ -177,9 +177,6 @@ export default async function InvoicePage({
           <p>
             This is a computer-generated invoice and is valid without a signature. Amounts are in
             Indian Rupees (INR).
-            {booking.isDemoData
-              ? " This booking was made against demo inventory in a non-production environment."
-              : ""}
           </p>
           <p className="mt-2">
             Registration and tax identifiers to be added in Admin → Site Settings before launch.

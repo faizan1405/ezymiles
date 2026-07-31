@@ -153,14 +153,13 @@ export type PackageCollectionSlug = (typeof PACKAGE_COLLECTIONS)[number]["slug"]
 /* -------------------------------------------------------------------------- */
 
 /**
- * Every price surfaced to a traveller carries one of these labels so we never
- * imply that demo inventory is live supplier inventory.
+ * Every price surfaced to a traveller carries one of these labels so we always
+ * show the source of the fare.
  */
 export const DATA_SOURCES = {
   live: { label: "Live fare", tone: "success" },
   cached: { label: "Cached fare", tone: "info" },
   estimated: { label: "Estimated fare", tone: "warning" },
-  demo: { label: "Demo data", tone: "neutral" },
 } as const;
 
 export type DataSource = keyof typeof DATA_SOURCES;

@@ -107,7 +107,6 @@ export default async function EditPackagePage({
     seoDescription: pkg.seo?.description ?? "",
     seoKeywords: pkg.seo?.keywords ?? [],
     noIndex: pkg.seo?.noIndex ?? false,
-    isDemoData: pkg.isDemoData,
   };
 
   return (

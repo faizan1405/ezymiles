@@ -8,10 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write .",
-    "seed": "tsx src/scripts/seed.ts",
-    "seed:packages": "tsx src/scripts/seed-demo-packages.ts",
-    "seed:destinations": "tsx src/scripts/seed-destinations.ts"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

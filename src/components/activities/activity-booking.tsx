@@ -30,7 +30,6 @@ export function ActivityBookingCard({
   minParticipants,
   maxParticipants,
   instantConfirmation,
-  isDemoData,
 }: {
   slug: string;
   slots: ActivitySlotOption[];
@@ -39,7 +38,6 @@ export function ActivityBookingCard({
   minParticipants: number;
   maxParticipants: number;
   instantConfirmation: boolean;
-  isDemoData: boolean;
 }) {
   const router = useRouter();
 
@@ -130,11 +128,6 @@ export function ActivityBookingCard({
             <Badge tone="success" size="sm">
               <Zap className="size-3" aria-hidden />
               Instant confirmation
-            </Badge>
-          ) : null}
-          {isDemoData ? (
-            <Badge tone="warning" size="sm">
-              Demo pricing
             </Badge>
           ) : null}
         </div>

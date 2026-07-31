@@ -1,5 +1,4 @@
 import "server-only";
-import { DemoFlightProvider } from "./demo-provider";
 import { integrations } from "@/lib/env";
 import type { FlightOffer, FlightProvider, FlightSearchQuery, FlightSearchResult } from "./types";
 import { connectDB } from "@/lib/db";
@@ -23,8 +22,6 @@ class AmadeusFlightProvider implements FlightProvider {
   }
 
   async search(): Promise<FlightSearchResult> {
-    // Intentionally explicit rather than silently falling back to demo data:
-    // pretending demo inventory is live is the one thing we must never do.
     throw new Error(
       "The Amadeus provider is registered but not implemented. Add your Self-Service credentials and implement search() against the Flight Offers Search API.",
     );
@@ -35,12 +32,13 @@ class AmadeusFlightProvider implements FlightProvider {
   }
 }
 
-const demo = new DemoFlightProvider();
 const amadeus = new AmadeusFlightProvider();
 
 export function getFlightProvider(): FlightProvider {
   if (process.env.FLIGHT_PROVIDER === "amadeus" && amadeus.configured) return amadeus;
-  return demo;
+  throw new Error(
+    "No flight provider is available. Set FLIGHT_PROVIDER=amadeus and configure AMADEUS_CLIENT_ID and AMADEUS_CLIENT_SECRET to enable flight search.",
+  );
 }
 
 /** Search + record the query (powers "popular routes" in the admin dashboard). */
@@ -56,7 +54,7 @@ export async function searchFlights(query: FlightSearchQuery): Promise<FlightSea
     return {
       offers: [],
       provider: provider.name,
-      dataSource: "demo",
+      dataSource: "estimated",
       notice:
         "We could not reach the flight supplier just now. Please try again, or send us an enquiry and we'll quote it manually.",
     };
@@ -85,4 +83,3 @@ export async function searchFlights(query: FlightSearchQuery): Promise<FlightSea
 }
 
 export * from "./types";
-export { AIRPORTS } from "./demo-provider";

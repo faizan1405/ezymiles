@@ -34,7 +34,7 @@ export default async function AdminDashboard() {
             <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted">
               There are no enquiries, leads or bookings in the database. Run{" "}
               <code className="rounded bg-sand-100 px-1.5 py-0.5 font-mono text-xs">npm run seed</code>{" "}
-              to load demo content, or wait for real traffic — these tiles will fill themselves.
+              to load content, or wait for real traffic — these tiles will fill themselves.
             </p>
           </div>
         </div>

@@ -78,17 +78,17 @@ export default async function AdminFlightsPage() {
             <p className="text-sm font-bold text-midnight-900">
               {isLive
                 ? "Live supplier connected"
-                : "No flight supplier connected — serving demo inventory"}
+                : "No flight supplier connected — search is unavailable without a live provider."}
             </p>
             <p className="mt-1 max-w-2xl text-[0.8125rem] leading-relaxed text-muted">
               {isLive
                 ? "Fares come from your contracted supplier and are re-confirmed on the server before any payment is taken."
-                : "Search returns deterministic demo itineraries, labelled as demo data everywhere they appear. They cannot be ticketed. To go live: implement the FlightProvider interface in src/server/flights/, set FLIGHT_PROVIDER=amadeus, and add your credentials. Nothing in the UI or booking flow changes."}
+                : "Search is unavailable without a connected flight supplier. Implement the FlightProvider interface in src/server/flights/, set FLIGHT_PROVIDER=amadeus, and add your credentials."}
             </p>
           </div>
         </div>
 
-        <DataSourceBadge source={isLive ? "live" : "demo"} className="shrink-0" />
+        <DataSourceBadge source={isLive ? "live" : "estimated"} className="shrink-0" />
       </div>
 
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
@@ -96,8 +96,8 @@ export default async function AdminFlightsPage() {
         <StatTile label="Flight bookings" value={bookings.length} sub="most recent 20 shown" />
         <StatTile
           label="Provider"
-          value={isLive ? "Amadeus" : "Demo"}
-          sub={isLive ? "live inventory" : "not ticketable"}
+          value={isLive ? "Amadeus" : "Not configured"}
+          sub={isLive ? "live inventory" : "supplier not connected"}
           tone={isLive ? "success" : "warning"}
         />
       </div>

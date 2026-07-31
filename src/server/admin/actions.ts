@@ -596,7 +596,6 @@ const packageSchema = z.object({
       noIndex: z.boolean().default(false),
     })
     .optional(),
-  isDemoData: z.boolean().default(false),
 });
 
 export async function savePackage(raw: unknown): Promise<AdminResult> {
@@ -669,7 +668,6 @@ export async function savePackage(raw: unknown): Promise<AdminResult> {
       status: d.status,
       publishAt: d.publishAt ? new Date(d.publishAt) : undefined,
       seo: d.seo,
-      isDemoData: d.isDemoData,
     };
 
     // Slug must be unique across everything except this document.

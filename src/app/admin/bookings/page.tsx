@@ -154,11 +154,6 @@ export default async function AdminBookingsPage({
                   <span className="mt-0.5 block text-[0.6875rem] capitalize text-muted">
                     {b.type} · {formatDate(b.createdAt)}
                   </span>
-                  {b.isDemoData ? (
-                    <span className="mt-1 inline-block rounded bg-amber-50 px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase tracking-wide text-amber-800">
-                      Demo
-                    </span>
-                  ) : null}
                 </Td>
 
                 <Td>

@@ -198,7 +198,6 @@ export default async function ActivityPage({ params }: PageProps) {
             minParticipants={activity.minParticipants}
             maxParticipants={activity.maxParticipants}
             instantConfirmation={activity.instantConfirmation}
-            isDemoData={activity.isDemoData}
           />
         </aside>
       </div>

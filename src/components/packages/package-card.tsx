@@ -85,11 +85,6 @@ export function PackageCard({
                 Trending
               </Badge>
             ) : null}
-            {pkg.isDemoData ? (
-              <Badge tone="warning" size="sm">
-                Demo Package
-              </Badge>
-            ) : null}
           </div>
 
           <div className="absolute right-3 top-3">
@@ -181,7 +176,6 @@ export function PackageCard({
                 />
                 <p className="mt-0.5 text-[0.6875rem] text-muted">
                   {pkg.priceBasis === "per_couple" ? "per couple" : "per person"}
-                  {pkg.isDemoData ? " · demo pricing" : ""}
                 </p>
               </div>
             </div>

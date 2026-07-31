@@ -54,7 +54,6 @@ export function BookingCard({
   packageTitle,
   variants,
   departures,
-  isDemoData,
   whatsappNumber,
   phoneNumber,
   className,
@@ -64,7 +63,6 @@ export function BookingCard({
   packageTitle: string;
   variants: BookingCardVariant[];
   departures: BookingCardDeparture[];
-  isDemoData: boolean;
   whatsappNumber: string;
   phoneNumber: string;
   className?: string;
@@ -184,12 +182,6 @@ export function BookingCard({
               className="border border-hairline bg-white shadow-none"
             />
           </div>
-
-          {isDemoData ? (
-            <Badge tone="warning" size="sm" className="mt-3">
-              Demo pricing — not live inventory
-            </Badge>
-          ) : null}
         </div>
 
         {/* -------------------------------- Selection ------------------------------- */}

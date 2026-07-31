@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Remote media: Cloudinary (managed uploads) plus the royalty-free
-    // placeholder sources used by the demo seed. Anything else is blocked.
+    // Remote media: Cloudinary (managed uploads) plus royalty-free placeholder sources.
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "images.unsplash.com" },

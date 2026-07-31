@@ -37,12 +37,9 @@ const serverSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   MAIL_FROM: z.string().default("eZyMiles <no-reply@ezymiles.example>"),
 
-  FLIGHT_PROVIDER: z.enum(["demo", "amadeus"]).default("demo"),
+  FLIGHT_PROVIDER: z.enum(["amadeus"]).optional(),
   AMADEUS_CLIENT_ID: z.string().optional(),
   AMADEUS_CLIENT_SECRET: z.string().optional(),
-
-  SEED_ADMIN_EMAIL: z.string().default("admin@ezymiles.example"),
-  SEED_ADMIN_PASSWORD: z.string().default("eZyMiles@2026"),
 
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 });

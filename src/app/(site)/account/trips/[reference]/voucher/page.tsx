@@ -134,9 +134,6 @@ export default async function VoucherPage({
           <p className="mt-2">
             Present this voucher along with photo identification. Services are subject to the terms
             you accepted at booking.
-            {booking.isDemoData
-              ? " This booking was made against demo inventory in a non-production environment and is not valid for travel."
-              : ""}
           </p>
         </footer>
       </article>

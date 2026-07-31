@@ -181,7 +181,6 @@ export function TripCard({ booking, hasReview = false }: { booking: IBooking; ha
 
               <div className="flex flex-wrap gap-1.5">
                 <Badge tone={status.tone}>{status.label}</Badge>
-                {booking.isDemoData ? <Badge tone="warning">Demo</Badge> : null}
               </div>
             </div>
 

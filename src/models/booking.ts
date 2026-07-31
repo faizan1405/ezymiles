@@ -129,7 +129,6 @@ export interface IBooking {
   };
   /** Guards against double-submitting the same booking intent. */
   idempotencyKey?: string;
-  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -198,7 +197,6 @@ const BookingSchema = new Schema<IBooking>(
       chargeINR: Number,
     },
     idempotencyKey: String,
-    isDemoData: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
@@ -313,7 +311,7 @@ export interface IFlightSearch {
   cabinClass: string;
   nonStopOnly: boolean;
   provider: string;
-  dataSource: "live" | "cached" | "estimated" | "demo";
+  dataSource: "live" | "cached" | "estimated";
   resultCount: number;
   createdAt: Date;
 }
@@ -328,8 +326,8 @@ const FlightSearchSchema = new Schema<IFlightSearch>(
     infants: { type: Number, default: 0 },
     cabinClass: { type: String, default: "economy" },
     nonStopOnly: { type: Boolean, default: false },
-    provider: { type: String, default: "demo" },
-    dataSource: { type: String, enum: ["live", "cached", "estimated", "demo"], default: "demo" },
+    provider: { type: String, default: "unknown" },
+    dataSource: { type: String, enum: ["live", "cached", "estimated"], default: "estimated" },
     resultCount: { type: Number, default: 0 },
   },
   { timestamps: { createdAt: true, updatedAt: false } },
@@ -345,7 +343,7 @@ export interface IFlightBooking {
   booking: Types.ObjectId;
   offerId: string;
   provider: string;
-  dataSource: "live" | "cached" | "estimated" | "demo";
+  dataSource: "live" | "cached" | "estimated";
   pnr?: string;
   tripType: string;
   segments: {
@@ -379,8 +377,8 @@ const FlightBookingSchema = new Schema<IFlightBooking>(
   {
     booking: { type: Schema.Types.ObjectId, ref: "Booking", required: true },
     offerId: { type: String, required: true },
-    provider: { type: String, default: "demo" },
-    dataSource: { type: String, enum: ["live", "cached", "estimated", "demo"], default: "demo" },
+    provider: { type: String, default: "unknown" },
+    dataSource: { type: String, enum: ["live", "cached", "estimated"], default: "estimated" },
     pnr: String,
     tripType: { type: String, default: "one_way" },
     segments: [

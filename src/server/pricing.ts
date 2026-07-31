@@ -222,8 +222,6 @@ async function quotePackage(intent: BookingIntentInput): Promise<Quote> {
 
   const total = taxable + tax + fees;
 
-  if (pkg.isDemoData) warnings.push("This package uses demo pricing and demo inventory.");
-
   return {
     lines,
     subtotalINR: subtotal,
@@ -245,7 +243,6 @@ async function quotePackage(intent: BookingIntentInput): Promise<Quote> {
         durationNights: variant.durationNights,
         departureId: intent.departureId,
         citiesCovered: pkg.citiesCovered,
-        isDemoData: pkg.isDemoData,
       },
     },
     travelDate,
@@ -318,8 +315,6 @@ async function quoteHotel(intent: BookingIntentInput): Promise<Quote> {
 
   const total = subtotal - discount + tax;
 
-  if (hotel.isDemoData) warnings.push("This property uses demo rates and demo availability.");
-
   return {
     lines,
     subtotalINR: subtotal,
@@ -343,7 +338,6 @@ async function quoteHotel(intent: BookingIntentInput): Promise<Quote> {
         refundable: room.refundable,
         cancellationRule: room.cancellationRule,
         pricePerNightINR: room.pricePerNightINR,
-        isDemoData: hotel.isDemoData,
       },
     },
     travelDate: checkIn,
@@ -427,8 +421,6 @@ async function quoteActivity(intent: BookingIntentInput): Promise<Quote> {
 
   const total = subtotal - discount + tax;
 
-  if (activity.isDemoData) warnings.push("This experience uses demo pricing and demo availability.");
-
   return {
     lines,
     subtotalINR: subtotal,
@@ -449,7 +441,6 @@ async function quoteActivity(intent: BookingIntentInput): Promise<Quote> {
         pickupLocation: intent.pickupLocation,
         city: activity.city,
         durationMinutes: activity.durationMinutes,
-        isDemoData: activity.isDemoData,
       },
     },
     travelDate: date,

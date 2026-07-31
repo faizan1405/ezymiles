@@ -126,8 +126,6 @@ export default async function ConfirmationPage({
                   : ""}
               </p>
             </div>
-
-            {booking.isDemoData ? <Badge tone="warning">Demo booking</Badge> : null}
           </div>
 
           {/* --------------------------------- Money --------------------------------- */}

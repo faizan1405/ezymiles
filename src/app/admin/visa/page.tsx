@@ -156,7 +156,7 @@ export default async function AdminVisaPage({
         <Panel title={`Visa countries (${countries.length})`}>
           {countries.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted">
-              No country guidance published. Run the seed script to load demo content.
+              No country guidance published yet.
             </p>
           ) : (
             <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">

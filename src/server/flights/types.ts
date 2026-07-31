@@ -32,7 +32,6 @@ export interface FlightOffer {
   /** Encodes the *inputs* that define this itinerary — never the price. */
   id: string;
   provider: string;
-  /** Always displayed to the traveller. Demo fares are never dressed up as live. */
   dataSource: DataSource;
   outbound: FlightSegment[];
   inbound?: FlightSegment[];

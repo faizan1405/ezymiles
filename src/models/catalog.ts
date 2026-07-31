@@ -69,8 +69,6 @@ export interface IDestination {
   status: PublishStatus;
   seo?: { title?: string; description?: string; keywords?: string[]; ogImage?: string; noIndex?: boolean };
   viewCount: number;
-  /** Set by the demo seed scripts so seeded content is labelled everywhere it surfaces. */
-  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -113,7 +111,6 @@ const DestinationSchema = new Schema<IDestination>(
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
     seo: SeoSchema,
     viewCount: { type: Number, default: 0 },
-    isDemoData: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
@@ -229,8 +226,6 @@ export interface IPackage {
   viewCount: number;
   enquiryCount: number;
   bookingCount: number;
-  /** Demo inventory is clearly labelled everywhere it is displayed. */
-  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -346,7 +341,6 @@ const PackageSchema = new Schema<IPackage>(
     viewCount: { type: Number, default: 0 },
     enquiryCount: { type: Number, default: 0 },
     bookingCount: { type: Number, default: 0 },
-    isDemoData: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },

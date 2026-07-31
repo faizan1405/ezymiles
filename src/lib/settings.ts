@@ -24,6 +24,7 @@ export const DEFAULT_SETTINGS: Settings = {
   brand: {
     name: BRAND.name,
     tagline: BRAND.tagline,
+    logoUrl: "/ezymiles-logo.PNG",
   },
   contact: {
     phone: BRAND.phone,

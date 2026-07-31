@@ -32,6 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
     description: settings.seo.defaultDescription,
     keywords: settings.seo.keywords,
     applicationName: settings.brand.name,
+    icons: {
+      icon: "/ezymiles-logo.PNG",
+      apple: "/ezymiles-logo.PNG",
+    },
     openGraph: {
       type: "website",
       locale: "en_IN",

@@ -125,11 +125,6 @@ export default async function AdminHotelsPage({
                           <Star key={i} className="size-2.5 fill-gild-400 text-gild-400" aria-hidden />
                         ))}
                         <span className="ml-1 capitalize">{h.propertyType}</span>
-                        {h.isDemoData ? (
-                          <span className="ml-1 rounded bg-amber-50 px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase text-amber-800">
-                            Demo
-                          </span>
-                        ) : null}
                       </span>
                     </div>
                   </div>

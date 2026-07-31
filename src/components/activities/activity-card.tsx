@@ -63,7 +63,7 @@ export function ActivityCard({ activity: a }: { activity: ActivityCardDTO }) {
         <div className="mt-auto pt-4">
           <Price amountINR={a.pricePerAdultINR} original={a.originalPriceINR} className="text-lg" />
           <p className="mt-0.5 text-[0.625rem] text-muted">
-            per person{a.isDemoData ? " · demo pricing" : ""}
+            per person
           </p>
         </div>
       </div>

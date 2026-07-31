@@ -187,7 +187,6 @@ export default async function AdminPackagesPage({
                         {p.isFeatured ? <Tag>Featured</Tag> : null}
                         {p.isTrending ? <Tag>Trending</Tag> : null}
                         {p.isBestseller ? <Tag>Bestseller</Tag> : null}
-                        {p.isDemoData ? <Tag tone="amber">Demo</Tag> : null}
                       </span>
                     </div>
                   </div>

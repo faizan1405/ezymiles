@@ -14,7 +14,7 @@ import { integrations } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Flights",
   description:
-    "Search flights, compare fares and book with a human on the other end. Every fare is clearly labelled as live, cached, estimated or demo.",
+    "Search flights, compare fares and book with a human on the other end. Every fare is clearly labelled as live, cached, or estimated.",
   alternates: { canonical: "/flights" },
 };
 
@@ -74,16 +74,16 @@ export default async function FlightsPage() {
               <Plane className="mt-0.5 size-5 shrink-0 text-lagoon-700" aria-hidden />
               <div>
                 <p className="text-sm font-semibold text-midnight-900">
-                  {isLive ? "Live supplier inventory" : "This environment serves demo fares"}
+                  {isLive ? "Live supplier inventory" : "No flight supplier connected"}
                 </p>
                 <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted">
                   {isLive
                     ? "Fares are retrieved from our contracted flight supplier and re-confirmed before payment."
-                    : "No flight supplier is connected yet, so search returns realistic demo itineraries. They are clearly labelled and cannot be ticketed. Connect an authorised supplier (Amadeus, Travelport or a consolidator) to switch to live inventory."}
+                    : "No flight supplier is connected yet, so search is unavailable. Connect an authorised supplier (Amadeus, Travelport or a consolidator) to enable live inventory."}
                 </p>
               </div>
             </div>
-            <DataSourceBadge source={isLive ? "live" : "demo"} className="shrink-0" />
+            <DataSourceBadge source={isLive ? "live" : "estimated"} className="shrink-0" />
           </div>
         </div>
       </section>
@@ -103,7 +103,7 @@ export default async function FlightsPage() {
               {
                 Icon: ShieldCheck,
                 title: "Fares labelled honestly",
-                body: "Live, cached, estimated or demo — stated on every single result. You always know what you're looking at.",
+                body: "Live, cached, or estimated — stated on every single result. You always know what you're looking at.",
               },
               {
                 Icon: Headset,

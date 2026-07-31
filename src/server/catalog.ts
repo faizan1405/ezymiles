@@ -69,7 +69,6 @@ function toPackageCard(p: PackageLean): PackageCardDTO {
     isTrending: p.isTrending,
     isBestseller: p.isBestseller,
     isFeatured: p.isFeatured,
-    isDemoData: p.isDemoData,
   };
 }
 
@@ -481,7 +480,6 @@ export async function getActivities(
       ratingAverage: a.ratingAverage,
       ratingCount: a.ratingCount,
       instantConfirmation: a.instantConfirmation,
-      isDemoData: a.isDemoData,
     }));
 
     return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
@@ -578,7 +576,6 @@ export async function getHotels(filter: HotelFilter = {}): Promise<PaginatedResu
       startingPriceINR: h.startingPriceINR,
       ratingAverage: h.ratingAverage,
       ratingCount: h.ratingCount,
-      isDemoData: h.isDemoData,
     }));
 
     return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };

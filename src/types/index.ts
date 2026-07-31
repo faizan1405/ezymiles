@@ -34,7 +34,6 @@ export interface PackageCardDTO {
   isTrending: boolean;
   isBestseller: boolean;
   isFeatured: boolean;
-  isDemoData: boolean;
 }
 
 export interface DestinationCardDTO {
@@ -70,7 +69,6 @@ export interface ActivityCardDTO {
   ratingAverage: number;
   ratingCount: number;
   instantConfirmation: boolean;
-  isDemoData: boolean;
 }
 
 export interface HotelCardDTO {
@@ -88,7 +86,6 @@ export interface HotelCardDTO {
   startingPriceINR: number;
   ratingAverage: number;
   ratingCount: number;
-  isDemoData: boolean;
 }
 
 export interface OfferDTO {

@@ -106,7 +106,6 @@ export default async function HotelPage({ params, searchParams }: PageProps) {
               {hotel.ratingCount > 0 ? (
                 <Rating value={hotel.ratingAverage} count={hotel.ratingCount} size="md" />
               ) : null}
-              {hotel.isDemoData ? <Badge tone="warning">Demo rates & availability</Badge> : null}
             </div>
           </div>
         </div>

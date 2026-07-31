@@ -108,7 +108,7 @@ export default async function AdminActivitiesPage({
 
         <tbody className="divide-y divide-hairline">
           {activities.length === 0 ? (
-            <TableEmpty colSpan={7} message="No activities yet. Run the seed script to load demo content." />
+            <TableEmpty colSpan={7} message="No activities yet." />
           ) : (
             activities.map((a) => (
               <tr key={String(a._id)} className="transition-colors hover:bg-sand-50">
@@ -129,7 +129,6 @@ export default async function AdminActivitiesPage({
                       </span>
                       <span className="mt-0.5 block text-[0.6875rem] capitalize text-muted">
                         {a.category.replace(/-/g, " ")}
-                        {a.isDemoData ? " · demo" : ""}
                       </span>
                     </div>
                   </div>

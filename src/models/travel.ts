@@ -79,7 +79,6 @@ export interface IHotel {
   isFeatured: boolean;
   status: PublishStatus;
   seo?: { title?: string; description?: string; noIndex?: boolean };
-  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -115,7 +114,6 @@ const HotelSchema = new Schema<IHotel>(
     isFeatured: { type: Boolean, default: false },
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
     seo: SeoSchema,
-    isDemoData: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
@@ -168,7 +166,6 @@ export interface IActivity {
   ratingCount: number;
   isFeatured: boolean;
   status: PublishStatus;
-  isDemoData: boolean;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -217,7 +214,6 @@ const ActivitySchema = new Schema<IActivity>(
     ratingCount: { type: Number, default: 0 },
     isFeatured: { type: Boolean, default: false },
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
-    isDemoData: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },

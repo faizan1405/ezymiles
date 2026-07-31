@@ -143,7 +143,6 @@ export async function startFlightBooking(raw: unknown): Promise<StartBookingResu
             airline: offer.airlineName,
             stops: offer.stops,
             cabinClass: query.cabinClass,
-            isDemoData: offer.dataSource === "demo",
           },
         },
         travelDate: new Date(offer.outbound[0].departAt),
@@ -185,7 +184,6 @@ export async function startFlightBooking(raw: unknown): Promise<StartBookingResu
         },
         status: "pending_payment",
         source: "website",
-        isDemoData: offer.dataSource === "demo",
       });
 
       const travellerDocs = await Traveller.insertMany(

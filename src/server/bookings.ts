@@ -133,11 +133,9 @@ export async function createBooking(args: CreateBookingArgs) {
     },
     status: "pending_payment",
     source,
-    isDemoData: Boolean((q.item.meta as { isDemoData?: boolean }).isDemoData),
     idempotencyKey,
   });
 
-  // Travellers
   const travellerDocs = await Traveller.insertMany(
     travellers.map((t, i) => ({
       ...t,

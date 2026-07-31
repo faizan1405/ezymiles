@@ -174,11 +174,6 @@ export default async function HotelsPage({
                         sizes="(max-width: 640px) 100vw, 256px"
                         className="object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:group-hover:scale-100"
                       />
-                      {h.isDemoData ? (
-                        <Badge tone="warning" size="sm" className="absolute left-3 top-3">
-                          Demo rates
-                        </Badge>
-                      ) : null}
                     </div>
 
                     <div className="flex flex-1 flex-col p-5">

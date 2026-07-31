@@ -1,4 +1,4 @@
-import { Radio, Database, Calculator, FlaskConical } from "lucide-react";
+import { Radio, Database, Calculator } from "lucide-react";
 import { DATA_SOURCES, type DataSource } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -17,12 +17,6 @@ const META: Record<DataSource, { Icon: typeof Radio; className: string; tooltip:
     Icon: Calculator,
     className: "bg-amber-50 text-amber-800",
     tooltip: "An estimate based on historical fares — not a bookable quote.",
-  },
-  demo: {
-    Icon: FlaskConical,
-    className: "bg-sand-100 text-midnight-700",
-    tooltip:
-      "Demo data generated for this environment. Not live airline inventory and not ticketable.",
   },
 };
 

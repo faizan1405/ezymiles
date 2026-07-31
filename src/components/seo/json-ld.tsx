@@ -5,8 +5,7 @@ import { SITE_URL } from "@/config/site";
  * Structured data.
  *
  * Review and aggregate-rating markup is only emitted when the underlying reviews
- * are real, approved rows in our database — we never mark up demo content as if
- * it were genuine customer feedback.
+ * are real, approved rows in our database.
  */
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
@@ -99,7 +98,7 @@ export function TourProductJsonLd({
   slug: string;
   priceINR: number;
   rating?: { average: number; count: number };
-  /** Only pass true when the ratings come from verified rows, not demo seed data. */
+  /** Only pass true when the ratings come from verified customer rows, not placeholder data. */
   hasGenuineReviews: boolean;
 }) {
   return (
