@@ -34,7 +34,7 @@ export function Logo({
       {/* ── Brand mark ── */}
       <svg
         viewBox="0 0 220 56"
-        className="h-10 w-auto shrink-0 md:h-12"
+        className="h-12 w-auto shrink-0 md:h-14"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"

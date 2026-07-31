@@ -119,10 +119,10 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
         )}
         onMouseLeave={scheduleClose}
       >
-        <div className="container-page flex h-[var(--header-height)] items-center gap-2">
+        <div className="container-page flex h-[var(--header-height)] min-w-0 items-center gap-2 overflow-hidden">
           <Link
             href="/"
-            className="mr-2 shrink-0 rounded-lg px-1 py-1 transition-transform duration-200 hover:scale-[1.04] focus-visible:outline-offset-4 active:scale-[0.98]"
+            className="mr-2 shrink-0 rounded-lg px-1 py-1 transition-all duration-200 hover:opacity-80 focus-visible:outline-offset-4 active:opacity-70"
             aria-label={`${settings.brand.name} — home`}
           >
             <Logo tone={tone} name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
