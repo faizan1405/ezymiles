@@ -259,12 +259,14 @@ export const authConfig: NextAuthConfig = {
   providers,
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: { signIn: "/login", error: "/login" },
-  // trustHost is deliberately false: set AUTH_URL in every environment
+  // trustHost is deliberately false by default: set AUTH_URL in every environment
   // (Vercel project settings or .env.local) so Auth.js can derive the correct
   // callback URL without trusting whatever the browser sends in the Host header.
   // trustHost: true would allow host-header injection when a proxy doesn't strip
   // attacker-controlled headers.
-  trustHost: false,
+  // Preview deployments on Vercel can set AUTH_TRUST_HOST=true since Vercel's
+  // edge strips attacker-controlled headers before reaching the function.
+  trustHost: process.env.AUTH_TRUST_HOST === "true",
 
   callbacks: {
     async signIn({ user, account, profile }) {
