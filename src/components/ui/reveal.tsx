@@ -47,6 +47,7 @@ function useInViewOnce<T extends Element>(): { ref: React.RefObject<T | null>; i
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInView(true);
       return;
     }
@@ -88,14 +89,12 @@ export function Reveal({
   const d = reduced ? 0.3 : duration;
   const delaySec = reduced ? 0 : delay;
 
-  const revealedRef = React.useRef(false);
   const style: React.CSSProperties = {
     opacity: inView ? 1 : 0,
     transform: inView ? "translate3d(0, 0, 0)" : `translate3d(${offset.x}px, ${offset.y}px, 0)`,
     transition: `opacity ${d}s ${EASE} ${delaySec}s, transform ${d}s ${EASE} ${delaySec}s`,
-    willChange: inView && !revealedRef.current ? "opacity, transform" : "auto",
+    willChange: inView ? "auto" : "opacity, transform",
   };
-  if (inView) revealedRef.current = true;
 
   return React.createElement(Tag, { ref, className, style }, children);
 }
@@ -159,14 +158,14 @@ export function RevealItem({
   const inView = ctx?.inView ?? true;
   const stagger = ctx?.stagger ?? 0.08;
   const delaySec = reduced ? 0 : __staggerIndex * stagger;
-  const revealedRef = React.useRef(false);
+  // willChange is only needed while the element is off-screen; once inView
+  // the browser no longer needs the hint.
   const style: React.CSSProperties = {
     opacity: inView ? 1 : 0,
     transform: inView ? "translate3d(0, 0, 0)" : `translate3d(0, ${reduced ? 0 : 22}px, 0)`,
     transition: `opacity 0.6s ${EASE} ${delaySec}s, transform 0.6s ${EASE} ${delaySec}s`,
-    willChange: inView && !revealedRef.current ? "opacity, transform" : "auto",
+    willChange: inView ? "auto" : "opacity, transform",
   };
-  if (inView) revealedRef.current = true;
 
   return React.createElement(Tag, { className, style }, children);
 }

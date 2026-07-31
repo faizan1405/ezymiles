@@ -7,7 +7,7 @@ import { SmartImage } from "@/components/ui/smart-image";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Pagination } from "@/components/ui/pagination";
 import { Price } from "@/components/ui/price";
-import { Badge, EmptyState, Rating } from "@/components/ui/primitives";
+import { EmptyState, Rating } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { HotelSearchBar } from "@/components/hotels/hotel-search-bar";
 import { HotelDestinationsRail } from "@/components/hotels/hotel-destinations-rail";

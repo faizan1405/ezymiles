@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Select } from "@/components/ui/field";
-import { Badge } from "@/components/ui/primitives";
 import { Price } from "@/components/ui/price";
 import { WishlistButton } from "./wishlist-button";
 import { CallbackDialog } from "@/components/forms/callback-dialog";

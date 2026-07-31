@@ -263,7 +263,7 @@ export async function updateBookingStatus(
         brandName: settings.brand.name,
         name: booking.guestName ?? "there",
         reference: booking.reference,
-        status: "confirmed",
+        status: "cancelled",
         chargeINR: booking.cancellation?.chargeINR,
       });
       await sendMail({ to: booking.guestEmail, subject: tpl.subject, html: tpl.html });

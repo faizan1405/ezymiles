@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: "Booking not found." }, { status: 404 });
     }
 
-    // Replay guard: this payment was already captured.
+    // Replay guard: already captured — respond idempotently.
     if (payment.status === "paid") {
       return NextResponse.json({ ok: true, reference: booking.reference, alreadyProcessed: true });
     }
@@ -104,6 +104,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // Mark payment paid inside the try block so a DB error is caught by the catch.
     payment.status = "paid";
     payment.gatewayPaymentId = gatewayPaymentId;
     payment.gatewaySignature = signature;

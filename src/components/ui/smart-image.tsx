@@ -41,7 +41,6 @@ export function SmartImage({
   sizes,
   priority,
   quality = 80,
-  loading,
   ...props
 }: SmartImageProps) {
   const [failed, setFailed] = React.useState(false);

@@ -6,7 +6,7 @@ import { getHotelBySlug, getReviewsForSubject } from "@/server/catalog";
 import { Gallery } from "@/components/packages/gallery";
 import { RoomSelector, type RoomOption } from "@/components/hotels/room-selector";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { Rating, Badge } from "@/components/ui/primitives";
+import { Rating } from "@/components/ui/primitives";
 import { ReviewList } from "@/components/reviews/review-list";
 import { SITE_URL } from "@/config/site";
 
