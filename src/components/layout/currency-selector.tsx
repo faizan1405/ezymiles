@@ -25,10 +25,7 @@ export function CurrencySelector({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         className={cn(
-          "flex items-center gap-1 rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors",
-          tone === "dark"
-            ? "text-white hover:bg-white/12 hover:text-white"
-            : "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
+          "flex items-center gap-1 rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
         )}
         aria-label={`Change currency, currently ${active}`}
       >

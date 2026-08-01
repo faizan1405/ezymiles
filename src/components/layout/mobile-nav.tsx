@@ -26,6 +26,8 @@ export function MobileNav({
     settings.features.hotelsEnabled && { href: "/hotels", label: "Hotels" },
     settings.features.visaEnabled && { href: "/visa", label: "Visa Assistance" },
     settings.features.cabsEnabled && { href: "/cabs", label: "Cabs & Transfers" },
+    settings.features.busEnabled && { href: "/bus", label: "Bus" },
+    settings.features.trainEnabled && { href: "/train", label: "Trains" },
     { href: "/customise-my-trip", label: "Customise My Trip" },
     { href: "/blog", label: "Travel Inspiration" },
     { href: "/about", label: "About" },

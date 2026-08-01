@@ -31,20 +31,8 @@ import { Logo } from "./logo";
 
 type MenuKey = "domestic" | "international" | "activities" | null;
 
-/**
- * Routes whose first screen is a full-bleed image hero. On these the header
- * starts as a solid deep-navy bar (matching the hero's dark scrim) and
- * switches to a solid white bar once scrolled. The header is never
- * transparent — it sits above the hero in normal flow, not over it, so a
- * transparent background would just expose the page's white background
- * behind white text.
- */
-const HERO_ROUTES = [/^\/$/, /^\/destinations\/[^/]+$/, /^\/about$/];
-
 export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings }) {
   const pathname = usePathname();
-  const overHero = HERO_ROUTES.some((re) => re.test(pathname));
-  const [scrolled, setScrolled] = React.useState(false);
   const [openMenu, setOpenMenu] = React.useState<MenuKey>(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
@@ -53,13 +41,6 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
 
   const wishlistCount = useWishlist((s) => s.ids.length);
   const wishlistHydrated = useWishlist((s) => s.hydrated);
-
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Close menus on navigation.
   React.useEffect(() => {
@@ -81,9 +62,6 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const solid = !overHero || scrolled || openMenu !== null;
-  const tone: "light" | "dark" = solid ? "light" : "dark";
-
   const openWithDelay = (key: MenuKey) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setOpenMenu(key);
@@ -95,27 +73,18 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
   };
 
   const linkClass = cn(
-    "relative flex items-center gap-1 rounded-full px-3 py-2 text-[0.875rem] font-semibold transition-colors duration-200",
-    solid
-      ? "text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950"
-      : "text-white hover:bg-white/12 hover:text-white",
+    "flex items-center gap-1 rounded-full px-3 py-2 text-[0.875rem] font-semibold transition-colors duration-200 text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950",
   );
 
   const iconButtonClass = cn(
-    "flex size-10 items-center justify-center rounded-full transition-colors",
-    solid
-      ? "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900"
-      : "text-white hover:bg-white/12 hover:text-white",
+    "flex size-10 items-center justify-center rounded-full transition-colors text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
   );
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-90 w-full transition-[background-color,box-shadow] duration-500",
-          solid
-            ? "border-b border-hairline bg-white shadow-[0_1px_0_rgb(16_25_43/0.04)]"
-            : "border-b border-white/10 bg-midnight-950",
+          "sticky top-0 z-90 w-full border-b border-hairline bg-white shadow-[0_1px_0_rgb(16_25_43/0.04)]",
         )}
         onMouseLeave={scheduleClose}
       >
@@ -125,7 +94,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
             className="mr-2 shrink-0 rounded-lg px-1 py-1 transition-all duration-200 hover:opacity-80 focus-visible:outline-offset-4 active:opacity-70"
             aria-label={`${settings.brand.name} — home`}
           >
-            <Logo tone={tone} name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
+            <Logo tone="light" name={settings.brand.name} logoUrl={settings.brand.logoUrl} />
           </Link>
 
           {/* ---------------------------- Desktop nav ---------------------------- */}
@@ -154,6 +123,22 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
             {settings.features.hotelsEnabled ? (
               <Link href="/hotels" className={linkClass} onMouseEnter={() => setOpenMenu(null)}>
                 Hotels
+              </Link>
+            ) : null}
+
+            {settings.features.cabsEnabled ? (
+              <Link href="/cabs" className={linkClass} onMouseEnter={() => setOpenMenu(null)}>
+                Cabs
+              </Link>
+            ) : null}
+            {settings.features.busEnabled ? (
+              <Link href="/bus" className={linkClass} onMouseEnter={() => setOpenMenu(null)}>
+                Bus
+              </Link>
+            ) : null}
+            {settings.features.trainEnabled ? (
+              <Link href="/train" className={linkClass} onMouseEnter={() => setOpenMenu(null)}>
+                Trains
               </Link>
             ) : null}
 
@@ -214,10 +199,10 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
             ) : null}
 
             <div className="hidden sm:block">
-              <CurrencySelector supported={settings.currency.supported} tone={tone} />
+              <CurrencySelector supported={settings.currency.supported} tone="light" />
             </div>
 
-            <UserMenu tone={tone} />
+            <UserMenu tone="light" />
 
             {/* Real click-to-call link. Icon shows from lg; the visible number
                 appears at 2xl where there is room. tel: strips spaces so the
@@ -226,10 +211,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
               href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
               aria-label={`Call ${settings.brand.name} at ${settings.contact.phone}`}
               className={cn(
-                "hidden items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors lg:inline-flex",
-                solid
-                  ? "text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950"
-                  : "text-white hover:bg-white/12 hover:text-white",
+                "hidden items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-[0.8125rem] font-semibold transition-colors text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950 lg:inline-flex",
               )}
             >
               <Phone className="size-[1.05rem]" aria-hidden />
@@ -239,7 +221,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
             <Button
               asChild
               size="sm"
-              variant={solid ? "accent" : "glass"}
+              variant="accent"
               className="ml-1.5 hidden lg:inline-flex"
             >
               <Link href="/customise-my-trip">Plan my trip</Link>

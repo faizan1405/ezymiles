@@ -60,6 +60,8 @@ export default async function FlightsPage() {
                 activities: settings.features.activitiesEnabled,
                 visa: settings.features.visaEnabled,
                 cabs: settings.features.cabsEnabled,
+                bus: settings.features.busEnabled,
+                train: settings.features.trainEnabled,
               }}
             />
           </div>

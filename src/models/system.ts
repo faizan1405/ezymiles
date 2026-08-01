@@ -93,6 +93,8 @@ export interface ISiteSettings {
     activitiesEnabled: boolean;
     visaEnabled: boolean;
     cabsEnabled: boolean;
+    busEnabled: boolean;
+    trainEnabled: boolean;
   };
 
   maintenance: {

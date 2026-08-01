@@ -10,6 +10,8 @@ import {
   Ticket,
   Stamp,
   Car,
+  Bus,
+  Train,
   Search,
   Minus,
   Plus,
@@ -26,7 +28,7 @@ import {
 } from "@/config/site";
 import { buildQueryString, cn, toDateInput } from "@/lib/utils";
 
-type TabKey = "packages" | "flights" | "hotels" | "activities" | "visa" | "cabs";
+type TabKey = "packages" | "flights" | "hotels" | "activities" | "visa" | "cabs" | "bus" | "train";
 
 const TABS: { key: TabKey; label: string; Icon: typeof Compass }[] = [
   { key: "packages", label: "Holiday Packages", Icon: Compass },
@@ -35,6 +37,8 @@ const TABS: { key: TabKey; label: string; Icon: typeof Compass }[] = [
   { key: "activities", label: "Activities", Icon: Ticket },
   { key: "visa", label: "Visa", Icon: Stamp },
   { key: "cabs", label: "Cabs", Icon: Car },
+  { key: "bus", label: "Bus", Icon: Bus },
+  { key: "train", label: "Trains", Icon: Train },
 ];
 
 const today = () => toDateInput(new Date());
@@ -56,6 +60,8 @@ export function UnifiedSearch({
     activities: boolean;
     visa: boolean;
     cabs: boolean;
+    bus: boolean;
+    train: boolean;
   };
   variant?: "hero" | "page";
 }) {
@@ -131,6 +137,8 @@ export function UnifiedSearch({
             {tab === "activities" ? <ActivitySearch destinations={destinations} /> : null}
             {tab === "visa" ? <VisaSearch countries={visaCountries} /> : null}
             {tab === "cabs" ? <CabSearch /> : null}
+            {tab === "bus" ? <BusSearch /> : null}
+            {tab === "train" ? <TrainSearch /> : null}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -760,6 +768,100 @@ function CabSearch() {
         <div className="flex items-end justify-end">
           <SubmitButton label="Get quote" />
         </div>
+      </div>
+    </form>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    Bus                                      */
+/* -------------------------------------------------------------------------- */
+
+function BusSearch() {
+  const router = useRouter();
+  const [pax, setPax] = React.useState({ adults: 1, children: 0, infants: 0 });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+
+    router.push(
+      `/bus/search${buildQueryString({
+        from: String(form.get("from") ?? ""),
+        to: String(form.get("to") ?? ""),
+        date: String(form.get("date") ?? ""),
+        passengers: String(pax.adults + pax.children),
+      })}`,
+    );
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_minmax(0,1fr)]">
+      <Field label="From" htmlFor="bs-from">
+        <Input id="bs-from" name="from" required placeholder="Departure city" />
+      </Field>
+
+      <Field label="To" htmlFor="bs-to">
+        <Input id="bs-to" name="to" required placeholder="Destination city" />
+      </Field>
+
+      <Field label="Date" htmlFor="bs-date">
+        <Input id="bs-date" name="date" type="date" min={today()} defaultValue={inDays(7)} />
+      </Field>
+
+      <Field label="Passengers" htmlFor="bs-pax">
+        <TravellerPicker adults={pax.adults} childCount={pax.children} onChange={setPax} label="Passengers" />
+      </Field>
+
+      <div className="flex items-end justify-end">
+        <SubmitButton label="Search buses" />
+      </div>
+    </form>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   Train                                     */
+/* -------------------------------------------------------------------------- */
+
+function TrainSearch() {
+  const router = useRouter();
+  const [pax, setPax] = React.useState({ adults: 1, children: 0, infants: 0 });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+
+    router.push(
+      `/train/search${buildQueryString({
+        from: String(form.get("from") ?? ""),
+        to: String(form.get("to") ?? ""),
+        date: String(form.get("date") ?? ""),
+        passengers: String(pax.adults + pax.children),
+      })}`,
+    );
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_minmax(0,1fr)]">
+      <Field label="From" htmlFor="ts-from">
+        <Input id="ts-from" name="from" required placeholder="Departure city" />
+      </Field>
+
+      <Field label="To" htmlFor="ts-to">
+        <Input id="ts-to" name="to" required placeholder="Destination city" />
+      </Field>
+
+      <Field label="Date" htmlFor="ts-date">
+        <Input id="ts-date" name="date" type="date" min={today()} defaultValue={inDays(7)} />
+      </Field>
+
+      <Field label="Passengers" htmlFor="ts-pax">
+        <TravellerPicker adults={pax.adults} childCount={pax.children} onChange={setPax} label="Passengers" />
+      </Field>
+
+      <div className="flex items-end justify-end">
+        <SubmitButton label="Search trains" />
       </div>
     </form>
   );

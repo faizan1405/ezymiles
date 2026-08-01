@@ -88,6 +88,8 @@ export const DEFAULT_SETTINGS: Settings = {
     activitiesEnabled: true,
     visaEnabled: true,
     cabsEnabled: true,
+    busEnabled: true,
+    trainEnabled: true,
   },
   maintenance: {
     enabled: false,

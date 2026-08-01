@@ -3,7 +3,7 @@
  * Kept free of any server-only imports so client components can use them too.
  */
 
-export const BOOKING_TYPES = ["package", "flight", "hotel", "activity", "visa", "cab"] as const;
+export const BOOKING_TYPES = ["package", "flight", "hotel", "activity", "visa", "cab", "bus", "train"] as const;
 export type BookingType = (typeof BOOKING_TYPES)[number];
 
 export const BOOKING_STATUSES = [

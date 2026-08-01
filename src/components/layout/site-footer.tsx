@@ -46,6 +46,8 @@ export function SiteFooter({ settings, nav }: { settings: Settings; nav: NavData
         { href: "/activities", label: "Activities" },
         { href: "/visa", label: "Visa assistance" },
         { href: "/cabs", label: "Cabs & transfers" },
+        { href: "/bus", label: "Bus booking" },
+        { href: "/train", label: "Train booking" },
         { href: "/customise-my-trip", label: "Custom trips" },
       ],
     },

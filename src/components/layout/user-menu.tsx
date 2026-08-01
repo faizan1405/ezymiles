@@ -27,10 +27,7 @@ export function UserMenu({ tone = "light" }: { tone?: "light" | "dark" }) {
   const { data: session, status } = useSession();
 
   const triggerClass = cn(
-    "flex size-10 items-center justify-center rounded-full transition-colors",
-    tone === "dark"
-      ? "text-white hover:bg-white/12 hover:text-white"
-      : "text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
+    "flex size-10 items-center justify-center rounded-full transition-colors text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
   );
 
   if (status === "loading") {

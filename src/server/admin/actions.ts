@@ -1748,6 +1748,8 @@ const settingsSchema = z.object({
     activitiesEnabled: z.boolean(),
     visaEnabled: z.boolean(),
     cabsEnabled: z.boolean(),
+    busEnabled: z.boolean(),
+    trainEnabled: z.boolean(),
   }),
   maintenance: z.object({
     enabled: z.boolean(),
