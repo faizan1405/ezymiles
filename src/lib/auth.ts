@@ -72,7 +72,10 @@ const providers: NextAuthConfig["providers"] = [
     },
     async authorize(raw) {
       const parsed = loginSchema.safeParse(raw);
-      if (!parsed.success) return null;
+      if (!parsed.success) {
+        console.error("[auth-staff] schema parse failed:", parsed.error.issues.map((i) => i.message));
+        return null;
+      }
 
       const { email, password } = parsed.data;
 
@@ -82,27 +85,30 @@ const providers: NextAuthConfig["providers"] = [
       const ipLimit = rateLimit(`login-ip:${ip}`, { limit: 15, windowSeconds: 15 * 60 });
       const emailLimit = rateLimit(`login-email:${email}`, { limit: 6, windowSeconds: 15 * 60 });
       if (!ipLimit.success || !emailLimit.success) {
+        console.error("[auth-staff] rate-limited ip:", ipLimit.success, "email:", emailLimit.success);
         throw new RateLimitedSignin();
       }
 
       await connectDB();
 
-      // Staff only. Travellers used to fall through to a User password check
-      // here; they now sign in with Google, and a traveller who somehow reaches
-      // this provider must get the same answer as an unknown email.
+      // Staff only.
       const admin = await AdminUser.findOne({ email, isActive: true, deletedAt: null }).select(
         "+passwordHash",
       );
 
-      if (!admin?.passwordHash) return null;
+      if (!admin?.passwordHash) {
+        console.error("[auth-staff] no admin or no passwordHash for:", email, "admin found:", !!admin);
+        return null;
+      }
 
       const ok = await bcrypt.compare(password, admin.passwordHash);
+      console.error("[auth-staff] bcrypt match:", ok, "for:", email, "role:", admin.role);
       if (!ok) return null;
 
       admin.lastLoginAt = new Date();
       await admin.save();
 
-      return {
+      const result = {
         id: admin._id.toString(),
         name: admin.name,
         email: admin.email,
@@ -115,6 +121,8 @@ const providers: NextAuthConfig["providers"] = [
           admin.revokedPermissions,
         ),
       };
+      console.error("[auth-staff] authorize success:", JSON.stringify(result));
+      return result;
     },
   }),
 ];
