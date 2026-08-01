@@ -19,7 +19,7 @@ export function Logo({
 }) {
   if (logoUrl) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={logoUrl} alt={name} className={cn("h-12 w-auto md:h-14", className)} />;
+    return <img src={logoUrl} alt={name} className={cn("h-16 w-auto md:h-20", className)} />;
   }
 
   const isDark = tone === "dark";
@@ -34,7 +34,7 @@ export function Logo({
       {/* ── Brand mark ── */}
       <svg
         viewBox="0 0 220 56"
-        className="h-12 w-auto shrink-0 md:h-14"
+        className="h-16 w-auto shrink-0 md:h-20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
@@ -63,7 +63,7 @@ export function Logo({
       {/* ── Wordmark + tagline ── */}
       <span className="flex flex-col leading-none">
         <span
-          className="text-xl font-bold tracking-tight md:text-[1.4rem]"
+          className="text-2xl font-bold tracking-tight md:text-[1.75rem]"
           style={{ color: wordmarkFill }}
         >
           {name}
