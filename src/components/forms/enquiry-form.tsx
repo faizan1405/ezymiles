@@ -122,7 +122,7 @@ export function EnquiryForm({
           />
         </Field>
 
-        <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+        <div className="grid grid-cols-1 gap-2 xs:grid-cols-[6.5rem_1fr]">
           <Field label="Code" htmlFor="eq-code">
             <Select id="eq-code" {...register("countryCode")}>
               <option value="+91">+91</option>

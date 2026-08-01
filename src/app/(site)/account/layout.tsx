@@ -27,8 +27,8 @@ export default async function AccountLayout({ children }: { children: React.Reac
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
         <aside className="lg:sticky lg:top-28 lg:h-fit">
-          {/* Identity */}
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-hairline bg-white p-4">
+          {/* Identity card — shown only on desktop where the sidebar is a proper rail. */}
+          <div className="mb-4 flex items-center gap-3 rounded-2xl border border-hairline bg-white p-4 lg:mb-6">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-midnight-900 text-sm font-bold text-white">
               {initials(user.name ?? "Traveller")}
             </span>
@@ -40,8 +40,9 @@ export default async function AccountLayout({ children }: { children: React.Reac
             </div>
           </div>
 
+          {/* Verification notice — desktop only. */}
           {!user.isVerified ? (
-            <p className="mb-6 rounded-xl bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+            <p className="mb-4 hidden rounded-xl bg-amber-50 p-3 text-xs leading-relaxed text-amber-900 lg:block lg:mb-6">
               Your email isn&apos;t verified yet. Check your inbox for the link — some features stay
               limited until it is.
             </p>
@@ -49,7 +50,8 @@ export default async function AccountLayout({ children }: { children: React.Reac
 
           <AccountNav unreadCount={unread} />
 
-          <p className="mt-6 px-3 text-xs leading-relaxed text-muted">
+          {/* Support link — desktop only on lg+; hidden on mobile where space is tight. */}
+          <p className="mt-6 hidden px-3 text-xs leading-relaxed text-muted lg:block">
             Need something changed on a booking?{" "}
             <Link href="/account/support" className="font-semibold text-lagoon-700 hover:underline">
               Open a support ticket

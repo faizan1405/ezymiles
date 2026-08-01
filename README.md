@@ -31,8 +31,8 @@ npm run dev
 ```
 
 Sign in as the seeded Super Admin with the email/password printed by the seed script (defaults to
-`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` from your `.env.local`, i.e. `admin@voyara.example` /
-`Voyara@2026` unless you changed them) at `/login`, then visit `/admin`. A demo traveller account is also
+`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` from your `.env.local`, i.e. `admin@ezymiles.in` /
+`EzY@2026#Admin!X9` unless you changed them) at `/login`, then visit `/admin`. A demo traveller account is also
 seeded — check the seed script's console output for its credentials.
 
 ### Scripts

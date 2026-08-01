@@ -103,10 +103,10 @@ describe("newsletterSchema", () => {
 
 describe("loginSchema", () => {
   it("accepts valid login data", () => {
-    expect(() => loginSchema.parse({ email: "admin@example.com", password: "secret123" })).not.toThrow();
+    expect(() => loginSchema.parse({ email: "admin@ezymiles.in", password: "secret123" })).not.toThrow();
   });
   it("rejects empty password", () => {
-    expect(() => loginSchema.parse({ email: "admin@example.com", password: "" })).toThrow();
+    expect(() => loginSchema.parse({ email: "admin@ezymiles.in", password: "" })).toThrow();
   });
   it("rejects invalid email", () => {
     expect(() => loginSchema.parse({ email: "not-email", password: "x" })).toThrow();

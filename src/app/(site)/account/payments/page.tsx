@@ -78,69 +78,135 @@ export default async function PaymentsPage() {
             }
           />
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-hairline bg-white">
-            <table className="w-full min-w-[42rem] text-sm">
-              <caption className="sr-only">Your payment history</caption>
-              <thead>
-                <tr className="border-b border-hairline bg-sand-50 text-left">
-                  <Th>Date</Th>
-                  <Th>Booking</Th>
-                  <Th>Method</Th>
-                  <Th>Status</Th>
-                  <Th className="text-right">Amount</Th>
-                  <Th className="text-right">Invoice</Th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-hairline">
-                {paymentRows.map((p) => {
-                  const booking = byId.get(String(p.booking));
-
-                  return (
-                    <tr key={String(p._id)}>
-                      <Td>{formatDate(p.paidAt ?? p.createdAt)}</Td>
-                      <Td>
+          <>
+            {/* Card layout on mobile, table on sm+ */}
+            <div className="space-y-3 sm:hidden">
+              {paymentRows.map((p) => {
+                const booking = byId.get(String(p.booking));
+                return (
+                  <div
+                    key={String(p._id)}
+                    className="rounded-2xl border border-hairline bg-white p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-midnight-900">
+                          {booking ? booking.reference : "—"}
+                        </p>
                         {booking ? (
-                          <span className="block max-w-48 truncate">
-                            <span className="font-semibold text-midnight-900">{booking.reference}</span>
-                            <span className="block truncate text-xs text-muted">
-                              {booking.item.title}
+                          <p className="mt-0.5 truncate text-xs text-muted">{booking.item.title}</p>
+                        ) : null}
+                      </div>
+                      <Badge tone={STATUS_TONE[p.status] ?? "neutral"} size="sm">
+                        {p.status.replace("_", " ")}
+                      </Badge>
+                    </div>
+                    <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+                      <div>
+                        <dt className="text-muted">Date</dt>
+                        <dd className="mt-0.5 font-medium text-midnight-800">
+                          {formatDate(p.paidAt ?? p.createdAt)}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted">Method</dt>
+                        <dd className="mt-0.5 font-medium text-midnight-800 capitalize">
+                          {p.gateway}
+                          {p.method ? ` · ${p.method}` : ""}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted">Amount</dt>
+                        <dd className="mt-0.5 font-medium text-midnight-800">
+                          <Price amountINR={p.amountINR} className="text-sm" />
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted">Invoice</dt>
+                        <dd className="mt-0.5">
+                          {booking && p.status === "paid" ? (
+                            <Link
+                              href={`/account/trips/${booking.reference}/invoice`}
+                              className="inline-flex items-center gap-1 font-semibold text-lagoon-700"
+                            >
+                              <Download className="size-3.5" aria-hidden />
+                              Download
+                            </Link>
+                          ) : (
+                            <span className="text-muted">—</span>
+                          )}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="hidden sm:block overflow-x-auto rounded-2xl border border-hairline bg-white">
+              <table className="w-full min-w-[42rem] text-sm">
+                <caption className="sr-only">Your payment history</caption>
+                <thead>
+                  <tr className="border-b border-hairline bg-sand-50 text-left">
+                    <Th>Date</Th>
+                    <Th>Booking</Th>
+                    <Th>Method</Th>
+                    <Th>Status</Th>
+                    <Th className="text-right">Amount</Th>
+                    <Th className="text-right">Invoice</Th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-hairline">
+                  {paymentRows.map((p) => {
+                    const booking = byId.get(String(p.booking));
+
+                    return (
+                      <tr key={String(p._id)}>
+                        <Td>{formatDate(p.paidAt ?? p.createdAt)}</Td>
+                        <Td>
+                          {booking ? (
+                            <span className="block max-w-48 truncate">
+                              <span className="font-semibold text-midnight-900">{booking.reference}</span>
+                              <span className="block truncate text-xs text-muted">
+                                {booking.item.title}
+                              </span>
                             </span>
-                          </span>
-                        ) : (
-                          "—"
-                        )}
-                      </Td>
-                      <Td className="capitalize">
-                        {p.gateway}
-                        {p.method ? ` · ${p.method}` : ""}
-                      </Td>
-                      <Td>
-                        <Badge tone={STATUS_TONE[p.status] ?? "neutral"} size="sm">
-                          {p.status.replace("_", " ")}
-                        </Badge>
-                      </Td>
-                      <Td className="text-right">
-                        <Price amountINR={p.amountINR} className="text-sm" />
-                      </Td>
-                      <Td className="text-right">
-                        {booking && p.status === "paid" ? (
-                          <Link
-                            href={`/account/trips/${booking.reference}/invoice`}
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-700 hover:underline"
-                          >
-                            <Download className="size-3.5" aria-hidden />
-                            Invoice
-                          </Link>
-                        ) : (
-                          <span className="text-xs text-muted">—</span>
-                        )}
-                      </Td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                          ) : (
+                            "—"
+                          )}
+                        </Td>
+                        <Td className="capitalize">
+                          {p.gateway}
+                          {p.method ? ` · ${p.method}` : ""}
+                        </Td>
+                        <Td>
+                          <Badge tone={STATUS_TONE[p.status] ?? "neutral"} size="sm">
+                            {p.status.replace("_", " ")}
+                          </Badge>
+                        </Td>
+                        <Td className="text-right">
+                          <Price amountINR={p.amountINR} className="text-sm" />
+                        </Td>
+                        <Td className="text-right">
+                          {booking && p.status === "paid" ? (
+                            <Link
+                              href={`/account/trips/${booking.reference}/invoice`}
+                              className="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-700 hover:underline"
+                            >
+                              <Download className="size-3.5" aria-hidden />
+                              Invoice
+                            </Link>
+                          ) : (
+                            <span className="text-xs text-muted">—</span>
+                          )}
+                        </Td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 

@@ -181,11 +181,11 @@ export function PackageCard({
             </div>
 
             <div className="relative z-10 mt-4 flex gap-2">
-              <Button asChild size="sm" variant="primary" className="flex-1">
+              <Button asChild size="md" variant="primary" className="flex-1">
                 <Link href={`/packages/${pkg.slug}`}>View details</Link>
               </Button>
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
                 className="flex-1"
                 onClick={() => setCallbackOpen(true)}

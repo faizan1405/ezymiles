@@ -36,7 +36,7 @@ const serverSchema = z.object({
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
-  MAIL_FROM: z.string().default("eZyMiles <no-reply@ezymiles.example>"),
+  MAIL_FROM: z.string().default("eZyMiles <no-reply@ezymiles.in>"),
 
   FLIGHT_PROVIDER: z.enum(["amadeus"]).optional(),
   AMADEUS_CLIENT_ID: z.string().optional(),
