@@ -68,7 +68,7 @@ export const DEFAULT_SETTINGS: Settings = {
     liveActivityEnabled: true,
   },
   seo: {
-    defaultTitle: "Luxury holidays, flights, stays & experiences",
+    defaultTitle: "Affordable holidays, flights, stays & experiences",
     titleTemplate: `%s — ${BRAND.name}`,
     defaultDescription: BRAND.description,
     keywords: [

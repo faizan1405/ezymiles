@@ -24,7 +24,7 @@ const SECTIONS: { key: string; label: string; description: string }[] = [
   { key: "map", label: "Interactive atlas", description: "World map with destination markers." },
   { key: "family", label: "Family holidays", description: "Package rail." },
   { key: "experiences", label: "Experiences", description: "Activity category grid." },
-  { key: "luxury", label: "Luxury getaways", description: "Package rail (dark)." },
+  { key: "affordable", label: "Affordable getaways", description: "Package rail (dark)." },
   { key: "offers", label: "Special offers", description: "Live offers with coupons." },
   { key: "adventure", label: "Adventure tours", description: "Package rail." },
   { key: "whyUs", label: "Why choose us", description: "Trust points." },

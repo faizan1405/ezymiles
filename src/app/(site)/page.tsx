@@ -49,7 +49,7 @@ export default async function HomePage() {
     bestOfIndia,
     honeymoon,
     family,
-    luxury,
+    affordable,
     adventure,
     weekend,
     groupDepartures,
@@ -68,7 +68,7 @@ export default async function HomePage() {
     getPackagesByCollection("best-of-india", 8),
     getPackagesByCollection("honeymoon-escapes", 8),
     getPackagesByCollection("family-holidays", 8),
-    getPackagesByCollection("luxury-getaways", 8),
+    getPackagesByCollection("affordable-getaways", 8),
     getPackagesByCollection("adventure-tours", 8),
     getPackagesByCollection("weekend-breaks", 8),
     getPackagesByCollection("group-departures", 8),
@@ -186,13 +186,13 @@ export default async function HomePage() {
 
       {on("experiences") ? <Experiences /> : null}
 
-      {on("luxury") ? (
+      {on("affordable") ? (
         <PackageRail
           eyebrow="No compromises"
-          title="Luxury getaways"
+          title="Affordable getaways"
           description="Suites, private guides, and the kind of restaurant reservations that are hard to get."
-          packages={luxury}
-          viewAllHref="/packages?tripType=luxury"
+          packages={affordable}
+          viewAllHref="/packages?tripType=affordable"
           tone="dark"
         />
       ) : null}

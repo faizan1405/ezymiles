@@ -186,7 +186,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       liveActivityEnabled: { type: Boolean, default: true },
     },
     seo: {
-      defaultTitle: { type: String, default: "Luxury holidays, flights, stays & experiences" },
+      defaultTitle: { type: String, default: "Affordable holidays, flights, stays & experiences" },
       titleTemplate: { type: String, default: "%s — [TRAVEL BRAND NAME]" },
       defaultDescription: {
         type: String,

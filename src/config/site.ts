@@ -88,7 +88,7 @@ export const TRIP_TYPES = [
   { slug: "honeymoon", label: "Honeymoon" },
   { slug: "family", label: "Family" },
   { slug: "group", label: "Group" },
-  { slug: "luxury", label: "Luxury" },
+  { slug: "affordable", label: "Affordable" },
   { slug: "adventure", label: "Adventure" },
   { slug: "beach", label: "Beach" },
   { slug: "wildlife", label: "Wildlife" },
@@ -115,7 +115,7 @@ export const ACTIVITY_CATEGORIES = [
 export const HOTEL_CATEGORIES = [
   { value: 3, label: "3★ Comfort" },
   { value: 4, label: "4★ Premium" },
-  { value: 5, label: "5★ Luxury" },
+  { value: 5, label: "5★ Affordable" },
 ] as const;
 
 export const TRAVEL_CLASSES = [
@@ -138,7 +138,7 @@ export const PACKAGE_COLLECTIONS = [
   { slug: "best-of-india", label: "Best of India" },
   { slug: "honeymoon-escapes", label: "Honeymoon Escapes" },
   { slug: "family-holidays", label: "Family Holidays" },
-  { slug: "luxury-getaways", label: "Luxury Getaways" },
+  { slug: "affordable-getaways", label: "Affordable Getaways" },
   { slug: "adventure-tours", label: "Adventure Tours" },
   { slug: "weekend-breaks", label: "Weekend Breaks" },
   { slug: "group-departures", label: "Group Departures" },
