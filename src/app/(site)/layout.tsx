@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import { getNavData } from "@/server/nav";
 import { getCurrentUser } from "@/lib/session";
