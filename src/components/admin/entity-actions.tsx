@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { MoreHorizontal, Pencil, Copy, Eye, EyeOff, Archive } from "lucide-react";
 
-import { duplicatePackage, setPublishStatus, softDeleteEntity } from "@/server/admin/actions";
+import { duplicateEntity, setPublishStatus, softDeleteEntity } from "@/server/admin/actions";
 import { Dialog, DialogContent } from "@/components/ui/overlays";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
@@ -19,7 +19,7 @@ export function EntityActions({
   label,
   status,
   editHref,
-  canDuplicate,
+  canDuplicate = true,
 }: {
   kind: EntityKind;
   id: string;
@@ -48,11 +48,12 @@ export function EntityActions({
 
   const duplicate = async () => {
     setPending(true);
-    const result = await duplicatePackage(id);
+    const result = await duplicateEntity(kind, id);
 
     if (result.ok && result.id) {
       toast.success("Duplicated", result.message);
-      router.push(`/admin/packages/${result.id}`);
+      const editBase = editHref.substring(0, editHref.lastIndexOf("/"));
+      router.push(`${editBase}/${result.id}`);
     } else {
       toast.error("Could not duplicate", result.message);
     }

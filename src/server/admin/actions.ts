@@ -433,12 +433,12 @@ export async function processRefund(refundId: string, approve: boolean): Promise
 /* -------------------------------------------------------------------------- */
 
 const MODELS = {
-  package: { model: Package, permission: "packages:manage", path: "/admin/packages" },
-  destination: { model: Destination, permission: "destinations:manage", path: "/admin/destinations" },
-  hotel: { model: Hotel, permission: "hotels:manage", path: "/admin/hotels" },
-  activity: { model: Activity, permission: "activities:manage", path: "/admin/activities" },
-  blog: { model: BlogPost, permission: "blogs:manage", path: "/admin/blogs" },
-  visa: { model: VisaCountry, permission: "visa:manage", path: "/admin/visa" },
+  package:     { model: Package,     permission: "packages:manage",     path: "/admin/packages",     nameField: "title" },
+  destination: { model: Destination, permission: "destinations:manage", path: "/admin/destinations", nameField: "name" },
+  hotel:       { model: Hotel,       permission: "hotels:manage",       path: "/admin/hotels",       nameField: "name" },
+  activity:    { model: Activity,    permission: "activities:manage",   path: "/admin/activities",   nameField: "title" },
+  blog:        { model: BlogPost,    permission: "blogs:manage",        path: "/admin/blogs",        nameField: "title" },
+  visa:        { model: VisaCountry, permission: "visa:manage",         path: "/admin/visa",         nameField: "name" },
 } as const;
 
 type EntityKind = keyof typeof MODELS;
@@ -496,6 +496,42 @@ export async function softDeleteEntity(kind: EntityKind, id: string): Promise<Ad
   } catch (error) {
     console.error("[softDeleteEntity]", error);
     return DENIED("Could not archive that.");
+  }
+}
+
+export async function duplicateEntity(kind: EntityKind, id: string): Promise<AdminResult> {
+  const config = MODELS[kind];
+  if (!config) return DENIED("Unknown entity.");
+
+  const g = await guardAction(config.permission as Permission);
+  if (!g.ok) return DENIED(g.message);
+
+  try {
+    const original = await (config.model as any).findById(id).lean();
+    if (!original) return DENIED("Record not found.");
+
+    const nameField = config.nameField as "title" | "name";
+    const slugSuffix = `-copy-${Date.now().toString(36).slice(-4)}`;
+
+    const { _id, createdAt, updatedAt, slug, ...rest } = original as Record<string, unknown>;
+
+    const newDoc = await (config.model as any).create({
+      ...rest,
+      [nameField]: `${original[nameField]} (copy)`,
+      slug: `${original.slug}${slugSuffix}`,
+      status: "draft",
+    });
+
+    await audit(g.actor, `${kind}.duplicate`, kind, {
+      id: String(newDoc._id),
+      label: newDoc[nameField],
+    });
+
+    revalidatePath(config.path);
+    return { ok: true, id: String(newDoc._id), message: "Duplicated as a draft." };
+  } catch (error) {
+    console.error("[duplicateEntity]", error);
+    return DENIED("Could not duplicate that.");
   }
 }
 
