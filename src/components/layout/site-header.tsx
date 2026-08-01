@@ -130,7 +130,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
 
           {/* ---------------------------- Desktop nav ---------------------------- */}
           <nav
-            className="ml-auto hidden items-center gap-0.5 xl:flex"
+            className="no-scrollbar ml-auto hidden items-center gap-0.5 overflow-x-auto xl:flex"
             aria-label="Primary"
           >
             <MegaTrigger
