@@ -21,6 +21,14 @@ class RateLimitedSignin extends CredentialsSignin {
 }
 
 /**
+ * Thrown when the database is unreachable during staff sign-in, so the client
+ * shows a meaningful message instead of the generic fallback.
+ */
+class DatabaseUnavailableSignin extends CredentialsSignin {
+  code = "database";
+}
+
+/**
  * Auth.js v5.
  *
  * Two audiences share one session, but no longer one provider:
@@ -89,40 +97,45 @@ const providers: NextAuthConfig["providers"] = [
         throw new RateLimitedSignin();
       }
 
-      await connectDB();
+      try {
+        await connectDB();
 
-      // Staff only.
-      const admin = await AdminUser.findOne({ email, isActive: true, deletedAt: null }).select(
-        "+passwordHash",
-      );
+        // Staff only.
+        const admin = await AdminUser.findOne({ email, isActive: true, deletedAt: null }).select(
+          "+passwordHash",
+        );
 
-      if (!admin?.passwordHash) {
-        console.error("[auth-staff] no admin or no passwordHash for:", email, "admin found:", !!admin);
-        return null;
+        if (!admin?.passwordHash) {
+          console.error("[auth-staff] no admin or no passwordHash for:", email, "admin found:", !!admin);
+          return null;
+        }
+
+        const ok = await bcrypt.compare(password, admin.passwordHash);
+        console.error("[auth-staff] bcrypt match:", ok, "for:", email, "role:", admin.role);
+        if (!ok) return null;
+
+        admin.lastLoginAt = new Date();
+        await AdminUser.updateOne({ _id: admin._id }, { $set: { lastLoginAt: admin.lastLoginAt } });
+
+        const result = {
+          id: admin._id.toString(),
+          name: admin.name,
+          email: admin.email,
+          isVerified: true,
+          isAdmin: true,
+          adminRole: admin.role,
+          permissions: await resolvePermissions(
+            admin.role,
+            admin.extraPermissions,
+            admin.revokedPermissions,
+          ),
+        };
+        console.error("[auth-staff] authorize success:", JSON.stringify(result));
+        return result;
+      } catch (dbError) {
+        console.error("[auth-staff] database unavailable:", dbError);
+        throw new DatabaseUnavailableSignin();
       }
-
-      const ok = await bcrypt.compare(password, admin.passwordHash);
-      console.error("[auth-staff] bcrypt match:", ok, "for:", email, "role:", admin.role);
-      if (!ok) return null;
-
-      admin.lastLoginAt = new Date();
-      await admin.save();
-
-      const result = {
-        id: admin._id.toString(),
-        name: admin.name,
-        email: admin.email,
-        isVerified: true,
-        isAdmin: true,
-        adminRole: admin.role,
-        permissions: await resolvePermissions(
-          admin.role,
-          admin.extraPermissions,
-          admin.revokedPermissions,
-        ),
-      };
-      console.error("[auth-staff] authorize success:", JSON.stringify(result));
-      return result;
     },
   }),
 ];

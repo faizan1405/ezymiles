@@ -23,6 +23,7 @@ import { Field, Input } from "@/components/ui/field";
 
 const CODE_MESSAGES: Record<string, string> = {
   "rate-limited": "Too many attempts. Please wait a few minutes and try again.",
+  database: "Our servers are temporarily unreachable. Please try again in a moment.",
   credentials: "Incorrect email or password.",
 };
 
@@ -55,7 +56,15 @@ export function StaffLoginForm({ callbackUrl }: { callbackUrl: string }) {
     });
 
     if (!result || result.error) {
-      setServerError((result?.code && CODE_MESSAGES[result.code]) ?? FALLBACK);
+      const code = result?.code && CODE_MESSAGES[result.code];
+      const errText = result?.error ? ` (${result.error})` : "";
+      if (code) {
+        setServerError(code + errText);
+      } else {
+        const detail = result?.error || FALLBACK;
+        console.error("[auth-staff-ui] signIn error:", result);
+        setServerError(detail);
+      }
       return;
     }
 

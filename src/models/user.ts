@@ -130,6 +130,13 @@ const AdminUserSchema = new Schema<IAdminUser>(
 AdminUserSchema.index({ email: 1 }, { unique: true });
 AdminUserSchema.index({ role: 1, isActive: 1 });
 
+AdminUserSchema.pre("save", function preSaveAdminName() {
+  if (!this.name || this.name.trim() === "") {
+    const derived = this.email.split("@")[0].replace(/[^a-zA-Z]/g, " ");
+    this.name = derived.replace(/\b\w/g, (c) => c.toUpperCase()) || "Staff";
+  }
+});
+
 /* ---------------------------------- Role ---------------------------------- */
 /**
  * Roles are seeded from ROLE_PERMISSIONS but stored so a Super Admin can tune
