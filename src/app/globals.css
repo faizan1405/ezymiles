@@ -114,7 +114,7 @@
 @layer base {
   :root {
     color-scheme: light;
-    --header-height: 6rem;
+    --header-height: 7.5rem;
   }
 
   * {
