@@ -1046,9 +1046,9 @@ async function main() {
 
   // Upsert packages
   for (const pkg of packages) {
-    const destSlug = pkg.destination || (destinations.find((d) => d.name === pkg.citiesCovered[0])?.slug) || "";
-    const destRecord = await Destination.findOne({ slug: destSlug } as Parameters<typeof Destination.findOne>[0]);
-    const resolvedDest = destRecord?._id || (await Destination.findOne({ name: pkg.citiesCovered[0] } as Parameters<typeof Destination.findOne>[0]))?._id || "";
+    const destSlug: string = pkg.destination || (destinations.find((d) => d.name === pkg.citiesCovered[0])?.slug) || "";
+    const destRecord = await Destination.findOne({ slug: destSlug });
+    const resolvedDest = destRecord?._id || (await Destination.findOne({ name: pkg.citiesCovered[0] }))?._id || "";
 
     const existing = await Package.findOne({ slug: pkg.slug });
     const doc: IPackage = {
