@@ -93,6 +93,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Bali Tour Packages from India", description: "Book Bali holiday packages from Delhi, Mumbai. Flights + hotels included.", keywords: ["bali", "indonesia"] },
     viewCount: 12400,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Dubai",
@@ -132,6 +133,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Dubai Tour Packages from India", description: "Affordable Dubai packages with flights from major Indian cities.", keywords: ["dubai", "uae"] },
     viewCount: 15800,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Himachal Pradesh",
@@ -170,6 +172,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Himachal Pradesh Tour Packages", description: "Manali, Shimla, Dharamshala packages with hotel and transfers." },
     viewCount: 9800,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Kerala",
@@ -208,6 +211,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Kerala Holiday Packages", description: "Munnar, Alleppey, Kovalam packages with houseboat stays." },
     viewCount: 11200,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Leh Ladakh",
@@ -246,6 +250,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Leh Ladakh Tour Packages", description: "Leh Ladakh bike tour and family packages from Delhi." },
     viewCount: 13500,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Sri Lanka",
@@ -285,6 +290,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Sri Lanka Tour Packages", description: "Affordable Sri Lanka packages with ETA assistance." },
     viewCount: 8900,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Goa",
@@ -323,6 +329,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Goa Holiday Packages", description: "Goa beach packages with flights and hotels from Delhi, Mumbai." },
     viewCount: 22100,
     deletedAt: null,
+    isDemoData: true,
   },
   {
     name: "Jaipur",
@@ -361,6 +368,7 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
     seo: { title: "Jaipur Tour Packages", description: "Jaipur, Jodhpur, Udaipur Rajasthan tour packages." },
     viewCount: 10400,
     deletedAt: null,
+    isDemoData: true,
   },
 ];
 
@@ -448,6 +456,7 @@ const packages = [
     enquiryCount: 180,
     bookingCount: 95,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 2. Dubai Dreams
@@ -524,6 +533,7 @@ const packages = [
     enquiryCount: 290,
     bookingCount: 165,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 3. Himalayan Escape
@@ -601,6 +611,7 @@ const packages = [
     enquiryCount: 120,
     bookingCount: 65,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 4. Kerala God's Own Country
@@ -683,6 +694,7 @@ const packages = [
     enquiryCount: 210,
     bookingCount: 140,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 5. Leh Ladakh Expedition
@@ -766,6 +778,7 @@ const packages = [
     enquiryCount: 220,
     bookingCount: 110,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 6. Sri Lanka Serenity
@@ -847,6 +860,7 @@ const packages = [
     enquiryCount: 155,
     bookingCount: 88,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 7. Goa Beach Retreat
@@ -921,6 +935,7 @@ const packages = [
     enquiryCount: 340,
     bookingCount: 210,
     deletedAt: null,
+    isDemoData: true,
   },
 
   // 8. Golden Triangle
@@ -1001,6 +1016,7 @@ const packages = [
     enquiryCount: 450,
     bookingCount: 280,
     deletedAt: null,
+    isDemoData: true,
   },
 ];
 
