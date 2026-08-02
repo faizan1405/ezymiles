@@ -73,11 +73,11 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
   };
 
   const linkClass = cn(
-    "flex items-center gap-1 rounded-full px-3 py-2 text-[0.875rem] font-semibold transition-colors duration-200 text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950",
+    "flex items-center gap-0.5 rounded-full px-2 py-1 text-[0.875rem] font-semibold transition-colors duration-200 text-midnight-700 hover:bg-midnight-900/[0.05] hover:text-midnight-950",
   );
 
   const iconButtonClass = cn(
-    "flex size-10 items-center justify-center rounded-full transition-colors text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
+    "flex size-9 items-center justify-center rounded-full transition-colors text-midnight-700 hover:bg-midnight-900/[0.06] hover:text-midnight-900",
   );
 
   return (
@@ -88,7 +88,7 @@ export function SiteHeader({ nav, settings }: { nav: NavData; settings: Settings
         )}
         onMouseLeave={scheduleClose}
       >
-        <div className="container-page flex h-[var(--header-height)] min-w-0 items-center gap-2 overflow-hidden">
+        <div className="container-page flex h-[var(--header-height)] min-w-0 items-center gap-1.5 overflow-hidden">
           <Link
             href="/"
             className="mr-2 shrink-0 rounded-lg px-1 py-1 transition-all duration-200 hover:opacity-80 focus-visible:outline-offset-4 active:opacity-70"

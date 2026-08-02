@@ -114,12 +114,12 @@
 @layer base {
   :root {
     color-scheme: light;
-    --header-height: 5.5rem;
+    --header-height: 5rem;
   }
 
   @media (width >= 64rem) {
     :root {
-      --header-height: 8rem;
+      --header-height: 7rem;
     }
   }
 
