@@ -1052,10 +1052,10 @@ async function main() {
 
     const existing = await Package.findOne({ slug: pkg.slug });
     const { destination: _omitDest, ...pkgWithoutDest } = pkg;
-    const doc: Omit<Parameters<typeof Package.create>[0], "destination"> & { destination: string } = {
+    const doc = {
       ...pkgWithoutDest,
       destination: resolvedDest!.toString(),
-    };
+    } as Parameters<typeof Package.create>[0];
 
     if (existing) {
       await Package.updateOne({ _id: existing._id }, { $set: doc });
