@@ -135,7 +135,7 @@ export interface IItineraryDay {
   hotel?: string;
   transfers?: string;
   activities: string[];
-  optionalExperiences: string[];
+  optionalExperiences?: string[];
   coordinates?: { lat: number; lng: number };
 }
 
