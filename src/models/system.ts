@@ -37,13 +37,6 @@ export interface ISiteSettings {
     x?: string;
   };
 
-  announcement: {
-    enabled: boolean;
-    items: { text: string; href?: string; emphasis?: string }[];
-    /** Cycle interval in ms. */
-    intervalMs: number;
-  };
-
   currency: {
     base: string;
     supported: string[];
@@ -151,11 +144,6 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       youtube: String,
       linkedin: String,
       x: String,
-    },
-    announcement: {
-      enabled: { type: Boolean, default: true },
-      items: [{ _id: false, text: String, href: String, emphasis: String }],
-      intervalMs: { type: Number, default: 5000 },
     },
     currency: {
       base: { type: String, default: "INR" },

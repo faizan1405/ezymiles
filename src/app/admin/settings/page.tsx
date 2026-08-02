@@ -37,7 +37,7 @@ export default async function AdminSettingsPage() {
     <div>
       <AdminPageHeader
         title="Site settings"
-        description="Brand, contact details, announcement bar, payments and feature toggles. Changes go live immediately."
+        description="Brand, contact details, payments and feature toggles. Changes go live immediately."
       />
 
       <SettingsEditor

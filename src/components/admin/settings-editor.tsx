@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Save, CheckCircle2, XCircle, Plus, Trash2 } from "lucide-react";
+import { Save, CheckCircle2, XCircle } from "lucide-react";
 
 import { saveSiteSettings } from "@/server/admin/actions";
 import { Panel } from "./ui";
@@ -31,11 +31,6 @@ export function SettingsEditor({
     brand: { ...settings.brand },
     contact: { ...settings.contact },
     social: { ...settings.social },
-    announcement: {
-      enabled: settings.announcement.enabled,
-      intervalMs: settings.announcement.intervalMs,
-      items: settings.announcement.items ?? [],
-    },
     payments: { ...settings.payments },
     features: { ...settings.features },
     maintenance: { ...settings.maintenance },
@@ -53,7 +48,6 @@ export function SettingsEditor({
       brand: values.brand,
       contact: values.contact,
       social: values.social,
-      announcement: values.announcement,
       payments: values.payments,
       features: values.features,
       maintenance: values.maintenance,
@@ -123,7 +117,6 @@ export function SettingsEditor({
         <TabsList className="mb-6 rounded-full bg-white p-1">
           {[
             ["brand", "Brand & contact"],
-            ["announcement", "Announcement"],
             ["payments", "Payments"],
             ["features", "Features"],
             ["seo", "SEO"],
@@ -279,145 +272,6 @@ export function SettingsEditor({
                   placeholder="@ezymiles.travel"
                 />
               </Field>
-            </div>
-          </Panel>
-        </TabsContent>
-
-        {/* ============================= ANNOUNCEMENT ============================ */}
-        <TabsContent value="announcement">
-          <Panel title="Announcement bar">
-            <div className="space-y-5">
-              <ToggleField
-                label="Show the announcement bar"
-                description="The thin strip above the header. Rotates between the messages below."
-                checked={values.announcement.enabled}
-                onChange={(v) =>
-                  setValues({
-                    ...values,
-                    announcement: { ...values.announcement, enabled: v },
-                  })
-                }
-              />
-
-              <Field
-                label="Rotation interval (ms)"
-                htmlFor="s-interval"
-                hint="3000–20000. Slower is kinder."
-              >
-                <Input
-                  id="s-interval"
-                  type="number"
-                  min={3000}
-                  max={20000}
-                  step={500}
-                  value={values.announcement.intervalMs}
-                  onChange={(e) =>
-                    setValues({
-                      ...values,
-                      announcement: { ...values.announcement, intervalMs: Number(e.target.value) },
-                    })
-                  }
-                />
-              </Field>
-
-              <fieldset>
-                <div className="mb-2 flex items-center justify-between">
-                  <legend className="text-[0.8125rem] font-semibold text-midnight-800">
-                    Messages
-                  </legend>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="subtle"
-                    onClick={() =>
-                      setValues({
-                        ...values,
-                        announcement: {
-                          ...values.announcement,
-                          items: [...values.announcement.items, { text: "", emphasis: "", href: "" }],
-                        },
-                      })
-                    }
-                  >
-                    <Plus aria-hidden />
-                    Add message
-                  </Button>
-                </div>
-
-                <ul className="space-y-3">
-                  {values.announcement.items.map((item, i) => (
-                    <li key={i} className="rounded-2xl border border-hairline bg-sand-50 p-4">
-                      <div className="grid gap-3 sm:grid-cols-[8rem_1fr_10rem_auto]">
-                        <Field label="Badge" htmlFor={`an-${i}-badge`}>
-                          <Input
-                            id={`an-${i}-badge`}
-                            value={item.emphasis ?? ""}
-                            onChange={(e) => {
-                              const items = [...values.announcement.items];
-                              items[i] = { ...items[i], emphasis: e.target.value };
-                              setValues({
-                                ...values,
-                                announcement: { ...values.announcement, items },
-                              });
-                            }}
-                            placeholder="Early bird"
-                          />
-                        </Field>
-
-                        <Field label="Message" htmlFor={`an-${i}-text`}>
-                          <Input
-                            id={`an-${i}-text`}
-                            value={item.text}
-                            onChange={(e) => {
-                              const items = [...values.announcement.items];
-                              items[i] = { ...items[i], text: e.target.value };
-                              setValues({
-                                ...values,
-                                announcement: { ...values.announcement, items },
-                              });
-                            }}
-                          />
-                        </Field>
-
-                        <Field label="Link (optional)" htmlFor={`an-${i}-href`}>
-                          <Input
-                            id={`an-${i}-href`}
-                            value={item.href ?? ""}
-                            onChange={(e) => {
-                              const items = [...values.announcement.items];
-                              items[i] = { ...items[i], href: e.target.value };
-                              setValues({
-                                ...values,
-                                announcement: { ...values.announcement, items },
-                              });
-                            }}
-                            placeholder="/packages"
-                          />
-                        </Field>
-
-                        <div className="flex items-end pb-1">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setValues({
-                                ...values,
-                                announcement: {
-                                  ...values.announcement,
-                                  items: values.announcement.items.filter((_, idx) => idx !== i),
-                                },
-                              })
-                            }
-                            aria-label={`Remove message ${i + 1}`}
-                            className="flex size-10 items-center justify-center rounded-lg text-midnight-400 hover:bg-white hover:text-red-600"
-                          >
-                            <Trash2 className="size-4" aria-hidden />
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </fieldset>
             </div>
           </Panel>
         </TabsContent>

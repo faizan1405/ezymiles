@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import { getNavData } from "@/server/nav";
 import { getCurrentUser } from "@/lib/session";
-import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingContact } from "@/components/layout/floating-contact";
@@ -36,7 +35,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <AnnouncementBar announcement={settings.announcement} />
       <SiteHeader nav={nav} settings={settings} />
 
       <main id="main" className="flex-1">

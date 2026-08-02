@@ -368,13 +368,13 @@ const destinations: Omit<IDestination, "_id" | "createdAt" | "updatedAt">[] = [
 // Demo packages
 // ---------------------------------------------------------------------------
 
-const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
+const packages = [
   // 1. Bali Bliss
   {
     title: "Bali Bliss",
     slug: "bali-bliss",
     subtitle: "Beaches, temples & rice terraces — the complete Bali experience",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Denpasar", "Ubud", "Uluwatu", "Nusa Dua", "Seminyak"],
     scope: "international",
@@ -455,7 +455,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Dubai Dreams",
     slug: "dubai-dreams",
     subtitle: "Desert magic, sky-high views, and shopping galore",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Dubai", "Abu Dhabi", "Sharjah"],
     scope: "international",
@@ -531,7 +531,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Himalayan Escape",
     slug: "himalayan-escape",
     subtitle: "Manali, Kasol & Solang Valley — mountains at their finest",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Manali", "Kasol", "Solang Valley", "Kullu", "Naggar"],
     scope: "domestic",
@@ -608,7 +608,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Kerala God's Own Country",
     slug: "kerala-gods-own-country",
     subtitle: "Backwaters, Ayurveda & misty hills — South India's finest",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Cochin", "Munnar", "Thekkady", "Alleppey", "Kovalam"],
     scope: "domestic",
@@ -690,7 +690,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Leh Ladakh Expedition",
     slug: "leh-ladakh-expedition",
     subtitle: "Pangong, Nubra, Khardung La — the ultimate Himalayan road trip",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Leh", "Nubra Valley", "Pangong Tso", "Khardung La", "Diskit"],
     scope: "domestic",
@@ -773,7 +773,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Sri Lanka Serenity",
     slug: "sri-lanka-serenity",
     subtitle: "Ella train, Sigiriya rock, and the southern beaches",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Colombo", "Kandy", "Ella", "Sigiriya", "Mirissa"],
     scope: "international",
@@ -854,7 +854,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Goa Beach Retreat",
     slug: "goa-beach-retreat",
     subtitle: "Sun-kissed beaches, Portuguese heritage, and seafood feasts",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["North Goa", "Old Goa", "South Goa", "Dudhsagar"],
     scope: "domestic",
@@ -928,7 +928,7 @@ const packages: Omit<IPackage, "_id" | "createdAt" | "updatedAt">[] = [
     title: "Golden Triangle",
     slug: "golden-triangle",
     subtitle: "Delhi — Agra — Jaipur, India's classic royal circuit",
-    destination: "" as string,
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Delhi", "Agra", "Jaipur", "Fatehpur Sikri"],
     scope: "domestic",
@@ -1046,14 +1046,15 @@ async function main() {
 
   // Upsert packages
   for (const pkg of packages) {
-    const destSlug: string = pkg.destination || (destinations.find((d) => d.name === pkg.citiesCovered[0])?.slug) || "";
+    const destSlug = (destinations.find((d) => d.name === pkg.citiesCovered[0])?.slug) || "";
     const destRecord = await Destination.findOne({ slug: destSlug });
-    const resolvedDest = destRecord?._id || (await Destination.findOne({ name: pkg.citiesCovered[0] }))?._id || "";
+    const resolvedDest = destRecord?._id || (await Destination.findOne({ name: pkg.citiesCovered[0] }))?._id;
 
     const existing = await Package.findOne({ slug: pkg.slug });
-    const doc: IPackage = {
-      ...(pkg as IPackage),
-      destination: resolvedDest as never,
+    const { destination: _omitDest, ...pkgWithoutDest } = pkg;
+    const doc: Omit<Parameters<typeof Package.create>[0], "destination"> & { destination: string } = {
+      ...pkgWithoutDest,
+      destination: resolvedDest!,
     };
 
     if (existing) {

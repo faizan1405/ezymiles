@@ -1761,11 +1761,6 @@ const settingsSchema = z.object({
     linkedin: socialUrl,
     x: socialUrl,
   }),
-  announcement: z.object({
-    enabled: z.boolean(),
-    intervalMs: z.coerce.number().int().min(3000).max(20000),
-    items: z.array(z.object({ text: z.string(), href: z.string().optional(), emphasis: z.string().optional() })),
-  }),
   payments: z.object({
     partialPaymentEnabled: z.boolean(),
     depositPercent: z.coerce.number().min(5).max(100),
@@ -1837,7 +1832,6 @@ export async function saveSiteSettings(raw: unknown): Promise<AdminResult> {
           brand: d.brand,
           contact: d.contact,
           social: d.social,
-          announcement: d.announcement,
           payments: d.payments,
           features: d.features,
           maintenance: d.maintenance,

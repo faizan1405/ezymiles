@@ -9,7 +9,6 @@ export type Settings = {
   brand: ISiteSettings["brand"];
   contact: ISiteSettings["contact"];
   social: ISiteSettings["social"];
-  announcement: ISiteSettings["announcement"];
   currency: ISiteSettings["currency"];
   payments: ISiteSettings["payments"];
   homepage: ISiteSettings["homepage"];
@@ -34,15 +33,6 @@ export const DEFAULT_SETTINGS: Settings = {
     officeHours: "10:00 AM – 5:00 PM",
   },
   social: BRAND.social,
-  announcement: {
-    enabled: true,
-    intervalMs: 5000,
-    items: [
-      { text: "Summer escapes are open — book by 31 August for early-bird pricing", emphasis: "Early bird" },
-      { text: "Free 30-minute consultation with a destination specialist", emphasis: "Free" },
-      { text: "Flight-inclusive packages with a 25% deposit to hold your dates", emphasis: "Flexible" },
-    ],
-  },
   currency: {
     base: "INR",
     supported: [...CURRENCIES],
@@ -158,7 +148,6 @@ export const getSettings = cache(async (): Promise<Settings> => {
       brand: { ...DEFAULT_SETTINGS.brand, ...s.brand },
       contact: { ...DEFAULT_SETTINGS.contact, ...s.contact },
       social: { ...DEFAULT_SETTINGS.social, ...s.social },
-      announcement: { ...DEFAULT_SETTINGS.announcement, ...s.announcement },
       currency: { ...DEFAULT_SETTINGS.currency, ...s.currency },
       payments: { ...DEFAULT_SETTINGS.payments, ...s.payments },
       homepage: { ...DEFAULT_SETTINGS.homepage, ...s.homepage },

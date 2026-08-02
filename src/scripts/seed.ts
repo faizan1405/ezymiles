@@ -34,7 +34,8 @@ import {
   VisaCountry,
 } from "@/models";
 import { LEGAL_PAGES } from "@/config/legal";
-import { activityCategorySeeds, blogSeeds, destinationSeeds, faqSeeds } from "./seed-data";
+import { activityCategorySeeds, blogSeeds, destinationSeeds, faqSeeds, packageSeeds } from "./seed-data";
+
 
 const img = (id: string, alt: string) => ({
   url: `https://images.unsplash.com/${id}?w=1600&q=80`,
@@ -103,15 +104,6 @@ async function seedSiteSettings() {
 
   await SiteSettings.create({
     key: "default",
-    announcement: {
-      enabled: true,
-      intervalMs: 5000,
-      items: [
-        { text: "Summer escapes are open — book by 31 August for early-bird pricing", emphasis: "Early bird" },
-        { text: "Free 30-minute consultation with a destination specialist", emphasis: "Free" },
-        { text: "Flight-inclusive packages with a 25% deposit to hold your dates", emphasis: "Flexible" },
-      ],
-    },
     homepage: {
       heroHeadline: "Travel With Confidence",
       heroSubheadline:
@@ -244,237 +236,67 @@ function inDays(n: number) {
 }
 
 async function seedPackages(destIds: Map<string, mongoose.Types.ObjectId>) {
-  const packages = [
+  const packages = packageSeeds;
+  const { destinationSlug: _destinationSlug, ...rest } = packages[0];
+  const allowedKeys = new Set(Object.keys(rest));
+  let count = 0;
+
+  for (const raw of packages) {
+    const destinationId = destIds.get(raw.destinationSlug);
+    if (!destinationId) {
+      console.log(`  Skipped "${raw.title}" — destination "${raw.destinationSlug}" not found.`);
+      continue;
+    }
+
+    const { destinationSlug, ...rest } = raw;
+    const record: Record<string, unknown> = {};
+    for (const key of Object.keys(rest)) {
+      if (allowedKeys.has(key)) record[key] = (rest as Record<string, unknown>)[key];
+    }
+
+    const variants = record.variants as unknown as { pricePerAdultINR: number; originalPricePerAdultINR?: number }[];
+    const startingPriceINR = Math.min(...variants.map((v) => v.pricePerAdultINR));
+    const originalPriceINR = variants.reduce((min: number, v: { originalPricePerAdultINR?: number }) =>
+      v.originalPricePerAdultINR && (!min || v.originalPricePerAdultINR < min)
+        ? v.originalPricePerAdultINR
+        : min,
+      0,
+    );
+
+    await Package.findOneAndUpdate(
+      { slug: record.slug as string },
+      {
+        $setOnInsert: {
+          ...record,
+          destination: destinationId,
+          startingPriceINR,
+          originalPriceINR: originalPriceINR || undefined,
+          taxPercent: 5,
+          ratingAverage: 4.6 + Math.random() * 0.3,
+          ratingCount: 12 + Math.floor(Math.random() * 40),
+        },
+      },
+      { upsert: true, returnDocument: "after" },
+    );
+    count++;
+  }
+
+  console.log(`Seeded ${count} packages.`);
+}
+
+async function seedHotels(destIds: Map<string, mongoose.Types.ObjectId>) {
+  const hotels = [
     {
-      title: "Bali Honeymoon — Ubud & Uluwatu",
-      slug: "bali-honeymoon-ubud-uluwatu",
-      subtitle: "Rice-field villas, a private sunset dinner, and Nusa Penida for a day.",
-      destinationSlug: "bali",
-      citiesCovered: ["Ubud", "Uluwatu", "Nusa Penida"],
-      scope: "international" as const,
-      tripTypes: ["honeymoon", "beach"],
-      collections: ["honeymoon-escapes", "trending-international"],
-      durationDays: 6,
-      durationNights: 5,
-      heroImage: img("photo-1537996194471-e657df975ab4", "A private villa pool overlooking rice terraces"),
-      gallery: [
-        img("photo-1552733407-5d5c46c3bb3b", "A Balinese temple at dusk"),
-        img("photo-1573790387438-4da905039392", "Rice terraces after rain"),
-      ],
-      overview:
-        "Five nights split between a rice-field villa in Ubud and a clifftop stay in Uluwatu, with a full day on Nusa Penida in between. Built for two people who want privacy more than a packed schedule — most days have one planned activity and a lot of open time.",
-      highlights: [
-        "Private pool villa with daily breakfast in Ubud",
-        "Sunset dinner on the Uluwatu clifftops",
-        "A full day exploring Nusa Penida's cliffs and beaches",
-        "One spa treatment included at each property",
-      ],
-      itinerary: [
-        {
-          day: 1,
-          city: "Ubud",
-          title: "Arrive and do nothing at all",
-          description:
-            "Private transfer from Denpasar airport to your rice-field villa. The rest of the day is intentionally unplanned.",
-          meals: ["breakfast"] as const,
-          hotel: "Ubud rice-field pool villa",
-          transfers: "Private airport transfer",
-          activities: [],
-          optionalExperiences: ["Balinese massage on arrival"],
-        },
-        {
-          day: 2,
-          city: "Ubud",
-          title: "Temples, markets, and the terraces before the tour buses",
-          description:
-            "An early start to Tegalalang rice terraces before 8am, then the Ubud morning market, and a visit to a working temple.",
-          meals: ["breakfast"] as const,
-          hotel: "Ubud rice-field pool villa",
-          transfers: "Private car with driver, full day",
-          activities: ["Tegalalang rice terraces", "Ubud morning market", "Temple visit"],
-          optionalExperiences: ["Balinese cooking class"],
-        },
-        {
-          day: 3,
-          city: "Nusa Penida",
-          title: "A full day on Nusa Penida",
-          description:
-            "Fast boat to Nusa Penida for Kelingking Beach, Angel's Billabong and Broken Beach — the island's three most photographed spots, without the group-tour pace.",
-          meals: ["breakfast", "lunch"] as const,
-          hotel: "Ubud rice-field pool villa",
-          transfers: "Fast boat + private van on the island",
-          activities: ["Kelingking Beach viewpoint", "Angel's Billabong", "Broken Beach"],
-          optionalExperiences: ["Manta ray snorkelling"],
-        },
-        {
-          day: 4,
-          city: "Uluwatu",
-          title: "Move to the clifftops",
-          description: "Transfer to Uluwatu. Afternoon free by the cliffside pool.",
-          meals: ["breakfast"] as const,
-          hotel: "Uluwatu clifftop resort",
-          transfers: "Private transfer, Ubud to Uluwatu",
-          activities: [],
-          optionalExperiences: ["Surf lesson at Padang Padang"],
-        },
-        {
-          day: 5,
-          city: "Uluwatu",
-          title: "Sunset dinner on the cliff edge",
-          description:
-            "A free morning, then Uluwatu Temple at sunset followed by a Kecak fire dance and a private dinner table on the clifftop.",
-          meals: ["breakfast", "dinner"] as const,
-          hotel: "Uluwatu clifftop resort",
-          transfers: "Private car for the temple visit",
-          activities: ["Uluwatu Temple", "Kecak fire dance", "Private clifftop dinner"],
-          optionalExperiences: [],
-        },
-        {
-          day: 6,
-          city: "Uluwatu",
-          title: "Departure",
-          description: "Late checkout where possible, then private transfer to the airport.",
-          meals: ["breakfast"] as const,
-          transfers: "Private airport transfer",
-          activities: [],
-          optionalExperiences: [],
-        },
-      ],
-      variants: [
-        {
-          key: "standard",
-          label: "Standard — 4★ villas",
-          hotelCategory: 4,
+      name: "Sawah Terrace Villas",
           durationDays: 6,
           durationNights: 5,
-          pricePerAdultINR: 68000,
-          pricePerChildINR: 45000,
-          singleSupplementINR: 22000,
-          originalPricePerAdultINR: 79000,
-          isDefault: true,
-        },
-        {
-          key: "premium",
-          label: "Premium — 5★ private pool villas",
-          hotelCategory: 5,
-          durationDays: 6,
-          durationNights: 5,
-          pricePerAdultINR: 98000,
-          pricePerChildINR: 62000,
-          singleSupplementINR: 32000,
-          isDefault: false,
-        },
-      ],
-      departures: [],
-      departureCities: ["Delhi", "Mumbai", "Bengaluru"],
-      flightsIncluded: false,
-      mealsIncluded: true,
-      activitiesIncluded: true,
-      visaIncluded: false,
-      transfersIncluded: true,
-      hotelCategory: 4,
-      tripStyle: "private" as const,
-      instantConfirmation: true,
-      recommendedSeason: ["Spring", "Summer", "Autumn"],
-      inclusions: [
-        "5 nights accommodation as per itinerary",
-        "Daily breakfast",
-        "All airport and inter-city transfers by private car",
-        "Nusa Penida fast boat and island transport",
-        "One spa treatment per property",
-        "English-speaking driver-guide",
-      ],
-      exclusions: [
-        "International and domestic flights",
-        "Indonesia visa on arrival fee",
-        "Lunches and dinners except where specified",
-        "Personal expenses and tips",
-        "Travel insurance",
-      ],
-      importantInfo: [
-        "Rice-field villas involve some uneven terrain — mention any mobility concerns when booking.",
-        "Nusa Penida's boat crossing can be cancelled in rough weather; we build in a buffer where possible.",
-      ],
-      visaDetails:
-        "Visa on arrival for Indian passport holders, valid 30 days, extendable once for a further 30 days.",
-      cancellationPolicy: [
-        { window: "More than 45 days before travel", charge: "10% of package cost" },
-        { window: "30–45 days before travel", charge: "30% of package cost" },
-        { window: "15–29 days before travel", charge: "60% of package cost" },
-        { window: "Less than 15 days before travel", charge: "100% of package cost" },
-      ],
-      paymentPolicy: [
-        "25% deposit to confirm your booking.",
-        "Balance due 21 days before travel.",
-      ],
-      termsAndConditions: [
-        "Rates are per person on twin-sharing basis unless a single supplement is selected.",
-        "Itinerary sequence may vary slightly based on local conditions.",
-      ],
-      faqs: [
-        {
-          question: "Can we add extra nights in Bali?",
-          answer: "Yes — tell us when you enquire and we'll requote with your preferred length.",
-        },
-      ],
-      isFeatured: true,
-      isTrending: true,
-      isBestseller: true,
-      status: "published" as const,
-      isDemoData: true,
-    },
+  console.log(`Seeded ${count} packages.`);
+}
+
+async function seedHotels(destIds: Map<string, mongoose.Types.ObjectId>) {
+  const hotels = [
     {
-      title: "Kyoto in Five Days",
-      slug: "kyoto-in-five-days",
-      subtitle: "Temples at dawn, a tea ceremony, and a day trip to Nara.",
-      destinationSlug: "kyoto",
-      citiesCovered: ["Kyoto", "Nara"],
-      scope: "international" as const,
-      tripTypes: ["luxury", "solo"],
-      collections: ["trending-international"],
-      durationDays: 5,
-      durationNights: 4,
-      heroImage: img("photo-1493976040374-85c8e12f0c0e", "Fushimi Inari torii gates"),
-      gallery: [img("photo-1478436127897-769e1b3f0f36", "A quiet Kyoto street")],
-      overview:
-        "Five days built around Kyoto's early mornings — Fushimi Inari before the crowds, a private tea ceremony, and a day trip to Nara's deer park, with time left over for Gion and the Arashiyama bamboo grove.",
-      highlights: [
-        "Fushimi Inari at sunrise",
-        "A private tea ceremony in a machiya house",
-        "Full day trip to Nara",
-        "Arashiyama bamboo grove before 9am",
-      ],
-      itinerary: [
-        {
-          day: 1,
-          city: "Kyoto",
-          title: "Arrival",
-          description: "Private transfer from Kansai Airport. Evening free to explore Gion.",
-          meals: ["breakfast"] as const,
-          hotel: "Central Kyoto hotel",
-          transfers: "Private airport transfer",
-          activities: [],
-          optionalExperiences: [],
-        },
-        {
-          day: 2,
-          city: "Kyoto",
-          title: "Fushimi Inari at sunrise",
-          description: "An early start to Fushimi Inari before the tour groups, then a free afternoon.",
-          meals: ["breakfast"] as const,
-          hotel: "Central Kyoto hotel",
-          transfers: "Local trains, guided",
-          activities: ["Fushimi Inari Shrine"],
-          optionalExperiences: ["Private tea ceremony"],
-        },
-        {
-          day: 3,
-          city: "Nara",
-          title: "Day trip to Nara",
-          description: "A full day in Nara's deer park and Todai-ji temple.",
-          meals: ["breakfast"] as const,
-          hotel: "Central Kyoto hotel",
-          transfers: "Train, guided",
+      name: "Sawah Terrace Villas",
           activities: ["Nara deer park", "Todai-ji Temple"],
           optionalExperiences: [],
         },
