@@ -1054,7 +1054,7 @@ async function main() {
     const { destination: _omitDest, ...pkgWithoutDest } = pkg;
     const doc: Omit<Parameters<typeof Package.create>[0], "destination"> & { destination: string } = {
       ...pkgWithoutDest,
-      destination: resolvedDest!,
+      destination: resolvedDest!.toString(),
     };
 
     if (existing) {
