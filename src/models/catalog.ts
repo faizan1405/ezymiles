@@ -66,6 +66,8 @@ export interface IDestination {
   packageFeatured: boolean;
   /** Manual sort order for curated rails and the admin list. Lower sorts first. */
   displayOrder: number;
+  /** True when the record was created by a seed script (demo data). */
+  isDemoData: boolean;
   status: PublishStatus;
   seo?: { title?: string; description?: string; keywords?: string[]; ogImage?: string; noIndex?: boolean };
   viewCount: number;
@@ -108,6 +110,7 @@ const DestinationSchema = new Schema<IDestination>(
     hotelFeatured: { type: Boolean, default: false },
     packageFeatured: { type: Boolean, default: false },
     displayOrder: { type: Number, default: 0 },
+    isDemoData: { type: Boolean, default: false },
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
     seo: SeoSchema,
     viewCount: { type: Number, default: 0 },
@@ -220,6 +223,8 @@ export interface IPackage {
   isFeatured: boolean;
   isTrending: boolean;
   isBestseller: boolean;
+  /** True when the record was created by a seed script (demo data). */
+  isDemoData: boolean;
   status: PublishStatus;
   publishAt?: Date;
   seo?: { title?: string; description?: string; keywords?: string[]; ogImage?: string; noIndex?: boolean };
@@ -335,6 +340,7 @@ const PackageSchema = new Schema<IPackage>(
     isFeatured: { type: Boolean, default: false },
     isTrending: { type: Boolean, default: false },
     isBestseller: { type: Boolean, default: false },
+    isDemoData: { type: Boolean, default: false },
     status: { type: String, enum: PUBLISH_STATUSES, default: "published" },
     publishAt: Date,
     seo: SeoSchema,
