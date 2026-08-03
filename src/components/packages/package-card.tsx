@@ -193,6 +193,18 @@ export function PackageCard({
                 Request callback
               </Button>
             </div>
+            <div className="mt-2.5">
+              <Button
+                size="md"
+                variant="accent"
+                className="w-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:hover:scale-100"
+                asChild
+              >
+                <a href="https://ezymiles.com" target="_blank" rel="noopener noreferrer">
+                  Book now
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </article>
