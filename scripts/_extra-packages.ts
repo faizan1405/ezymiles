@@ -1,3 +1,5 @@
+const img = (url: string, alt: string) => ({ url, alt });
+
 const extraPackages = [
   // 40. Dubai Marina & Abu Dhabi
   {
