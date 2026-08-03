@@ -60,9 +60,12 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Account and admin surfaces must never sit in a shared cache.
         source: "/:group(account|admin)/:path*",
         headers: [{ key: "Cache-Control", value: "private, no-store" }],
+      },
+      {
+        source: "/((?!account|admin|api).*)",
+        headers: [{ key: "Cache-Control", value: "public, max-age=60, stale-while-revalidate=300" }],
       },
     ];
   },

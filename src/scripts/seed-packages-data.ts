@@ -4,10 +4,10 @@
  * Extra packages (40-50) override demo duplicates.
  */
 
-const img = (id: string, alt: string) => ({
-  url: `https://images.unsplash.com/${id}?w=1600&q=80`,
-  alt,
-});
+const img = (id: string, alt: string) => {
+  if (/^https?:\/\//i.test(id)) return { url: id, alt };
+  return { url: `https://images.unsplash.com/${id}?w=1600&q=80&fm=webp`, alt };
+};
 
 export const img_ = img;
 

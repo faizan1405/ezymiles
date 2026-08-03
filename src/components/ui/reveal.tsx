@@ -39,7 +39,7 @@ function usePrefersReducedMotion(): boolean {
  * to `true` immediately where IntersectionObserver is unavailable so content is
  * never stuck hidden.
  */
-function useInViewOnce<T extends Element>(): { ref: React.RefObject<T | null>; inView: boolean } {
+export function useInViewOnce<T extends Element>(): { ref: React.RefObject<T | null>; inView: boolean } {
   const ref = React.useRef<T>(null);
   const [inView, setInView] = React.useState(false);
 

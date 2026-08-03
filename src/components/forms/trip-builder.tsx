@@ -4,7 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { useForm, Controller, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import {
   MapPin,
   Users,

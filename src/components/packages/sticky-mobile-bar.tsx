@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { Price } from "@/components/ui/price";
 import { Button } from "@/components/ui/button";
 

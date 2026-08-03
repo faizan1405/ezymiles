@@ -178,6 +178,36 @@ export function serialise<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
 
+/**
+ * Repair malformed image URLs — strips a double-prefixed
+ * `https://images.unsplash.com/https://images.unsplash.com/` that can arise when
+ * a seed helper receives an already-absolute URL and prepends the base again.
+ */
+export function normaliseImageUrl(url: string): string {
+  const DOUBLE_PREFIX = "https://images.unsplash.com/https://images.unsplash.com";
+  if (url.startsWith(DOUBLE_PREFIX)) {
+    return "https://images.unsplash.com" + url.slice(DOUBLE_PREFIX.length);
+  }
+  return url;
+}
+
+const UNSPLASH_REGEX = /^https:\/\/images\.unsplash\.com\/(photo-[^?]+)(\?[^#]*)?/;
+
+export function optimiseImageUrl(url: string): string {
+  const match = url.match(UNSPLASH_REGEX);
+  if (!match) return url;
+  const photoId = match[1];
+  const existingQuery = (match[2] ?? "").replace(/^\?/, "");
+  const params = new URLSearchParams(existingQuery || "w=1200&q=80");
+  if (!params.has("auto")) params.set("auto", "format");
+  if (!params.has("fit")) params.set("fit", "crop");
+  return `https://images.unsplash.com/${photoId}?${params.toString()}`;
+}
+
+export function sanitiseImageUrl(url: string): string {
+  return optimiseImageUrl(normaliseImageUrl(url));
+}
+
 export function buildQueryString(params: Record<string, string | number | boolean | undefined | null | string[]>) {
   const sp = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {

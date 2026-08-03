@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { ArrowRight, CalendarRange, Layers } from "lucide-react";
 import type { DestinationCardDTO } from "@/types";
 import { Price } from "@/components/ui/price";

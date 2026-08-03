@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import ClientProviders from "@/components/ui/client-providers";
 import { Toaster } from "@/components/ui/toast";
 import { getSettings } from "@/lib/settings";
 import { SITE_URL } from "@/config/site";
@@ -10,14 +11,18 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-jakarta",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+  fallback: ["system-ui"],
+  adjustFontFallback: true,
 });
 
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-fraunces",
-  weight: ["400", "500", "600"],
+  weight: ["400"],
+  fallback: ["Georgia"],
+  adjustFontFallback: true,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -78,10 +83,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <SessionProvider>
+        <ClientProviders>
           {children}
-          <Toaster />
-        </SessionProvider>
+        </ClientProviders>
       </body>
     </html>
   );

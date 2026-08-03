@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { Expand, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 import { SmartImage } from "@/components/ui/smart-image";
 import { Dialog, DialogContent } from "@/components/ui/overlays";

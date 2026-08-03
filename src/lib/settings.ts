@@ -130,11 +130,13 @@ If, after your journey, you feel that eZyMiles made your travel easier, safer an
   },
 };
 
-/**
- * Per-request memoised settings. Falls back to defaults if the database is
- * unreachable so the marketing site still renders during an outage.
- */
+const SETTINGS_CACHE_TTL = 60_000;
+let settingsCache: { value: Settings; expiresAt: number } | null = null;
+
+/** Per-request and short-lived process memoised settings. */
 export const getSettings = cache(async (): Promise<Settings> => {
+  if (settingsCache && settingsCache.expiresAt > Date.now()) return settingsCache.value;
+
   const connected = await tryConnectDB();
   if (!connected) return DEFAULT_SETTINGS;
 
@@ -144,7 +146,7 @@ export const getSettings = cache(async (): Promise<Settings> => {
 
     const s = serialise(doc) as unknown as ISiteSettings;
 
-    return {
+    const value = {
       brand: { ...DEFAULT_SETTINGS.brand, ...s.brand },
       contact: { ...DEFAULT_SETTINGS.contact, ...s.contact },
       social: { ...DEFAULT_SETTINGS.social, ...s.social },
@@ -156,6 +158,8 @@ export const getSettings = cache(async (): Promise<Settings> => {
       about: { ...DEFAULT_SETTINGS.about, ...s.about },
       maintenance: { ...DEFAULT_SETTINGS.maintenance, ...s.maintenance },
     };
+    settingsCache = { value, expiresAt: Date.now() + SETTINGS_CACHE_TTL };
+    return value;
   } catch {
     return DEFAULT_SETTINGS;
   }

@@ -5,20 +5,20 @@ import Image, { type ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * next/image with a branded fallback.
- *
- * Remote media (Cloudinary, stock photography) can 404, rate-limit or be swapped
- * out by an admin. Rather than showing a broken frame we render a deterministic
- * ocean-gradient plate with the alt text — the layout never shifts and the page
- * still reads correctly.
+ * Brand-gradient fallback plates (deterministic, hashed from alt text).
  */
-
 const GRADIENTS = [
   "linear-gradient(135deg,#0a1628 0%,#123f52 55%,#17a5a3 100%)",
   "linear-gradient(135deg,#101f37 0%,#2f4f83 55%,#6fdbd6 100%)",
   "linear-gradient(135deg,#134648 0%,#0f8484 50%,#dbbf78 100%)",
   "linear-gradient(135deg,#182d4d 0%,#714629 60%,#cfa551 100%)",
 ];
+
+/**
+ * High-quality travel fallback image used as a last resort before the
+ * gradient plate. A beach scene that fits most travel contexts.
+ */
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80";
 
 function pickGradient(seed: string) {
   let hash = 0;
@@ -40,13 +40,25 @@ export function SmartImage({
   fill,
   sizes,
   priority,
-  quality = 80,
+  quality = 75,
   ...props
 }: SmartImageProps) {
-  const [failed, setFailed] = React.useState(false);
+  const [attempt, setAttempt] = React.useState(0); // 0 = primary, 1 = fallback
+  const [loading, setLoading] = React.useState(true);
   const safeAlt = typeof alt === "string" ? alt : "";
 
-  if (!src || failed) {
+  const currentSrc = attempt === 0 ? src : FALLBACK_IMAGE;
+  const showGradient = !currentSrc || attempt >= 2;
+  const shouldSkeleton = loading && !showGradient && !priority;
+
+  const onError = React.useCallback(() => {
+    setLoading(false);
+    setAttempt((a) => a + 1);
+  }, []);
+
+  const onLoad = React.useCallback(() => setLoading(false), []);
+
+  if (showGradient) {
     return (
       <div
         className={cn(
@@ -65,17 +77,35 @@ export function SmartImage({
   }
 
   return (
-    <Image
-      src={src}
-      alt={safeAlt}
-      fill={fill}
-      sizes={sizes ?? (fill ? "(max-width: 768px) 100vw, 50vw" : undefined)}
-      priority={priority}
-      quality={quality}
-      loading={priority ? undefined : "lazy"}
-      onError={() => setFailed(true)}
-      className={cn(className)}
-      {...props}
-    />
+    <>
+      {/* Shimmer skeleton while image loads — prevents layout shift */}
+      {shouldSkeleton && (
+        <div
+          className={cn(
+            "absolute inset-0 animate-pulse bg-sand-100",
+            fill ? "" : "size-full",
+          )}
+          aria-hidden
+        />
+      )}
+      <Image
+        src={currentSrc!}
+        alt={safeAlt}
+        fill={fill}
+        sizes={sizes ?? (fill ? "(max-width: 768px) 100vw, 50vw" : undefined)}
+        priority={priority}
+        quality={quality}
+        loading={priority ? undefined : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
+        onLoad={onLoad}
+        onError={onError}
+        className={cn(
+          "transition-opacity duration-300",
+          loading ? "opacity-0" : "opacity-100",
+          className,
+        )}
+        {...props}
+      />
+    </>
   );
 }

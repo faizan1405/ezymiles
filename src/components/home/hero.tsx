@@ -2,11 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { ArrowRight, ShieldCheck, Headset, Star, MapPin } from "lucide-react";
 import { SmartImage } from "@/components/ui/smart-image";
 import { Button } from "@/components/ui/button";
 import { EASE_OUT_EXPO } from "@/lib/motion";
+import { useInViewOnce } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 export interface HeroSlide {
@@ -42,6 +44,7 @@ export function Hero({
   const reduced = useReducedMotion();
   const [index, setIndex] = React.useState(0);
   const [isDesktop, setIsDesktop] = React.useState(false);
+  const { ref: heroRef, inView } = useInViewOnce<HTMLElement>();
 
   React.useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -55,16 +58,16 @@ export function Hero({
   const useVideo = mediaKind === "video" && Boolean(videoUrl) && isDesktop && !reduced;
 
   React.useEffect(() => {
-    if (useVideo || usableSlides.length < 2 || reduced) return;
+    if (useVideo || usableSlides.length < 2 || reduced || !inView) return;
     const id = setInterval(() => setIndex((i) => (i + 1) % usableSlides.length), 6500);
     return () => clearInterval(id);
-  }, [useVideo, usableSlides.length, reduced]);
+  }, [useVideo, usableSlides.length, reduced, inView]);
 
   const active = usableSlides[index % usableSlides.length];
   const words = headline.split(" ");
 
   return (
-    <section className="relative isolate flex min-h-[42rem] flex-col justify-center overflow-hidden pb-14 pt-24 md:min-h-[46rem] lg:min-h-[52rem]">
+    <section ref={heroRef} className="relative isolate flex min-h-[42rem] flex-col justify-center overflow-hidden pb-14 pt-24 md:min-h-[46rem] lg:min-h-[52rem]">
       {/* ---------------------------------- Media --------------------------------- */}
       <div className="absolute inset-0 -z-10">
         {useVideo ? (

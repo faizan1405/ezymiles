@@ -1,18 +1,10 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { type Metadata } from "next";
+import { Suspense } from "react";
 import { getSettings } from "@/lib/settings";
-import {
-  getActiveOffers,
-  getBlogPosts,
-  getDepartureCities,
-  getDestinations,
-  getFeaturedReviews,
-  getHotelCities,
-  getLiveActivity,
-  getPackagesByCollection,
-  getVisaCountries,
-} from "@/server/catalog";
+import { getHomepageData } from "@/server/catalog";
 
 import { Hero } from "@/components/home/hero";
 import { UnifiedSearch } from "@/components/search/unified-search";
@@ -38,22 +30,20 @@ const TravelMap = dynamic(
 
 export const revalidate = 300;
 
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+  return {
+    title: settings.brand.name,
+    description: settings.brand.tagline,
+  };
+}
+
 export default async function HomePage() {
   const settings = await getSettings();
-
-  // One parallel fan-out rather than a waterfall — every rail is independent.
-  const [
+  const homepage = await getHomepageData(settings.homepage.liveActivityEnabled);
+  const {
     destinations,
     internationalDestinations,
-    trendingIntl,
-    bestOfIndia,
-    honeymoon,
-    family,
-    affordable,
-    adventure,
-    weekend,
-    groupDepartures,
-    flightInclusive,
     offers,
     reviews,
     posts,
@@ -61,26 +51,16 @@ export default async function HomePage() {
     hotelCities,
     departureCities,
     visaCountries,
-  ] = await Promise.all([
-    getDestinations({ limit: 24 }),
-    getDestinations({ packageFeatured: true, limit: 12 }),
-    getPackagesByCollection("trending-international", 8),
-    getPackagesByCollection("best-of-india", 8),
-    getPackagesByCollection("honeymoon-escapes", 8),
-    getPackagesByCollection("family-holidays", 8),
-    getPackagesByCollection("affordable-getaways", 8),
-    getPackagesByCollection("adventure-tours", 8),
-    getPackagesByCollection("weekend-breaks", 8),
-    getPackagesByCollection("group-departures", 8),
-    getPackagesByCollection("flight-inclusive", 8),
-    getActiveOffers(5),
-    getFeaturedReviews(8),
-    getBlogPosts({ limit: 4 }),
-    settings.homepage.liveActivityEnabled ? getLiveActivity() : Promise.resolve(null),
-    getHotelCities(),
-    getDepartureCities(),
-    getVisaCountries(),
-  ]);
+  } = homepage;
+  const trendingIntl = homepage.collections["trending-international"] ?? [];
+  const bestOfIndia = homepage.collections["best-of-india"] ?? [];
+  const honeymoon = homepage.collections["honeymoon-escapes"] ?? [];
+  const family = homepage.collections["family-holidays"] ?? [];
+  const affordable = homepage.collections["affordable-getaways"] ?? [];
+  const adventure = homepage.collections["adventure-tours"] ?? [];
+  const weekend = homepage.collections["weekend-breaks"] ?? [];
+  const groupDepartures = homepage.collections["group-departures"] ?? [];
+  const flightInclusive = homepage.collections["flight-inclusive"] ?? [];
 
   const sections = settings.homepage.sections ?? {};
   const on = (key: string) => sections[key] !== false;
@@ -131,123 +111,163 @@ export default async function HomePage() {
         ))}
       </datalist>
 
-      {on("liveActivity") ? <LiveActivity data={liveActivity} /> : null}
+      <Suspense fallback={null}>
+        {on("liveActivity") ? <LiveActivity data={liveActivity} /> : null}
+      </Suspense>
 
-      {on("destinations") ? <DestinationExplorer destinations={destinations} /> : null}
+      <Suspense fallback={null}>
+        {on("destinations") ? <DestinationExplorer destinations={destinations} /> : null}
+      </Suspense>
 
-      {on("internationalDestinations") ? (
-        <InternationalDestinationsRail destinations={internationalDestinations} />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("internationalDestinations") ? (
+          <InternationalDestinationsRail destinations={internationalDestinations} />
+        ) : null}
+      </Suspense>
 
-      {on("trendingInternational") ? (
-        <PackageRail
-          eyebrow="Far away"
-          title="Trending international trips"
-          description="Where our travellers are actually going this season — not where a supplier wants to push inventory."
-          packages={trendingIntl}
-          viewAllHref="/packages?scope=international"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("trendingInternational") ? (
+          <PackageRail
+            eyebrow="Far away"
+            title="Trending international trips"
+            description="Where our travellers are actually going this season — not where a supplier wants to push inventory."
+            packages={trendingIntl}
+            viewAllHref="/packages?scope=international"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("bestOfIndia") ? (
-        <PackageRail
-          eyebrow="Closer to home"
-          title="Best of India"
-          description="Short flights, long memories. The subcontinent, planned by people who grew up travelling it."
-          packages={bestOfIndia}
-          viewAllHref="/packages?scope=domestic"
-          tone="dark"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("bestOfIndia") ? (
+          <PackageRail
+            eyebrow="Closer to home"
+            title="Best of India"
+            description="Short flights, long memories. The subcontinent, planned by people who grew up travelling it."
+            packages={bestOfIndia}
+            viewAllHref="/packages?scope=domestic"
+            tone="dark"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("tripBuilder") ? <TripBuilderSection destinations={destinationOptions} /> : null}
+      <Suspense fallback={null}>
+        {on("tripBuilder") ? <TripBuilderSection destinations={destinationOptions} /> : null}
+      </Suspense>
 
-      {on("honeymoon") ? (
-        <PackageRail
-          eyebrow="Just the two of you"
-          title="Honeymoon escapes"
-          description="Private transfers, late checkouts, and a designer who quietly tells the hotel it's your honeymoon."
-          packages={honeymoon}
-          viewAllHref="/packages?tripType=honeymoon"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("honeymoon") ? (
+          <PackageRail
+            eyebrow="Just the two of you"
+            title="Honeymoon escapes"
+            description="Private transfers, late checkouts, and a designer who quietly tells the hotel it's your honeymoon."
+            packages={honeymoon}
+            viewAllHref="/packages?tripType=honeymoon"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("map") ? <TravelMap destinations={destinations} /> : null}
+      <Suspense fallback={null}>
+        {on("map") ? <TravelMap destinations={destinations} /> : null}
+      </Suspense>
 
-      {on("family") ? (
-        <PackageRail
-          eyebrow="All ages"
-          title="Family holidays"
-          description="Pacing that works for a six-year-old and a sixty-year-old on the same trip."
-          packages={family}
-          viewAllHref="/packages?tripType=family"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("family") ? (
+          <PackageRail
+            eyebrow="All ages"
+            title="Family holidays"
+            description="Pacing that works for a six-year-old and a sixty-year-old on the same trip."
+            packages={family}
+            viewAllHref="/packages?tripType=family"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("experiences") ? <Experiences /> : null}
+      <Suspense fallback={null}>
+        {on("experiences") ? <Experiences /> : null}
+      </Suspense>
 
-      {on("affordable") ? (
-        <PackageRail
-          eyebrow="No compromises"
-          title="Affordable getaways"
-          description="Suites, private guides, and the kind of restaurant reservations that are hard to get."
-          packages={affordable}
-          viewAllHref="/packages?tripType=affordable"
-          tone="dark"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("affordable") ? (
+          <PackageRail
+            eyebrow="No compromises"
+            title="Affordable getaways"
+            description="Suites, private guides, and the kind of restaurant reservations that are hard to get."
+            packages={affordable}
+            viewAllHref="/packages?tripType=affordable"
+            tone="dark"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("offers") ? <Offers offers={offers} /> : null}
+      <Suspense fallback={null}>
+        {on("offers") ? <Offers offers={offers} /> : null}
+      </Suspense>
 
-      {on("adventure") ? (
-        <PackageRail
-          eyebrow="Earn the view"
-          title="Adventure tours"
-          description="Certified guides, honest grading, and the right answer when the weather says no."
-          packages={adventure}
-          viewAllHref="/packages?tripType=adventure"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("adventure") ? (
+          <PackageRail
+            eyebrow="Earn the view"
+            title="Adventure tours"
+            description="Certified guides, honest grading, and the right answer when the weather says no."
+            packages={adventure}
+            viewAllHref="/packages?tripType=adventure"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("whyUs") ? <WhyChooseUs trustPoints={settings.homepage.trustPoints} /> : null}
+      <Suspense fallback={null}>
+        {on("whyUs") ? <WhyChooseUs trustPoints={settings.homepage.trustPoints} /> : null}
+      </Suspense>
 
-      {on("weekend") ? (
-        <PackageRail
-          eyebrow="Friday to Sunday"
-          title="Weekend breaks"
-          description="Three days, no leave burnt, back in time for Monday."
-          packages={weekend}
-          viewAllHref="/packages?tripType=weekend"
-          columns={4}
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("weekend") ? (
+          <PackageRail
+            eyebrow="Friday to Sunday"
+            title="Weekend breaks"
+            description="Three days, no leave burnt, back in time for Monday."
+            packages={weekend}
+            viewAllHref="/packages?tripType=weekend"
+            columns={4}
+          />
+        ) : null}
+      </Suspense>
 
-      {on("groupDepartures") ? (
-        <PackageRail
-          eyebrow="Fixed dates"
-          title="Group departures"
-          description="Set dates, guaranteed departures, and a small group that stays small."
-          packages={groupDepartures}
-          viewAllHref="/packages?tripStyle=group"
-          tone="dark"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("groupDepartures") ? (
+          <PackageRail
+            eyebrow="Fixed dates"
+            title="Group departures"
+            description="Set dates, guaranteed departures, and a small group that stays small."
+            packages={groupDepartures}
+            viewAllHref="/packages?tripStyle=group"
+            tone="dark"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("testimonials") ? <Testimonials reviews={reviews} /> : null}
+      <Suspense fallback={null}>
+        {on("testimonials") ? <Testimonials reviews={reviews} /> : null}
+      </Suspense>
 
-      {on("flightInclusive") ? (
-        <PackageRail
-          eyebrow="One price, door to door"
-          title="Flight-inclusive deals"
-          description="Return flights, stays, transfers and taxes — in one number, with nothing hidden underneath it."
-          packages={flightInclusive}
-          viewAllHref="/packages?flightsIncluded=1"
-        />
-      ) : null}
+      <Suspense fallback={null}>
+        {on("flightInclusive") ? (
+          <PackageRail
+            eyebrow="One price, door to door"
+            title="Flight-inclusive deals"
+            description="Return flights, stays, transfers and taxes — in one number, with nothing hidden underneath it."
+            packages={flightInclusive}
+            viewAllHref="/packages?flightsIncluded=1"
+          />
+        ) : null}
+      </Suspense>
 
-      {on("blog") ? <Inspiration posts={posts.items} /> : null}
+      <Suspense fallback={null}>
+        {on("blog") ? <Inspiration posts={posts.items} /> : null}
+      </Suspense>
 
-      {on("leadCapture") ? <LeadCapture whatsapp={settings.contact.whatsapp} /> : null}
+      <Suspense fallback={null}>
+        {on("leadCapture") ? <LeadCapture whatsapp={settings.contact.whatsapp} /> : null}
+      </Suspense>
     </>
   );
 }

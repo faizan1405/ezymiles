@@ -52,6 +52,7 @@ export interface DestinationCardDTO {
   packageCount: number;
   coordinates: { lat: number; lng: number };
   isTrending: boolean;
+  packageFeatured: boolean;
 }
 
 export interface ActivityCardDTO {

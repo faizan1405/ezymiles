@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { CheckCircle2, AlertTriangle, Info, XCircle, X } from "lucide-react";
 import { create } from "zustand";
 import { cn } from "@/lib/utils";

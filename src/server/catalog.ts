@@ -16,7 +16,7 @@ import {
   type IPackage,
   type IDestination,
 } from "@/models";
-import { serialise, clamp } from "@/lib/utils";
+import { serialise, clamp, sanitiseImageUrl } from "@/lib/utils";
 import type {
   ActivityCardDTO,
   BlogCardDTO,
@@ -50,7 +50,7 @@ function toPackageCard(p: PackageLean): PackageCardDTO {
     scope: p.scope,
     durationDays: p.durationDays,
     durationNights: p.durationNights,
-    heroImage: p.heroImage?.url ?? "",
+    heroImage: sanitiseImageUrl(p.heroImage?.url ?? ""),
     heroAlt: p.heroImage?.alt || p.title,
     startingPriceINR: p.startingPriceINR,
     originalPriceINR: p.originalPriceINR,
@@ -80,7 +80,7 @@ function toDestinationCard(d: IDestination, packageCount = 0): DestinationCardDT
     country: d.country,
     scope: d.scope,
     themes: d.themes ?? [],
-    heroImage: d.heroImage?.url ?? "",
+    heroImage: sanitiseImageUrl(d.heroImage?.url ?? ""),
     heroAlt: d.heroImage?.alt || d.name,
     summary: d.summary ?? "",
     startingPriceINR: d.startingPriceINR,
@@ -89,6 +89,7 @@ function toDestinationCard(d: IDestination, packageCount = 0): DestinationCardDT
     packageCount,
     coordinates: d.coordinates ?? { lat: 0, lng: 0 },
     isTrending: d.isTrending,
+    packageFeatured: d.packageFeatured,
   };
 }
 
@@ -323,6 +324,128 @@ export const getPackagesByCollection = cache(
   },
 );
 
+export type HomepageData = {
+  destinations: DestinationCardDTO[];
+  internationalDestinations: DestinationCardDTO[];
+  collections: Record<string, PackageCardDTO[]>;
+  offers: OfferDTO[];
+  reviews: ReviewDTO[];
+  posts: Awaited<ReturnType<typeof getBlogPosts>>;
+  liveActivity: Awaited<ReturnType<typeof getLiveActivity>>;
+  hotelCities: string[];
+  departureCities: string[];
+  visaCountries: unknown[];
+};
+
+/** Fetch all public homepage data with a bounded number of database round trips. */
+export const getHomepageData = cache(async (liveActivityEnabled: boolean): Promise<HomepageData> => {
+  if (!(await tryConnectDB())) {
+    return {
+      destinations: [],
+      internationalDestinations: [],
+      collections: Object.create(null),
+      offers: [],
+      reviews: [],
+      posts: { items: [], total: 0, page: 1, pageSize: 4, totalPages: 0 },
+      liveActivity: null,
+      hotelCities: [],
+      departureCities: [],
+      visaCountries: [],
+    };
+  }
+
+  const collectionKeys = [
+    "trending-international",
+    "best-of-india",
+    "honeymoon-escapes",
+    "family-holidays",
+    "affordable-getaways",
+    "adventure-tours",
+    "weekend-breaks",
+    "group-departures",
+    "flight-inclusive",
+  ];
+
+  try {
+    const [destinationRows, packageRows, secondary] = await Promise.all([
+      Destination.aggregate([
+        { $match: PUBLISHED },
+        { $sort: { displayOrder: 1, isFeatured: -1, isTrending: -1, startingPriceINR: 1 } },
+        { $limit: 24 },
+        {
+          $lookup: {
+            from: "packages",
+            let: { destId: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$destination", "$$destId"] }, ...PUBLISHED } },
+              { $count: "count" },
+            ],
+            as: "packageStats",
+          },
+        },
+      ]),
+      Package.aggregate([
+        { $match: { ...PUBLISHED, collections: { $in: collectionKeys } } },
+        { $sort: { isFeatured: -1, ratingAverage: -1 } },
+        { $limit: 72 },
+        { $lookup: { from: "destinations", localField: "destination", foreignField: "_id", as: "destination" } },
+        { $unwind: { path: "$destination", preserveNullAndEmptyArrays: true } },
+        {
+          $project: {
+            title: 1, slug: 1, subtitle: 1, destination: { name: 1, slug: 1 }, citiesCovered: 1,
+            scope: 1, durationDays: 1, durationNights: 1, heroImage: 1, startingPriceINR: 1,
+            originalPriceINR: 1, priceBasis: 1, tripTypes: 1, hotelCategory: 1, flightsIncluded: 1,
+            mealsIncluded: 1, activitiesIncluded: 1, transfersIncluded: 1, visaIncluded: 1,
+            tripStyle: 1, instantConfirmation: 1, ratingAverage: 1, ratingCount: 1,
+            isTrending: 1, isBestseller: 1, isFeatured: 1, collections: 1,
+          },
+        },
+      ]),
+      Promise.all([
+        getActiveOffers(5),
+        getFeaturedReviews(8),
+        getBlogPosts({ limit: 4 }),
+        liveActivityEnabled ? getLiveActivity() : Promise.resolve(null),
+        getHotelCities(),
+        getDepartureCities(),
+        getVisaCountries(),
+      ]),
+    ]);
+
+    const destinations = destinationRows.map((row) =>
+      toDestinationCard(serialise(row) as IDestination, row.packageStats?.[0]?.count ?? 0),
+    );
+    const collections: Record<string, PackageCardDTO[]> = Object.fromEntries(
+      collectionKeys.map((key) => [
+        key,
+        (serialise(packageRows.filter((row) => row.collections?.includes(key))) as unknown as PackageLean[])
+          .slice(0, 8)
+          .map(toPackageCard),
+      ]),
+    );
+
+    return {
+      destinations,
+      internationalDestinations: destinations.filter((d) => d.packageFeatured).slice(0, 12),
+      collections,
+      offers: secondary[0],
+      reviews: secondary[1],
+      posts: secondary[2],
+      liveActivity: secondary[3],
+      hotelCities: secondary[4],
+      departureCities: secondary[5],
+      visaCountries: secondary[6],
+    };
+  } catch (error) {
+    console.error("[getHomepageData]", error);
+    return {
+      destinations: [], internationalDestinations: [], collections: Object.create(null), offers: [], reviews: [],
+      posts: { items: [], total: 0, page: 1, pageSize: 4, totalPages: 0 }, liveActivity: null,
+      hotelCities: [], departureCities: [], visaCountries: [],
+    };
+  }
+});
+
 export const getPackageBySlug = cache(async (slug: string) => {
   if (!(await tryConnectDB())) return null;
   try {
@@ -471,7 +594,7 @@ export async function getActivities(
       title: a.title,
       city: a.city,
       category: a.category,
-      heroImage: a.heroImage?.url ?? "",
+      heroImage: sanitiseImageUrl(a.heroImage?.url ?? ""),
       heroAlt: a.heroImage?.alt || a.title,
       summary: a.summary ?? "",
       durationMinutes: a.durationMinutes,
@@ -569,7 +692,7 @@ export async function getHotels(filter: HotelFilter = {}): Promise<PaginatedResu
       country: h.country,
       starCategory: h.starCategory,
       propertyType: h.propertyType,
-      heroImage: h.heroImage?.url ?? "",
+      heroImage: sanitiseImageUrl(h.heroImage?.url ?? ""),
       heroAlt: h.heroImage?.alt || h.name,
       summary: h.summary ?? "",
       amenities: h.amenities ?? [],

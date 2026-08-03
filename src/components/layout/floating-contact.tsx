@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "@/components/ui/reduced-motion-context";
 import { MessageCircle, Phone, X, Headset } from "lucide-react";
 import type { Settings } from "@/lib/settings";
 import { whatsappLink } from "@/lib/utils";
