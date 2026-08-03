@@ -1,246 +1,10 @@
-/**
- * Package seed data.
- * 13 packages from scripts/seed-demo-packages.ts and scripts/_extra-packages.ts.
- */
-
-const img = (id: string, alt: string) => ({
-  url: `https://images.unsplash.com/${id}?w=1600&q=80`,
-  alt,
-});
-
-export const img_ = img;
-
-const day = (n: number, city: string, title: string, description: string, hotel = "", activities: string[] = []) => ({
-  day: n,
-  city,
-  title,
-  description,
-  meals: ["breakfast"] as ("breakfast" | "lunch" | "dinner")[],
-  hotel,
-  transfers: hotel ? "Private transfer" : "",
-  activities,
-  optionalExperiences: [],
-});
-
-export const day_ = day;
-
-const variant = (
-  key: string,
-  label: string,
-  hotelCategory: 3 | 4 | 5,
-  pricePerAdultINR: number,
-  originalPricePerAdultINR: number | undefined,
-  isDefault: boolean,
-  roomAmenities: string[],
-  pricePerNightINR: number,
-) => ({
-  key,
-  label,
-  hotelCategory,
-  durationDays: 6,
-  durationNights: 5,
-  pricePerAdultINR,
-  pricePerChildINR: Math.round(pricePerAdultINR * 0.7),
-  originalPricePerAdultINR,
-  isDefault,
-  description: label,
-  rooms: [
-    {
-      key: `${key}-room`,
-      name: label,
-      description: `Standard room with ${label.toLowerCase()}.`,
-      images: [img("photo-1537996194471-e657df975ab4", label)],
-      maxAdults: 2,
-      maxChildren: 1,
-      maxOccupancy: 3,
-      bedType: "King",
-      sizeSqft: 400,
-      amenities: roomAmenities,
-      mealPlan: "breakfast" as const,
-      pricePerNightINR,
-      taxPercent: 12,
-      refundable: true,
-      cancellationRule: "Free cancellation up to 14 days before check-in.",
-      roomsAvailable: 8,
-    },
-  ],
-});
-
-export const variant_ = variant;
-
-export type PackageSeed = Record<string, unknown> & {
-  title: string;
-  slug: string;
-  destinationSlug: string;
-};
-
-export const packageSeeds: PackageSeed[] = [
-
-  // Bali Bliss
-  {
-    title: "Bali Bliss",
-    slug: "bali-bliss",
-    subtitle: "Beaches, temples & rice terraces — the complete Bali experience",
-    destinationSlug: "bali",
-    additionalDestinations: [],
-    citiesCovered: ["Denpasar", "Ubud", "Uluwatu", "Nusa Dua", "Seminyak"],
-    scope: "international",
-    tripTypes: ["honeymoon", "leisure"],
-    collections: ["trending-international", "honeymoon-escapes"],
-    durationDays: 6,
-    durationNights: 5,
-    heroImage: img("https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=80", "Bali rice terraces at sunrise"),
-    gallery: [
-      img("https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80", "Bali temple"),
-      img("https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80", "Bali beach"),
-    ],
-    overview: "Six days in Bali that balance relaxation with discovery. Morning yoga in Ubud, sunset at Tanah Lot, a sunrise trek up Mount Batur, and three nights on the beach in Nusa Dua. Flights, four-star stays, all transfers, and a private driver included.",
-    highlights: ["Sunrise Mount Batur trek with hot springs", "Ubud rice terrace walk and cooking class", "Tanah Lot temple at sunset", "Nusa Penida day trip with Kelingking Beach", "Private candlelit dinner on Seminyak beach", "Traditional Balinese spa treatment"],
-    itinerary: [
-      { day: 1, city: "Denpasar → Nusa Dua", title: "Arrival & Beach Welcome", description: "Touch down at Ngurah Rai International Airport, meet your private driver, and transfer to your Nusa Dua resort. Evening at leisure.", images: [], meals: ["dinner"], hotel: "Nusa Dua Beach Hotel & Spa 4★", transfers: "Private airport transfer", activities: ["Beach walk", "Welcome dinner"] },
-      { day: 2, city: "Nusa Dua", title: "Beach Day & Water Sports", description: "Free morning to relax. Afternoon optional water sports — parasailing, jet ski, snorkelling. Evening Balinese massage at the resort spa.", images: [], meals: ["breakfast"], hotel: "Nusa Dua Beach Hotel & Spa 4★", transfers: "", activities: ["Beach relaxation", "Optional water sports", "Balinese massage"], optionalExperiences: ["Snorkelling at Blue Point", "Sunset dolphin cruise"] },
-      { day: 3, city: "Ubud", title: "Cultural Heart of Bali", description: "Drive to Ubud through spice plantations. Visit the Sacred Monkey Forest, explore the Ubud Art Market, and attend a traditional Balinese cooking class.", images: [], meals: ["breakfast", "lunch"], hotel: "Ubud Hanging Gardens 5★", transfers: "Private car, 90 mins", activities: ["Monkey Forest", "Art Market", "Cooking class"] },
-      { day: 4, city: "Ubud → Kintamani", title: "Mount Batur Sunrise Trek", description: "Wake at 2:30 AM for the Mount Batur sunrise trek. Trek 2 hours to the summit for sunrise over Lake Batur, then descend for a hot spring soak.", images: [], meals: ["breakfast", "lunch"], hotel: "Ubud Hanging Gardens 5★", transfers: "Private transfer", activities: ["Mount Batur trek", "Hot springs", "Tegalalang Rice Terrace visit"] },
-      { day: 5, city: "Uluwatu → Seminyak", title: "Temples & Southern Beaches", description: "Visit Tanah Lot temple for sunset, then Uluwatu Temple perched on a cliff. Evening kecak fire dance. Dinner in Seminyak.", images: [], meals: ["breakfast", "dinner"], hotel: "The Haven Seminyak 4★", transfers: "Private car", activities: ["Tanah Lot sunset", "Uluwatu Temple", "Kecak dance"] },
-      { day: 6, city: "Seminyak → Airport", title: "Farewell Bali", description: "Leisurely morning with breakfast at a beachfront cafe. Last-minute shopping, then transfer to the airport.", images: [], meals: ["breakfast"], transfers: "Private airport transfer", activities: ["Breakfast at beachfront cafe", "Shopping"] },
-    ],
-    variants: [
-      { key: "3-star", label: "Comfort", hotelCategory: 3, durationDays: 6, durationNights: 5, pricePerAdultINR: 34999, pricePerChildINR: 25000, singleSupplementINR: 15000, originalPricePerAdultINR: 41999, inclusionsExtra: ["Pool access", "Daily breakfast"], isDefault: false },
-      { key: "4-star", label: "Premium", hotelCategory: 4, durationDays: 6, durationNights: 5, pricePerAdultINR: 54999, pricePerChildINR: 35000, singleSupplementINR: 22000, originalPricePerAdultINR: 65999, inclusionsExtra: ["Spa credit 2000", "Private driver", "Candlelight dinner"], isDefault: true },
-      { key: "5-star", label: "Luxury", hotelCategory: 5, durationDays: 6, durationNights: 5, pricePerAdultINR: 89999, pricePerChildINR: 55000, singleSupplementINR: 45000, originalPricePerAdultINR: 107999, inclusionsExtra: ["All meals", "Private villa", "Helicopter tour"], isDefault: false },
-    ],
-    departures: makeDepartures(7, 6),
-    departureCities: ["Delhi", "Mumbai", "Bangalore"],
-    startingPriceINR: 34999,
-    originalPriceINR: 41999,
-    priceBasis: "per_person",
-    taxPercent: 5,
-    flightsIncluded: true,
-    mealsIncluded: true,
-    activitiesIncluded: true,
-    visaIncluded: true,
-    transfersIncluded: true,
-    hotelCategory: 4,
-    tripStyle: "private",
-    instantConfirmation: true,
-    recommendedSeason: ["April", "May", "June", "July", "August", "September"],
-    inclusions: ["Return flights from Delhi/Mumbai/Bangalore", "5 nights accommodation (breakfast included)", "All inter-hotel transfers by private AC car", "Mount Batur sunrise trek with guide", "Kecak fire dance entry ticket", "Balinese spa treatment", "Cooking class with market tour", "Travel insurance"],
-    exclusions: ["Lunch and dinner (unless specified)", "Personal expenses and tips", "Water sports activities", "Nusa Penida fast boat ticket", "Items of personal nature"],
-    importantInfo: ["Passport must be valid for 6 months from date of travel", "Visa on arrival fee of 3500 approx payable at Bali airport", "Carry Indian Rupees or USD for local expenses"],
-    visaDetails: "Indian passport holders are eligible for Visa on Arrival in Indonesia — 30 days, extendable once.",
-    cancellationPolicy: [
-      { window: "More than 30 days before departure", charge: "10% of total" },
-      { window: "15–30 days before departure", charge: "50% of total" },
-      { window: "Less than 15 days before departure", charge: "100% of total" },
-    ],
-    paymentPolicy: ["30% advance at booking to confirm", "Balance due 15 days before departure"],
-    termsAndConditions: ["Prices are per person on twin sharing basis", "Prices are subject to change with currency fluctuation", "Airline and hotel names are indicative and may change"],
-    hotels: [
-      { city: "Nusa Dua", name: "Nusa Dua Beach Hotel & Spa", category: 4, nights: 2, note: "Beachfront, pool access" },
-      { city: "Ubud", name: "Ubud Hanging Gardens", category: 5, nights: 2, note: "Pool villas with valley view" },
-      { city: "Seminyak", name: "The Haven Seminyak", category: 4, nights: 1, note: "Steps from Seminyak Beach" },
-    ],
-    faqs: [
-      { question: "Is Bali safe for solo female travellers?", answer: "Yes, Bali is one of the safest destinations for solo travellers, especially in tourist areas." },
-      { question: "What is included in the flights?", answer: "Return economy class flights from your chosen departure city with a 20 kg check-in allowance." },
-    ],
-    ratingAverage: 4.7,
-    ratingCount: 234,
-    isFeatured: true,
-    isTrending: true,
-    isBestseller: true,
-    status: "published",
-    seo: { title: "Bali Bliss — 6 Days 5 Nights from 34999", description: "Bali package with flights, 4★ hotels, Mount Batur trek and Ubud cultural tour.", keywords: ["bali", "bali package", "bali honeymoon"] },
-    viewCount: 5600,
-    enquiryCount: 180,
-    bookingCount: 95,
-    deletedAt: null,
-    isDemoData: true,
-  },
-
-  // Dubai Dreams
-  {
-    title: "Dubai Dreams",
-    slug: "dubai-dreams",
-    subtitle: "Desert magic, sky-high views, and shopping galore",
-    destinationSlug: "dubai",
-    additionalDestinations: [],
-    citiesCovered: ["Dubai", "Abu Dhabi", "Sharjah"],
-    scope: "international",
-    tripTypes: ["family", "leisure"],
-    collections: ["trending-international", "flight-inclusive"],
-    durationDays: 5,
-    durationNights: 4,
-    heroImage: img("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80", "Dubai skyline"),
-    gallery: [
-      img("https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=800&q=80", "Dubai desert safari"),
-      img("https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80", "Burj Khalifa"),
-    ],
-    overview: "Five days that capture the full spectacle of Dubai — from the record-breaking heights of Burj Khalifa to the golden silence of the desert. Includes a desert safari, dhow cruise, and a day trip to Abu Dhabi's Sheikh Zayed Grand Mosque.",
-    highlights: ["Burj Khalifa 124th floor access", "Desert safari with BBQ dinner", "Sheikh Zayed Grand Mosque visit", "Dhow cruise with dinner", "Dubai Mall and Aquarium", "Global Village entry"],
-    itinerary: [
-      { day: 1, city: "Dubai", title: "Arrival & City Orientation", description: "Arrive at DXB, transfer to hotel. Evening free to explore the Marina Walk.", images: [], meals: [], transfers: "Private airport transfer", activities: ["Hotel check-in", "Marina Walk"], optionalExperiences: ["Dubai Frame visit"] },
-      { day: 2, city: "Dubai", title: "Desert Safari", description: "Late afternoon pickup for desert safari — dune bashing, camel ride, sunset photography, followed by BBQ dinner with belly dance and tanoura shows.", images: [], meals: ["dinner"], transfers: "Safari pickup from hotel", activities: ["Dune bashing", "Camel ride", "BBQ dinner with shows"], optionalExperiences: ["Quad bike ride", "Sandboarding"] },
-      { day: 3, city: "Dubai", title: "Burj Khalifa & Downtown", description: "Visit Burj Khalifa 124th and 125th floors. Explore the Dubai Mall. Evening at Downtown.", images: [], meals: ["breakfast"], transfers: "Private car", activities: ["Burj Khalifa", "Dubai Mall", "Fountain show"], optionalExperiences: ["At the Top SKY experience", "Dhow cruise dinner"] },
-      { day: 4, city: "Abu Dhabi", title: "Sheikh Zayed Mosque & Louvre", description: "Day trip to Abu Dhabi. Visit the magnificent Sheikh Zayed Grand Mosque, then the Louvre Abu Dhabi.", images: [], meals: ["breakfast"], transfers: "Private car, 1.5 hrs each way", activities: ["Grand Mosque", "Louvre Abu Dhabi", "Corniche walk"] },
-      { day: 5, city: "Dubai → Airport", title: "Global Village & Departure", description: "Morning at Global Village for shopping. Transfer to DXB for your flight home.", images: [], meals: ["breakfast"], transfers: "Private airport transfer", activities: ["Global Village"] },
-    ],
-    variants: [
-      { key: "3-star", label: "Comfort", hotelCategory: 3, durationDays: 5, durationNights: 4, pricePerAdultINR: 42999, pricePerChildINR: 32000, singleSupplementINR: 18000, originalPricePerAdultINR: 52999, inclusionsExtra: ["Daily breakfast"], isDefault: false },
-      { key: "4-star", label: "Premium", hotelCategory: 4, durationDays: 5, durationNights: 4, pricePerAdultINR: 64999, pricePerChildINR: 45000, singleSupplementINR: 28000, originalPricePerAdultINR: 77999, inclusionsExtra: ["Daily breakfast & dinner", "Desert safari BBQ", "Dhow cruise"], isDefault: true },
-      { key: "5-star", label: "Luxury", hotelCategory: 5, durationDays: 5, durationNights: 4, pricePerAdultINR: 109999, pricePerChildINR: 70000, singleSupplementINR: 55000, originalPricePerAdultINR: 134999, inclusionsExtra: ["All meals", "Burj Khalifa VIP access", "Limousine transfers"], isDefault: false },
-    ],
-    departures: makeDepartures(14, 8, 10),
-    departureCities: ["Delhi", "Mumbai", "Chennai", "Hyderabad"],
-    startingPriceINR: 42999,
-    originalPriceINR: 52999,
-    priceBasis: "per_person",
-    taxPercent: 5,
-    flightsIncluded: true,
-    mealsIncluded: true,
-    activitiesIncluded: true,
-    visaIncluded: true,
-    transfersIncluded: true,
-    hotelCategory: 4,
-    tripStyle: "private",
-    instantConfirmation: true,
-    recommendedSeason: ["October", "November", "December", "January", "February", "March"],
-    inclusions: ["Return flights from all major Indian cities", "4 nights hotel accommodation", "Daily breakfast; dinner on selected days", "All transfers and sightseeing by private AC vehicle", "Desert safari with BBQ dinner and live entertainment", "Burj Khalifa 124th & 125th floor tickets", "Sheikh Zayed Mosque and Louvre Abu Dhabi entry", "Dubai visa processing assistance", "Travel insurance"],
-    exclusions: ["Lunch (except where mentioned)", "Personal expenses, tips, and shopping", "Any services not specifically mentioned", "Dubai visa fee", "Optional tours not included"],
-    importantInfo: ["Visa processing takes 3-5 working days", "Carry passport copies at all times in Dubai", "Dress modestly when visiting mosques (provided)"],
-    visaDetails: "UAE visa processing included. Indian passport holders get a 30-day tourist visa.",
-    cancellationPolicy: [
-      { window: "More than 30 days before departure", charge: "15% of total" },
-      { window: "15–30 days before departure", charge: "50% of total" },
-      { window: "Less than 15 days before departure", charge: "100% of total" },
-    ],
-    paymentPolicy: ["30% advance at booking", "Balance due 10 days before departure"],
-    termsAndConditions: ["Prices per person on twin sharing basis", "Flight timings subject to change by airline", "Hotel check-in at 3 PM, check-out at 12 PM"],
-    hotels: [{ city: "Dubai", name: "Ibis Deira Hotel", category: 3, nights: 4, note: "Near Deira City Centre" }],
-    faqs: [
-      { question: "Do I need travel insurance for Dubai?", answer: "Travel insurance is strongly recommended and is included in our packages." },
-      { question: "What is the flight duration to Dubai?", answer: "Approximately 3.5 hours from most Indian metros." },
-    ],
-    ratingAverage: 4.5,
-    ratingCount: 312,
-    isFeatured: true,
-    isTrending: true,
-    isBestseller: true,
-    status: "published",
-    seo: { title: "Dubai Dreams — 5 Days 4 Nights from 42999", description: "Dubai holiday package with flights, Burj Khalifa, desert safari and Abu Dhabi tour." },
-    viewCount: 8900,
-    enquiryCount: 290,
-    bookingCount: 165,
-    deletedAt: null,
-    isDemoData: true,
-  },
-
-  // Dubai Marina & Abu Dhabi
+const extraPackages = [
+  // 40. Dubai Marina & Abu Dhabi
   {
     title: "Dubai Marina & Abu Dhabi",
     slug: "dubai-marina-abu-dhabi",
     subtitle: "Burj Khalifa, desert safari, Sheikh Zayed Mosque, and more",
-    destinationSlug: "dubai",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Dubai", "Abu Dhabi"],
     scope: "international",
@@ -311,12 +75,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Sri Lanka Highlights
+  // 41. Sri Lanka Highlights
   {
     title: "Sri Lanka Highlights",
     slug: "sri-lanka-highlights",
     subtitle: "Ancient cities, hill country, temples, and pristine beaches",
-    destinationSlug: "sri-lanka",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Colombo", "Kandy", "Nuwara Eliya", "Galle"],
     scope: "international",
@@ -393,12 +157,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Maldives Overwater Villa
+  // 42. Maldives Overwater Villa
   {
     title: "Maldives Overwater Villa",
     slug: "maldives-overwater-villa",
     subtitle: "Crystal-clear waters, overwater villas, and island escapes",
-    destinationSlug: "maldives",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Male", "Maafushi"],
     scope: "international",
@@ -468,12 +232,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Leh Ladakh Motorcycle Expedition
+  // 43. Leh Ladakh Motorcycle Expedition
   {
     title: "Leh Ladakh Motorcycle Expedition",
     slug: "leh-ladakh-motorcycle-expedition",
     subtitle: "Royal Enfield ride through Khardung La, Nubra Valley, and Pangong Lake",
-    destinationSlug: "ladakh",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Leh", "Nubra Valley", "Pangong Lake", "Tso Moriri"],
     scope: "domestic",
@@ -552,12 +316,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Andaman Islands Escape
+  // 44. Andaman Islands Escape
   {
     title: "Andaman Islands Escape",
     slug: "andaman-islands-escape",
     subtitle: "Radhanagar Beach, Cellular Jail, Snorkelling, and Scuba Diving",
-    destinationSlug: "andaman",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Port Blair", "Havelock Island", "Neil Island"],
     scope: "domestic",
@@ -631,12 +395,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Kerala Backwaters & Hill Stations
+  // 45. Kerala Backwaters & Hill Stations
   {
     title: "Kerala Backwaters & Hill Stations",
     slug: "kerala-backwaters-hill-stations",
     subtitle: "Houseboats, tea plantations, Ayurveda, and wildlife",
-    destinationSlug: "kerala-backwaters",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Kochi", "Munnar", "Thekkady", "Alleppey"],
     scope: "domestic",
@@ -712,12 +476,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Thailand Beach & Bangkok
+  // 46. Thailand Beach & Bangkok
   {
     title: "Thailand Beach & Bangkok",
     slug: "thailand-beach-bangkok",
     subtitle: "Pattaya beaches, Bangkok temples, coral island, and Thai cuisine",
-    destinationSlug: "thailand",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Bangkok", "Pattaya"],
     scope: "international",
@@ -789,12 +553,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Jaisalmer & Jodhpur Desert Safari
+  // 47. Jaisalmer & Jodhpur Desert Safari
   {
     title: "Jaisalmer & Jodhpur Desert Safari",
     slug: "jaisalmer-jodhpur-desert-safari",
     subtitle: "Thar Desert, golden fort, camel safari, and Rajasthani culture",
-    destinationSlug: "rajasthan",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Jaisalmer", "Jodhpur"],
     scope: "domestic",
@@ -865,12 +629,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Bhutan Kingdom of Happiness
+  // 48. Bhutan Kingdom of Happiness
   {
     title: "Bhutan Kingdom of Happiness",
     slug: "bhutan-kingdom-of-happiness",
     subtitle: "Tiger's Nest, Punakha Dzong, Paro, and Himalayan landscapes",
-    destinationSlug: "kyoto",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Paro", "Thimphu", "Punakha"],
     scope: "international",
@@ -944,12 +708,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Singapore & Sentosa Island
+  // 49. Singapore & Sentosa Island
   {
     title: "Singapore & Sentosa Island",
     slug: "singapore-sentosa-island",
     subtitle: "Marina Bay, Gardens by the Bay, Universal Studios, and Sentosa fun",
-    destinationSlug: "singapore",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Singapore"],
     scope: "international",
@@ -1019,12 +783,12 @@ export const packageSeeds: PackageSeed[] = [
     isDemoData: true,
   },
 
-  // Himachal Pradesh Hill Tour
+  // 50. Himachal Pradesh Hill Tour
   {
     title: "Himachal Pradesh Hill Tour",
     slug: "himachal-pradesh-hill-tour",
     subtitle: "Shimla, Manali, Dharamshala, and Dalhousie",
-    destinationSlug: "himachal-pradesh",
+    destination: "" as never,
     additionalDestinations: [],
     citiesCovered: ["Shimla", "Manali", "Dharamshala", "Dalhousie"],
     scope: "domestic",
@@ -1100,5 +864,6 @@ export const packageSeeds: PackageSeed[] = [
     deletedAt: null,
     isDemoData: true,
   },
-
 ];
+
+export { extraPackages };
