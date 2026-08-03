@@ -1,4 +1,33 @@
-const img = (url: string, alt: string) => ({ url, alt });
+function img(url: string, alt: string) {
+  return { url, alt };
+}
+
+function makeDepartures(
+  startOffsetDays: number,
+  count: number,
+  gapDays: number = 14
+): any[] {
+  const deps: any[] = [];
+  const today = new Date();
+  for (let i = 0; i < count; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() + startOffsetDays + i * gapDays);
+    const seatsTotal = 20;
+    const seatsBooked = Math.floor(Math.random() * 14);
+    deps.push({
+      date,
+      returnDate: new Date(date.getTime() + (i % 2 === 0 ? 7 : 5) * 86400000),
+      departureCity: "Delhi",
+      seatsTotal,
+      seatsBooked,
+      priceAdjustmentINR: i === 0 ? -2000 : 0,
+      isFixedDeparture: true,
+      isGuaranteed: i === 0,
+      status: seatsBooked >= seatsTotal ? "sold_out" : seatsBooked >= seatsTotal - 3 ? "filling_fast" : "open",
+    });
+  }
+  return deps;
+}
 
 const extraPackages = [
   // 40. Dubai Marina & Abu Dhabi
