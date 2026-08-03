@@ -87,7 +87,8 @@ async function main() {
   await connect();
 
   const destIds = new Map<string, mongoose.Types.ObjectId>();
-  const destinations = await mongoose.connection.db
+  const db = mongoose.connection.db!;
+  const destinations = await db
     .collection("destinations")
     .find({})
     .project<{ _id: mongoose.Types.ObjectId; slug: string }>({ slug: 1 })

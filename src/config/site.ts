@@ -160,6 +160,7 @@ export const DATA_SOURCES = {
   live: { label: "Live fare", tone: "success" },
   cached: { label: "Cached fare", tone: "info" },
   estimated: { label: "Estimated fare", tone: "warning" },
+  demo: { label: "Demo fare", tone: "muted" },
 } as const;
 
 export type DataSource = keyof typeof DATA_SOURCES;
