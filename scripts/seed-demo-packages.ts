@@ -535,14 +535,6 @@ const packages = [
     deletedAt: null,
     isDemoData: true,
   },
-];
-
-// ---------------------------------------------------------------------------
-// Run
-// ---------------------------------------------------------------------------
-
-async function main() {
-
   // 3. Himalayan Escape
   {
     title: "Himalayan Escape",
@@ -1203,7 +1195,7 @@ async function main() {
     heroImage: img("https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1200&q=80", "Thailand beach"),
     gallery: [
       img("https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=800&q=80", "Thai temple"),
-      img("https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?w=800&q=80", "Chiang Mai"],
+      img("https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?w=800&q=80", "Chiang Mai"),
     ],
     overview: "Seven days covering Thailand's best of three worlds: Bangkok's glittering temples and street food, Chiang Mai's ancient temples and elephant sanctuaries, and Phuket's turquoise waters and island hopping.",
     highlights: ["Grand Palace and Wat Phra Kaew in Bangkok", "Chiang Mai elephant sanctuary", "Phi Phi Islands day trip", "Thai cooking class", "Thai massage and spa", "Floating market experience"],
@@ -4396,8 +4388,8 @@ bookingCount: 165,
     deletedAt: null,
     isDemoData: true,
   },
-];
 
+];
 async function main() {
   await connectDB();
 
