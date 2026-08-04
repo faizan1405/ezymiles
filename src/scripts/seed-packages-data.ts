@@ -6,7 +6,8 @@
 
 const img = (id: string, alt: string) => {
   if (/^https?:\/\//i.test(id)) return { url: id, alt };
-  return { url: `https://images.unsplash.com/${id}?w=1600&q=80&fm=webp`, alt };
+  const cleanId = id.replace(/\?.*$/, "");
+  return { url: `https://images.unsplash.com/${cleanId}?w=1600&q=80&fm=webp`, alt };
 };
 
 export const img_ = img;
@@ -434,7 +435,7 @@ export const packageSeeds: PackageSeed[] = [
     citiesCovered: ["Leh", "Nubra Valley", "Pangong Tso", "Khardung La", "Diskit"],
     scope: "domestic",
     tripTypes: ["adventure", "road-trip"],
-    collections: ["adventure-tours", "trending-international"],
+    collections: ["adventure-tours"],
     durationDays: 8,
     durationNights: 7,
     heroImage: img("https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=1200&q=80", "Pangong Lake"),
@@ -756,7 +757,7 @@ export const packageSeeds: PackageSeed[] = [
     citiesCovered: ["Port Blair", "Havelock Island", "Neil Island"],
     scope: "domestic",
     tripTypes: ["beach", "adventure", "honeymoon"],
-    collections: ["honeymoon-escapes", "trending-international"],
+    collections: ["honeymoon-escapes"],
     durationDays: 6,
     durationNights: 5,
     heroImage: img("https://images.unsplash.com/photo-1580137187710-1c31e9e2dd17?w=1200&q=80", "Andaman beach"),
@@ -1316,7 +1317,7 @@ bookingCount: 165,
     citiesCovered: ["Dubai", "Abu Dhabi", "Sharjah"],
     scope: "international",
     tripTypes: ["family", "leisure", "luxury"],
-    collections: ["trending-international", "flight-inclusive", "best-of-india"],
+    collections: ["trending-international", "flight-inclusive"],
     durationDays: 6,
     durationNights: 5,
     heroImage: img("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80", "Dubai skyline"),
@@ -2685,7 +2686,7 @@ bookingCount: 165,
     citiesCovered: ["Ubud", "Uluwatu", "Tampaksiring"],
     scope: "international",
     tripTypes: ["culture", "leisure", "heritage"],
-    collections: ["trending-international", "best-of-india"],
+    collections: ["trending-international"],
     durationDays: 6,
     durationNights: 5,
     heroImage: img("https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1200&q=80", "Bali temple"),
@@ -2844,7 +2845,7 @@ bookingCount: 165,
     citiesCovered: ["Colombo", "Kandy", "Nuwara Eliya", "Galle"],
     scope: "international",
     tripTypes: ["culture", "family", "beach"],
-    collections: ["trending-international", "best-of-india"],
+    collections: ["trending-international"],
     durationDays: 7,
     durationNights: 6,
     heroImage: img("https://images.unsplash.com/photo-1566837945700-30057527ade0?w=1200&q=80", "Sri Lanka temple"),
@@ -3320,7 +3321,7 @@ bookingCount: 165,
     citiesCovered: ["Paro", "Thimphu", "Punakha"],
     scope: "international",
     tripTypes: ["culture", "leisure", "honeymoon"],
-    collections: ["trending-international", "best-of-india"],
+    collections: ["trending-international"],
     durationDays: 6,
     durationNights: 5,
     heroImage: img("https://images.unsplash.com/photo-1561363433-d909b43d4c7c?w=1200&q=80", "Bhutan Tiger Nest"),

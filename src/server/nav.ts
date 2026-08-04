@@ -75,7 +75,10 @@ export const getNavData = cache(async (): Promise<NavData> => {
 
     const mapDest = (scope: "domestic" | "international"): NavDestination[] =>
       destinations
-        .filter((d) => d.scope === scope)
+        .filter((d) => {
+          const s = typeof d.scope === "string" ? d.scope.trim().toLowerCase() : "";
+          return s === scope;
+        })
         .slice(0, 10)
         .map((d) => ({
           name: d.name,
@@ -84,10 +87,12 @@ export const getNavData = cache(async (): Promise<NavData> => {
           startingPriceINR: d.startingPriceINR,
           heroImage: d.heroImage?.url ?? "",
         }));
-
     const mapPkg = (scope: "domestic" | "international"): NavPackage[] =>
       packages
-        .filter((p) => p.scope === scope)
+        .filter((p) => {
+          const s = typeof p.scope === "string" ? p.scope.trim().toLowerCase() : "";
+          return s === scope;
+        })
         .slice(0, 3)
         .map((p) => ({
           title: p.title,

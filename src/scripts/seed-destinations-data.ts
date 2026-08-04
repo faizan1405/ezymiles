@@ -18,10 +18,11 @@
  * seed script only ever backfills a field that is currently unset.
  */
 
-const img = (id: string, alt: string) => ({
-  url: `https://images.unsplash.com/${id}?w=1600&q=80`,
-  alt,
-});
+const img = (id: string, alt: string) => {
+  if (/^https?:\/\//i.test(id)) return { url: id, alt };
+  const cleanId = id.replace(/\?.*$/, "");
+  return { url: `https://images.unsplash.com/${cleanId}?w=1600&q=80&fm=webp`, alt };
+};
 
 export type DestinationTypeSeed = "country" | "city" | "region" | "emirate";
 

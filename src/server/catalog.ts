@@ -30,6 +30,15 @@ import type {
 
 const PUBLISHED = { status: "published", deletedAt: null } as const;
 
+function normaliseScope(value: unknown): "domestic" | "international" | undefined {
+  if (typeof value !== "string") return undefined;
+  const v = value.trim().toLowerCase();
+  if (v === "domestic" || v === "international") return v;
+  if (v === "india" || v === "in" || v === "dom") return "domestic";
+  if (v === "intl" || v === "int" || v === "abroad" || v === "world") return "international";
+  return undefined;
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                   Mappers                                   */
 /* -------------------------------------------------------------------------- */
@@ -222,7 +231,7 @@ const SORTS: Record<string, Record<string, 1 | -1>> = {
 async function buildPackageQuery(filter: PackageFilter): Promise<QueryFilter<IPackage>> {
   const q: QueryFilter<IPackage> = { ...PUBLISHED };
 
-  if (filter.scope) q.scope = filter.scope;
+  if (filter.scope) q.scope = normaliseScope(filter.scope) ?? filter.scope;
   if (filter.tripType) q.tripTypes = filter.tripType;
   if (filter.collection) q.collections = filter.collection;
   if (filter.tripStyle) q.tripStyle = filter.tripStyle;
@@ -415,18 +424,35 @@ export const getHomepageData = cache(async (liveActivityEnabled: boolean): Promi
     const destinations = destinationRows.map((row) =>
       toDestinationCard(serialise(row) as IDestination, row.packageStats?.[0]?.count ?? 0),
     );
+    const SCOPE_BY_COLLECTION: Record<string, "domestic" | "international" | undefined> = {
+      "trending-international": "international",
+      "best-of-india": "domestic",
+    };
+
+    const expectedScope = (key: string) => SCOPE_BY_COLLECTION[key];
+
     const collections: Record<string, PackageCardDTO[]> = Object.fromEntries(
       collectionKeys.map((key) => [
         key,
-        (serialise(packageRows.filter((row) => row.collections?.includes(key))) as unknown as PackageLean[])
+        (serialise(packageRows.filter((row) => {
+          if (!row.collections?.includes(key)) return false;
+          const scope = expectedScope(key);
+          return !scope || normaliseScope(row.scope) === scope;
+        })) as unknown as PackageLean[])
           .slice(0, 8)
           .map(toPackageCard),
       ]),
     );
 
+    const curatedIntl = destinations.filter((d) => d.packageFeatured);
+    const internationalDestinations =
+      curatedIntl.length > 0
+        ? curatedIntl.slice(0, 12)
+        : destinations.filter((d) => d.scope === "international").slice(0, 12);
+
     return {
       destinations,
-      internationalDestinations: destinations.filter((d) => d.packageFeatured).slice(0, 12),
+      internationalDestinations,
       collections,
       offers: secondary[0],
       reviews: secondary[1],
